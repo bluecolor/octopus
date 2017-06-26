@@ -1,0 +1,20 @@
+td(style="width:20px")
+  .checkbox.js-checkbox
+    input.styled(type='checkbox', value!='<%= id %>', aria-label='', name='checkbox')
+    label
+td(style="width:50px")
+  span.label(class!='<%= label %>'  data-toggle="tooltip" title="Status") <%- status %> 
+td
+  a(href!='#/scheduler/sessions/<%=id%>'  data-toggle="tooltip" title="Name") <%- name %>
+td(style="width:100px")
+  a(href!='#/scheduler/plans/<%= plan.id %>'  data-toggle="tooltip" title="Plan") <%- plan ? plan.name: ''  %>
+td(style="width:50px")
+  a(href!='#/scheduler/task-instances?session=<%=id%>'  data-toggle="tooltip" title="Success/Total") <%=`${stats.success+stats.done}/${stats.total}` %>
+td(style="width:200px")
+  span(data-toggle="tooltip" title="Session start date") <%= color.startDate %>
+td(style="width:200px")
+  span(data-toggle="tooltip" title="Session end date") <%= color.endDate %>
+td(style="width:200px;cursor:pointer;" )
+  .progress.progress-striped(style="margin-bottom:0px;")
+    .progress-bar.progress-bar-info(role='progressbar', style!='width: <%=progress%>%;')
+      | <%=progress%>%

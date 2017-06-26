@@ -1,0 +1,97 @@
+@import "includes/base";
+
+.alert-action-anim {
+  padding-left: 5px;
+  opacity: 0.8;
+}
+
+.spinner {
+  // margin: 100px auto;
+  width: 90px;
+  // height: 40px;
+  text-align: center;
+  // font-size: 10px;
+  float: left;
+}
+
+.spinner > div {
+  background-color: #333;
+  opacity: 0.7;
+  height:10px;
+  width: 10px;
+  display: inline-block;
+  
+  -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
+  animation: sk-stretchdelay 1.2s infinite ease-in-out;
+}
+
+.spinner .rect2 {
+  -webkit-animation-delay: -1.1s;
+  animation-delay: -1.1s;
+}
+
+.spinner .rect3 {
+  -webkit-animation-delay: -1.0s;
+  animation-delay: -1.0s;
+}
+
+.spinner .rect4 {
+  -webkit-animation-delay: -0.9s;
+  animation-delay: -0.9s;
+}
+
+.spinner .rect5 {
+  -webkit-animation-delay: -0.8s;
+  animation-delay: -0.8s;
+}
+
+@-webkit-keyframes sk-stretchdelay {
+  0%, 40%, 100% { -webkit-transform: scaleY(0.4) }  
+  20% { -webkit-transform: scaleY(1.0) }
+}
+
+@keyframes sk-stretchdelay {
+  0%, 40%, 100% { 
+    transform: scaleY(0.4);
+    -webkit-transform: scaleY(0.4);
+  }  20% { 
+    transform: scaleY(1.0);
+    -webkit-transform: scaleY(1.0);
+  }
+}
+
+
+.alert-name {
+  float:left;
+  font-weight: bold;
+  color: $red-plum-fade;
+  &:hover{
+    color:$red-plum;
+  }
+}
+
+.alert-type {
+  float: left;
+  opacity: 0.6;
+  padding-left: 5px;
+}
+
+.alert-date {
+  float: left;
+  opacity: 0.6;
+  padding-left: 5px;
+}
+
+.alert-action {
+  float: left;
+}
+
+.alert-msg {
+  float:right;
+  opacity: 0.6;
+}
+
+.alert-detail {
+  padding-top: 5px;
+}
+

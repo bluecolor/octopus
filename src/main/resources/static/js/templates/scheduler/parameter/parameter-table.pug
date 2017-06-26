@@ -1,0 +1,28 @@
+.row 
+  .col-md-8.col-md-offset-2
+    .box(style="border-top=0px")
+      .box-header.with-border
+        h3.box-title Parameters
+        .box-tools.pull-right
+          .has-feedback
+            input.form-control.input-sm.js-search(type='text', placeholder='Search')
+            span.glyphicon.glyphicon-search.form-control-feedback
+      .box-body.no-padding
+        .table-controls
+          a.btn.btn-default.btn-sm.js-reload-btn(type='button' data-toggle="tooltip" title="Refresh")
+            i.fa.fa-refresh.text-blue.fa-lg
+          a.js-new-group.btn.btn-default.btn-sm(href='#/scheduler/parameters/new' data-toggle="tooltip" title="New parameter")
+            i.fa.fa-plus.text-green.fa-lg
+          a.btn.btn-default.btn-sm.js-import-btn(href='#/scheduler/parameters/import' data-toggle="tooltip" title="Import parameters")
+            i.fa.fa-upload.text-yellow.fa-lg          
+          a.btn.btn-default.btn-sm.js-trash-btn.hidden(type='button' data-toggle="tooltip" title="Delete parameter")
+            i.fa.fa-trash-o.text-danger.fa-lg
+          a.js-export-btn.btn.btn-default.btn-sm.hidden(data-toggle="tooltip" title="Export parameters")
+            i.fa.fa-download.text-green.fa-lg  
+
+        .table-responsive
+          table.table.table-hover
+            tbody
+      .box-footer.clearfix
+        ul.pagination.pagination-sm.no-margin.pull-right          
+        

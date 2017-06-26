@@ -1,0 +1,15 @@
+td
+  .checkbox.js-connection-checkbox
+    input.styled(type='checkbox', value!='<%= id %>', aria-label='', name='connection-checkbox')
+    label
+td.connection-name
+  a(href!='#/connections/<%= id %>') <%- name %>
+td.connection-type
+  b <%- connectionType %> 
+td.connection-host <%- host || jdbcUrl %>
+td
+  <% if(status < 0) {%>
+    i.fa.fa-frown-o.text-danger.fa-lg(data-toggle="tooltip" title="Down")
+  <%}else if(status > 0) {%>
+    i.fa.fa-smile-o.text-green.fa-lg(data-toggle="tooltip" title="Up")
+  <%}%>

@@ -1,0 +1,4 @@
+td 
+  a(href!='#/scheduler/task-instances/<%= id %>'  data-toggle="tooltip" title="Name") <%- task.name %>
+td(style="width:100px")
+  span.label(class!='<%= label %>'  data-toggle="tooltip" title="Status") <%- status?status:'UNKNOWN' %> 

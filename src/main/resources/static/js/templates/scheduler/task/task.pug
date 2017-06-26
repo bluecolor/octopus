@@ -1,0 +1,26 @@
+.row
+  .col-md-6.col-md-offset-3  
+    .box.box-primary
+      .box-header.with-border
+        h3.box-title Task
+      .panel-body(style="height:620px")
+        ul.nav.nav-tabs
+          li.active
+            a(href='#task-general', data-toggle='tab', aria-expanded='true') General
+          li
+            a(href='#task-script', data-toggle='tab', aria-expanded='false') Script
+          li
+            a(href='#task-dependencies', data-toggle='tab', aria-expanded='false') Dependencies
+          li
+            a(href='#task-groups', data-toggle='tab', aria-expanded='false') Groups
+          li
+            a(href='#task-owners', data-toggle='tab', aria-expanded='false') Owners
+        .tab-content
+          #task-general.tab-pane.active.in(style="margin:10px")
+          #task-script.tab-pane(style="margin:10px")
+          #task-dependencies.tab-pane(style="margin:10px")
+          #task-groups.tab-pane(style="margin:10px")
+          #task-owners.tab-pane(style="margin:10px")
+      .box-footer
+        a.btn.btn-danger.js-cancel-btn Cancel
+        a.disabled.ladda-button.btn.btn-primary.pull-right.js-save-btn(data-style="expand-left") Save

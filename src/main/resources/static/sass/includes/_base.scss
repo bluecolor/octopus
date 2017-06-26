@@ -1,0 +1,60 @@
+/*	FONTS
+------------------------*/
+
+// @import url(https://fonts.googleapis.com/css?family=Raleway:400,700);
+
+/*	TYPOGRAPHY
+–––––––––––––––––––––––––––*/
+
+$yellow     : #FFD76E;
+$gray       : #CCCCCC;
+$grayHarbor : #757D75;
+$green      : #26A65B;
+$greenFade  : rgba(38, 166, 91,0.1);
+$blue       : #59ABE3;
+$red-plum   : rgba(219,90,107,1);
+$red-plum-fade:rgba(219,90,107,0.8); 
+
+.text-yellow {
+  color: $yellow;
+}
+.text-gray {
+  color: $gray;
+}
+.text-gray-harbor {
+  color: $grayHarbor;
+}
+.text-green{
+  color: $green;
+}
+
+.text-green-fade{
+  color: $greenFade;
+}
+
+
+.text-blue {
+  color: $blue;
+}
+
+.text-red-plum {
+  color: $red-plum;
+}
+
+body {
+  font-family: 'Raleway', Arial, sans-serif, ;
+  color: #555;
+  font-size: 100%;
+  line-height: 1.5;
+  background-color: #f2f2f2;
+  margin: 0;
+}
+
+
+/* ------ Normalize ----- */
+
+*,
+*:after,
+*:before {
+  box-sizing: border-box;
+}

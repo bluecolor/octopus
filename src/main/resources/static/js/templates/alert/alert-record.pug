@@ -1,0 +1,19 @@
+td(style="width:20px" obj-id!="<%-obj.id%>" obj-tp="<%-tp%>")
+  div(style="height:100%; width:100%; overflow: hidden;") 
+    div(style="float:left;")
+      a.alert-name(href="#") <%- obj.name %>
+      span.alert-type - <%- objtpHuman %>
+      span.alert-date - <%- alertDate %> 
+    div(style="float:right;")
+      span.alert-msg <%- msg %>
+  div.alert-detail(style="height:100%; width:100%; overflow: hidden;")
+    div.alert-action(data-toggle="tooltip" title="Completed tasks")
+      a(href="javascript:void(0);", name="run") Run again
+      a(href="javascript:void(0);" style="padding-left:10px;", name="done") Make done 
+    .spinner.hidden(style="float:left;")
+      .rect1
+      .rect2
+      .rect3
+      .rect4
+      .rect5
+      

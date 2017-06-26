@@ -1,0 +1,8 @@
+label <%- label %>
+select.form-control.js-combo(style='border-radius:3px 0px 0px 3px; width:100%', name!='<%=name%>')
+span.input-group-btn.js-clear-btn(style='vertical-align:bottom')
+  a.btn.btn-default.combo-action(type='button', tabindex='-1', href='javascript:void(0)')
+    span.fa.fa-eraser.text-danger(aria-hidden='true')    
+span.input-group-btn.js-combo-link(style='vertical-align:bottom')
+  a.btn.btn-default(type='button', tabindex='-1', href='#/connections/new')
+    span.fa.fa-plus.text-success(aria-hidden='true')    

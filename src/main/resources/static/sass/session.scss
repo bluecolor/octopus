@@ -1,0 +1,38 @@
+
+.session-status {
+  float: left;
+}
+
+.session-name {
+  float: left;
+  margin-left: 10px;
+  font-weight: bold;
+}
+
+.session-detail {
+  .session-detail-label:not(:first-child){
+    margin-left: 10px;
+  }
+  .session-detail-label{
+    float: left;
+    opacity: 0.5;
+  }
+}
+
+
+.session-stat {
+  float: left;
+}
+
+.session-detail{
+  padding-top: 5px;
+}
+
+.session-plan {
+  float: left;
+  opacity: 0.5;
+  cursor: pointer;
+  &:hover {
+    opacity: 1;
+  }
+}

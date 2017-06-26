@@ -1,0 +1,29 @@
+.row
+  .col-md-6.col-md-offset-3  
+    .box.box-primary
+      .box-header.with-border
+        h3.box-title Group
+      form(role='form')
+        .box-body
+          .form-group
+            label Name
+            input.form-control(name="name", type='text', placeholder='Group name ...', required=true, autofocus=true)
+          .form-group
+            label Parallel
+            input.form-control(name="parallel", type='number', required=false, min='1')
+          .form-group
+            label Priority
+            div(style="min-width:400px")
+              input.form-control.slider(name='priority', style="min-width:400px", type='text', data-slider-value=2)
+          .form-group
+            label Color
+            .input-group.colorpicker-component.js-group-color
+              input.form-control(type='text', name='color', value='#00AABB')
+              span.input-group-addon
+                i
+          .form-group
+            label Description
+            textarea.form-control(name="description" rows="3")
+        .box-footer
+          a.btn.btn-danger.js-cancel-btn Cancel
+          a.disabled.ladda-button.btn.btn-primary.pull-right.js-save-btn(data-style="expand-left") Save

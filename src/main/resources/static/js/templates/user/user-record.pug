@@ -1,0 +1,16 @@
+td(style="width:20px")
+  <% if(system) { %>
+  span(class!='<%= system ? "fa fa-lg fa-shield text-danger":"" %>' data-toggle="tooltip" title="System user")
+  <% } else { %>
+  .checkbox.js-user-checkbox(class!='<%= system ? "hidden":"" %>')
+    input.styled(type='checkbox', value!='<%= id %>', aria-label='', name='checkbox')
+    label
+  <% } %>     
+td(style="width:20px")
+  span(class!='<%= locked ? "fa fa-lg fa-lock text-danger":"" %>' data-toggle="tooltip" title="User locked")
+td
+  a(href!='#/users/<%= id %>') 
+    b <%- username %>
+td <%- name %> 
+td 
+  b <%- role %>

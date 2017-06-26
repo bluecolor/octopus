@@ -1,0 +1,84 @@
+.row 
+  .col-md-10.col-md-offset-1
+    .box(style="border-top=0px")
+      .box-header.with-border
+        h3.box-title Sessions
+        .box-tools.pull-right
+          .has-feedback.table-search
+            input.form-control.input-sm.js-search(type='text', placeholder='Search')
+            span.glyphicon.glyphicon-search.form-control-feedback
+      .box-body.no-padding
+        .table-controls
+          a.btn.btn-default.btn-sm.js-reload(type='button' data-toggle="tooltip" title="Refresh")
+            i.fa.fa-refresh.text-blue.fa-lg
+          a.js-trash-btn.btn.btn-default.btn-sm.hidden(data-toggle="tooltip" title="Delete Session")
+            i.fa.fa-trash-o.text-danger.fa-lg
+          
+          .dropdown.hidden.js-more-btn(style="display:inline;" name="more")
+            button.btn.btn-default.btn-sm.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
+              | More
+              span.caret
+            ul.dropdown-menu(aria-labelledby='dropdownMenu1')
+              li  
+                a.js-run-task(href='javascript:void(0);') Stop
+              li  
+                a.js-run-task(href='javascript:void(0);') Start
+              li.divider(role='separator')
+              li.js-delete
+                a(href='javascript:void(0);') Delete
+
+          .dropdown.pull-right(style="display:inline;" name="status")
+            a.btn.btn-default.btn-sm.dropdown-toggle.text-green(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
+              | Sort By
+              span.caret
+            ul.dropdown-menu.js-sort(aria-labelledby='dropdownMenu1')
+              li
+                a(href='javascript:void(0);', name="status", order="-1") Status ascending
+              li
+                a(href='javascript:void(0);', name="status", order="1") Status descending
+              li.divider(role='separator')
+              li
+                a(href='javascript:void(0);', name="name", order="-1") Name ascending
+              li
+                a(href='javascript:void(0);', name="name", order="1") Name descending
+              li.divider(role='separator')
+              li
+                a(href='javascript:void(0);', name="scheduledate", order="-1") Schedule date ascending
+              li
+                a(href='javascript:void(0);', name="scheduledate", order="1") Schedule date descending
+              li.divider(role='separator')
+              li
+                a(href='javascript:void(0);', name="startdate", order="-1") Start date ascending
+              li
+                a(href='javascript:void(0);', name="startdate", order="1") Start date descending              
+          .dropdown.pull-right(style="display:inline; margin-right:10px;")
+            a.btn.btn-default.btn-sm.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
+              | Status
+              span.caret
+            ul.dropdown-menu.js-status-filter(aria-labelledby='dropdownMenu1')
+              li
+                a(href='javascript:void(0);', name="running") RUNNING
+              li
+                a(href='javascript:void(0);', name="idle") IDLE
+              li
+                a(href='javascript:void(0);', name="success")  SUCCESS
+              li
+                a(href='javascript:void(0);', name="error")  ERROR
+          .dropdown.pull-right(name="plan")
+            button.btn.btn-sm.btn-default.dropdown-toggle(type='button', data-toggle='dropdown') Plan
+              span.caret
+            ul.dropdown-menu.js-plan-filter
+          .js-daterangepicker.pull-right.date-picker(data-toggle="tooltip" title="Schedule date")
+            i.glyphicon.glyphicon-calendar.fa.fa-calendar
+            span
+            b.caret
+          a.btn.btn-default.btn-sm.js-clear-filter-btn.text-red-plum.pull-right.hidden(href="#" style="margin-right:10px;")
+            i.fa.fa-filter.fa-lg
+            |   Clear filter
+        .table-responsive
+          table.table.table-hover
+            tbody.js-table-body
+      
+      .box-footer.clearfix
+        ul.pagination.pagination-sm.no-margin.pull-right
+        

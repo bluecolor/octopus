@@ -1,0 +1,22 @@
+.row
+  .col-md-6.col-md-offset-3  
+    .box.box-primary
+      .box-header.with-border
+        h3.box-title My Profile
+      .panel-body(style="height:400px")  
+        form(name="profile-form", role='form')
+          .box-body
+            .form-group
+              label Username
+              input.form-control.js-username(name="username", type='text', required=true, autofocus=true)
+            .form-group
+              label Name
+              input.form-control.js-name(name="name", type='text',  required=true)
+            .form-group
+              label Email
+              input.form-control.js-name(name="email", type='text', required=true)
+            .form-group
+              a.btn.btn-success.js-change-pass(href="#/profile/password") Change Password
+      .box-footer
+        a.btn.btn-danger.js-cancel-btn Cancel
+        a.ladda-button.btn.btn-primary.pull-right.js-save-btn(data-style="expand-left") Save

@@ -1,0 +1,95 @@
+.row 
+  .col-md-12
+    .box(style="border-top=0px")
+      .box-header.with-border
+        h3.box-title Tasks of <%= session %>
+        .box-tools.pull-right
+          .input-group.task-search(style="margin-left:10px; align:center")
+            .input-group-btn
+              button.btn.btn-sm.btn-primary.dropdown-toggle(type='button', data-toggle='dropdown', aria-expanded='false')
+                | Filter 
+                span.fa.fa-caret-down
+              ul.dropdown-menu.js-search-menu
+                li
+                  a(href='#' name='my-tasks') Your tasks
+                li
+                  a(href='#' name='bookmarked') Bookmarked tasks
+                li.divider
+                li
+                  a(href='#') View advanced search syntax
+            input.form-control.input-sm(type='text', placeholder='Search', name="search")
+      .box-body.no-padding
+        .table-controls
+          a.btn.btn-default.btn-sm.js-reload(type='button' data-toggle="tooltip" title="Refresh")
+            i.fa.fa-refresh.text-blue.fa-lg
+          a.js-trash-btn.btn.btn-default.btn-sm.hidden(data-toggle="tooltip" title="Delete Session")
+            i.fa.fa-trash-o.text-danger.fa-lg
+          
+          
+          .dropdown.hidden.js-more-btn(style="display:inline;" name="more")
+            button.btn.btn-default.btn-sm.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
+              | More
+              span.caret
+            ul.dropdown-menu(aria-labelledby='dropdownMenu1')
+              li  
+                a.js-done-task(href='javascript:void(0);') Done
+              li  
+                a.js-stop-task(href='javascript:void(0);') Stop
+              li  
+                a.js-start-task(href='javascript:void(0);') Start
+              li  
+                a.js-block-task(href='javascript:void(0);') Block
+              li.divider(role='separator')
+              li.js-delete
+                a(href='javascript:void(0);') Delete
+          .dropdown.pull-right(style="display:inline;" name="sort")
+            a.btn.btn-default.btn-sm.dropdown-toggle.text-green(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
+              | Sort By
+              span.caret
+            ul.dropdown-menu.js-sort(aria-labelledby='dropdownMenu1')
+              li
+                a(href='javascript:void(0);' , name="status", order="-1") Status ascending
+              li
+                a(href='javascript:void(0);', name="status", order="1") Status descending
+              li.divider(role='separator')
+              li
+                a(href='javascript:void(0);' , name="name", order="-1") Name ascending
+              li
+                a(href='javascript:void(0);', name="name", order="1") Name descending
+              li.divider(role='separator')
+              li
+                a(href='javascript:void(0);', name="duration", order="-1") Duration ascending
+              li
+                a(href='javascript:void(0);', name="duration", order="1") Duration descending              
+          .dropdown.pull-right(name="owner")
+            button.btn.btn-sm.btn-default.dropdown-toggle(type='button', data-toggle='dropdown', style="margin-right:10px;") Owner
+              span.caret
+            ul.dropdown-menu.js-owner-filter
+          .dropdown.pull-right(name="group")
+            button.btn.btn-sm.btn-default.dropdown-toggle(type='button', data-toggle='dropdown') Group
+              span.caret
+            ul.dropdown-menu.js-group-filter
+          .dropdown.pull-right(style="display:inline;" name="sort")
+            a.btn.btn-default.btn-sm.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
+              | Status
+              span.caret
+            ul.dropdown-menu.js-status-filter(aria-labelledby='dropdownMenu1')
+              li
+                a(href='javascript:void(0);', name="running") RUNNING
+              li
+                a(href='javascript:void(0);', name="idle") IDLE
+              li
+                a(href='javascript:void(0);', name="done") DONE
+              li
+                a(href='javascript:void(0);', name="success")  SUCCESS
+              li
+                a(href='javascript:void(0);', name="error")  ERROR
+          a.btn.btn-default.btn-sm.js-clear-filter-btn.text-red-plum.pull-right.hidden(href="#" style="margin-right:15px;")
+            i.fa.fa-filter.fa-lg
+            |   Clear filter    
+        .table-responsive.connection-items
+          table.table.table-hover
+            tbody.js-table-body
+      
+      .box-footer.clearfix
+        ul.pagination.pagination-sm.no-margin.pull-right

@@ -1,0 +1,19 @@
+.search-view {
+  padding-top: 20px;
+}
+
+.search-owner {
+  color:#c6bcbc !important;
+  &:hover {
+    color: #337ab7 !important;
+  }
+}
+
+.search-plan,
+.search-primary-group {
+  font-weight: 400; 
+  color:#5b626d !important;
+  &:hover {
+    color: #337ab7 !important;
+  }
+}

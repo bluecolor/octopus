@@ -1,0 +1,7 @@
+td(style="width:100px")
+  span.label(class!='<%= label %>'  data-toggle="tooltip" title="Status") <%- status?status:'UNKNOWN' %> 
+td(style="width:100px") <%- moment(date).format('MMM DD HH:mm:ss') %>
+td(style="width:100px") <%- `${(log==null?'':log).substring(0,30)}...` %>
+td(style="width:20px")
+  a.js-more(href='javascript:void(0);' style='margin-right:20px' model-id!='<%- id %>')
+    i.fa.fa-ellipsis-h.text-green-fade.fa-lg

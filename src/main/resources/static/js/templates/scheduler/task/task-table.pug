@@ -1,0 +1,105 @@
+.row 
+  .col-md-12
+    .box(style="border-top=0px")
+      .box-header.with-border
+        h3.box-title Tasks
+        .box-tools.pull-right.table-search
+          .input-group(style="margin-left:10px; align:center")
+            .input-group-btn
+              button.btn.btn-sm.btn-primary.dropdown-toggle(type='button', data-toggle='dropdown', aria-expanded='false')
+                | Filter 
+                span.fa.fa-caret-down
+              ul.dropdown-menu.js-search-menu
+                li
+                  a(href='#' name='myTasks') Your Tasks
+                li
+                  a(href='#' name='disabled') Disabled Tasks
+                li
+                  a(href='#' name='bookmarked') Bookmarked Tasks
+                li.divider
+                li
+                  a(href='#') View advanced search syntax
+            input.form-control.input-sm.table-search(type='text', placeholder='Search', name="search")
+      .box-body.no-padding
+        .table-controls
+          a.btn.btn-default.btn-sm.js-reload-btn
+            i.fa.fa-refresh.text-blue.fa-lg
+          a.js-new-task-btn.btn.btn-default.btn-sm(href='#/scheduler/tasks/new')
+            i.fa.fa-plus.text-green.fa-lg
+          a.btn.btn-default.btn-sm.js-import-btn(href='#/scheduler/tasks/import' data-toggle="tooltip" title="Import tasks")
+            i.fa.fa-upload.text-yellow.fa-lg
+          a.btn.btn-default.btn-sm.js-delete-task.hidden(data-toggle="tooltip" title="Delete task")
+            i.fa.fa-trash-o.text-danger.fa-lg
+          .dropdown.hidden(style="display:inline;" name="more")
+            button.btn.btn-default.btn-sm.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
+              | More
+              span.caret
+            ul.dropdown-menu(aria-labelledby='dropdownMenu1')
+              li  
+                a.js-run-task(href='javascript:void(0);') Run
+              li.divider(role='separator')
+              li.js-duplicate-task
+                a(href='javascript:void(0);') Duplicate
+              li.js-task-dep
+                a(href='javascript:void(0);') Dependencies
+              li  
+                a.js-export-task(href='javascript:void(0);') Export
+              li.divider(role='separator')
+              li
+                a.js-enable-task(href='javascript:void(0);') Enable
+              li
+                a.js-disable-task(href='javascript:void(0);') Disable
+              li.js-delete-task.divider(role='separator')
+              li
+                a.js-delete-task(href='javascript:void(0);') Delete
+          span.js-selected-tasks.text-gray-harbor.hidden
+          .dropdown.pull-right(style="display:inline;" name="sort")
+            a.btn.btn-default.btn-sm.dropdown-toggle.text-green(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
+              | Sort By
+              span.caret
+            ul.dropdown-menu(aria-labelledby='dropdownMenu1')
+              li.js-sort-name-asc
+                a(href='javascript:void(0);') Name ascending
+              li.js-sort-name-desc
+                a(href='javascript:void(0);') Name descending
+              li.divider(role='separator')
+              li.js-sort-avgd-asc
+                a(href='javascript:void(0);') Avg. duration ascending
+              li.js-sort-avgd-desc
+                a(href='javascript:void(0);') Avg. duration descending
+              li.divider(role='separator')                
+              li.js-sort-most-crash
+                a(href='javascript:void(0);') Most crashing              
+              li.js-sort-least-crash
+                a(href='javascript:void(0);') Least crashing              
+
+          .dropdown.pull-right(name="owner")
+            button.btn.btn-sm.btn-default.dropdown-toggle(type='button', data-toggle='dropdown', style="margin-right:10px;") Owner
+              span.caret
+            ul.dropdown-menu.js-owner-filter
+          .dropdown.pull-right(name="group" style="margin-right:10px;")
+            button.btn.btn-sm.btn-default.dropdown-toggle(type='button', data-toggle='dropdown') Group
+              span.caret
+            ul.dropdown-menu.js-group-filter
+          .dropdown.pull-right(name="plan" style="margin-right:10px;")
+            button.btn.btn-sm.btn-default.dropdown-toggle(type='button', data-toggle='dropdown') Plan
+              span.caret
+            ul.dropdown-menu.js-plan-filter
+          a.btn.btn-default.btn-sm.js-clear-filter-btn.text-red-plum.pull-right.hidden(href="#" style="margin-right:15px;")
+            i.fa.fa-filter.fa-lg
+            |   Clear filter
+        .table-responsive.connection-items
+          table.table.table-hover.display
+            thead
+              tr
+                th(style="width:20px") 
+                th(style="width:20px")
+                th(style="width:20px")
+                th(data-sortable="true") Task Name 
+                th(data-sortable="true") Dependencies
+                th(data-sortable="true") Group
+                th(data-sortable="true") Plan
+                th(style="width:20px")
+            tbody.js-table-body.plan-table
+      .box-footer.clearfix
+        ul.pagination.pagination-sm.no-margin.pull-right

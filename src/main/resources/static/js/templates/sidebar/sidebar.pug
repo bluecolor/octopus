@@ -1,0 +1,53 @@
+section.sidebar(style='height: auto;')
+  ul.sidebar-menu
+    li
+      a(href='#/scheduler')
+        i.fa.fa-home
+        span General
+    li
+      a.js-nav-scheduler(href='#/scheduler/sessions')
+        i.fa.fa-tasks
+        span Sessions
+    li
+      a(href='#/scheduler/plans')
+        i.fa.fa-calendar-check-o
+        span Run Plans
+    li
+      a(href='#/scheduler/groups')
+        i.fa.fa-cubes
+        span Groups
+    li
+      a(href='#/scheduler/parameters')
+        i.fa.fa-code
+        span Parameters
+    li
+      a.js-nav-connections(href='#/connections')
+        i.fa.fa-plug
+        span Connections
+    li
+      a.js-nav-users(href='#/users')
+        i.fa.fa-users
+        span Users
+    li
+      a.js-nav-users(href='#/settings')
+        i.fa.fa-wrench
+        span Settings
+      ul.treeview-menu
+        li
+          a(href='#/settings/mail')
+            i.fa.fa-envelope-o
+            | Mail
+    li
+      a.js-nav-users(href='#/reports')
+        i.fa.fa-bar-chart
+        span Reports
+    li
+      a.js-nav-users(href='#')
+        i.fa.fa-lg.fa-github
+        span Project Home
+      ul.treeview-menu
+        li 
+          a.js-nav-users(href='#')
+            i.fa.fa-book
+            span Documentation
+        

@@ -1,0 +1,31 @@
+.row 
+  .col-md-8.col-md-offset-2
+    .box(style="border-top=0px")
+      .box-header.with-border
+        h3.box-title Users
+        .box-tools.pull-right
+          .has-feedback.table-search
+            input.form-control.input-sm.js-search(type='text', placeholder='Search')
+            span.glyphicon.glyphicon-search.form-control-feedback
+      .box-body.no-padding
+        .table-controls
+          a.btn.btn-default.btn-sm.js-reload-btn(type='button')
+            i.fa.fa-refresh.text-blue.fa-lg
+          a.js-new-plan.btn.btn-default.btn-sm(href='#/users/new')
+            i.fa.fa-plus.text-green.fa-lg
+          a.js-trash-btn.btn.btn-default.btn-sm.hidden
+            i.fa.fa-trash-o.text-danger.fa-lg
+        
+        .table-responsive
+          table.table.table-hover
+            thead(style="display:none")
+              tr
+                th(style="width:20px")
+                th 
+                th
+                th
+                th(style="width:20px")
+            tbody.js-table-body
+            
+      .box-footer.clearfix
+        ul.pagination.pagination-sm.no-margin.pull-right          

@@ -1,0 +1,28 @@
+td
+  .checkbox.js-checkbox
+    input.styled(type='checkbox', value!='<%= id %>', aria-label='', name='checkbox')
+    label
+td    
+  a.js-bookmark.bookmark-item.pull-left(href='javascript:void(0)' style='margin-right:20px' model-id!='<%- id %>')
+    <% if(bookmarked) {%>
+      i.fa.fa-bookmark.text-yellow.fa-lg
+    <%}else{%>
+      i.fa.fa-bookmark-o.text-gray.fa-lg
+    <%}%>  
+td
+  <% if(!active) {%>
+    i.fa.fa-ban.text-danger.fa-lg(data-toggle="tooltip" title="Disabled")
+  <%}%>
+td
+  a(href!='#/scheduler/tasks/<%= id %>') <%- name %>
+td
+  a.js-dependencies(model-id!='<%- id %>' href!='#') <%- dependencies.length %>
+td
+  <% if(primaryGroup) {%>
+  span.label(style!='background-color:<%= primaryGroup.color %>') <%- primaryGroup.name %> 
+  <% } %>
+td.js-plan
+  <%- plan.name %>
+td    
+  a.js-stats(href='javascript:void(0)' data-toggle="popover" model-id!='<%- id %>')
+    i.fa.fa-bar-chart.text-green-fade.fa-lg

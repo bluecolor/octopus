@@ -1,0 +1,21 @@
+.row 
+  .col-md-8.col-md-offset-2
+    .box(style="border-top=0px")
+      .box-header.with-border
+        h3.box-title Alerts
+        .box-tools.pull-right
+          .has-feedback.table-search
+            input.form-control.input-sm.js-search(type='text', placeholder='Search')
+            span.glyphicon.glyphicon-search.form-control-feedback
+      .box-body.no-padding
+        .table-controls
+          a.btn.btn-default.btn-sm.js-reload-btn(type='button')
+            i.fa.fa-refresh.text-blue.fa-lg
+
+        .table-responsive
+          table.table.table-hover
+            tbody.js-table-body
+            
+      .box-footer.clearfix
+        ul.pagination.pagination-sm.no-margin.pull-right
+        

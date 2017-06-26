@@ -1,0 +1,30 @@
+.row
+  .col-md-6.col-md-offset-3  
+    .box.box-primary
+      .box-header.with-border
+        h3.box-title Session Task
+      .panel-body(style="height:620px")
+        ul.nav.nav-tabs
+          li.active
+            a(href='#task-instance-general', data-toggle='tab', aria-expanded='true') General
+          li
+            a(href='#task-instance-script', data-toggle='tab', aria-expanded='false') Script
+          li
+            a(href='#task-instance-dependencies', data-toggle='tab', aria-expanded='false') Dependencies
+          li
+            a(href='#task-instance-groups', data-toggle='tab', aria-expanded='false') Groups
+          li
+            a(href='#task-instance-owners', data-toggle='tab', aria-expanded='false') Owners
+          li
+            a(href='#task-instance-logs', data-toggle='tab', aria-expanded='false') Logs
+        .tab-content
+          #task-instance-general.tab-pane.active.in(style="margin:10px")
+          #task-instance-script.tab-pane(style="margin:10px")
+          #task-instance-dependencies.tab-pane(style="margin:10px")
+          #task-instance-groups.tab-pane(style="margin:10px")
+          #task-instance-owners.tab-pane(style="margin:10px")
+          #task-instance-logs.tab-pane(style="margin:10px")
+      .box-footer
+        a.btn.btn-danger.js-cancel-btn Cancel
+        a.ladda-button.btn.btn-primary.pull-right.js-save-btn(data-style="expand-left") Save
+        
