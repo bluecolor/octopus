@@ -15,11 +15,49 @@ apply plugin: 'eclipse'
 apply plugin: 'spring-boot'
 apply plugin: 'scala'
 
+def _versionCode=0
+def _major=0
+def _minor=0
+def _patch=0
+def _applicationId = "io.bluecolor.octopus"
+def versionPropsFile = file('version.properties')
+
+if (versionPropsFile.canRead()) {
+    def Properties versionProps = new Properties()
+
+    versionProps.load(new FileInputStream(versionPropsFile))
+
+    _patch = versionProps['PATCH'].toInteger() + 1
+    _major = versionProps['MAJOR'].toInteger()
+    _minor = versionProps['MINOR'].toInteger() 
+    _versionCode= versionProps['VERSION_CODE'].toInteger()+1
+    if(_patch==99)
+    {
+        _patch=0
+        _minor=_minor+1
+    }
+    if(_major==99){
+        _major=0
+        _major=_major+1
+    }
+
+    versionProps['MAJOR']=_major.toString()
+    versionProps['MINOR']=_minor.toString()
+    versionProps['PATCH']=_patch.toString()
+    versionProps['VERSION_CODE']=_versionCode.toString()
+    versionProps.store(versionPropsFile.newWriter(), null)
+}
+else {
+    throw new GradleException("Could not read version.properties!")
+}
+def _versionName = "${_major}.${_versionCode}.${_minor}.${_patch}"
+
 
 jar {
 	baseName = 'octopus'
-	version = '0.0.1-SNAPSHOT'
+	version = "${_versionName}"
 }
+
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
