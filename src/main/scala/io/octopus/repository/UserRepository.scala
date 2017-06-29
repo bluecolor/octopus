@@ -10,6 +10,7 @@ import io.octopus.model.User
 @Repository
 trait UserRepository extends JpaRepository[User, java.lang.Long] {
   def findByUsername(username: String) : User
+  def findBySystemTrue: User
   def findByUsernameIgnoreCase(username: String): User
   def findByEmailIgnoreCase(email: String): List[User]
   def findByNameContainingIgnoreCase(str: String): List[User]

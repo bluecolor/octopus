@@ -26,5 +26,5 @@ src/test/**
 **stdout.log
 .project
 .swp
-.private-docs
+private-docs
 octopus.properties

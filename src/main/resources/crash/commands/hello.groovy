@@ -4,7 +4,7 @@ import org.crsh.cli.Command
 import org.crsh.cli.Usage
 import org.crsh.command.InvocationContext
 
-class hello {
+class Hello {
 
   @Usage("Say Hello")
   @Command

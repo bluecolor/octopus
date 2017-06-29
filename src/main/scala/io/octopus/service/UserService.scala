@@ -10,7 +10,6 @@ import org.springframework.security.core.authority.AuthorityUtils
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.core.context.SecurityContextHolder
 
-
 import io.octopus.AppInit
 import io.octopus.repository.UserRepository
 import io.octopus.model.User
@@ -18,23 +17,34 @@ import io.octopus.exception._
 import io.octopus.actor.message.{SendUserPasswordMail,SendNewPasswordMail}
 import org.apache.commons.lang3.RandomStringUtils
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+import java.lang.invoke.MethodHandles
+
 @Service
 @Transactional
 class UserService @Autowired()(val userRepository: UserRepository) extends UserDetailsService {
 
   @(Autowired @setter)
   private var appInit: AppInit = _
-  
+
+  private val log:Logger  = LoggerFactory.getLogger(MethodHandles.lookup.lookupClass)
+
+
 	override def loadUserByUsername(username: String): UserDetails = {
 		
     val user = userRepository.findByUsername(username);
-    val auth = AuthorityUtils.createAuthorityList( user.getRole().toString() )
+    val auth = AuthorityUtils.createAuthorityList( user.getRole.toString )
     
 		new org.springframework.security.core.userdetails.User(
       user.username, 
       user.password,
 			auth)
 	}
+
+  def search(exp: String) = userRepository.search(exp)
+  
+  def findSystemUser = userRepository.findBySystemTrue
 
   def findAll = userRepository.findAll
 
@@ -58,11 +68,13 @@ class UserService @Autowired()(val userRepository: UserRepository) extends UserD
   def findByUsername(username: String) = userRepository.findByUsername(username)
   
 
-  def create(user: User) = {
-    val password = RandomStringUtils.random(8,true,true)
+  def create(user: User, system: Boolean = false) = {
+    val password = if(!system) RandomStringUtils.random(8,true,true) else user.password
+    
     user.password = new BCryptPasswordEncoder().encode(password)
     val u = userRepository.save(user)
     sendMail(SendUserPasswordMail(u, password))
+    log.debug(s"User '${user.username}' created.")    
     u
   }
 
@@ -73,12 +85,11 @@ class UserService @Autowired()(val userRepository: UserRepository) extends UserD
 
   def update(user: User) = {
     var u = userRepository.findOne(user.id)
-    u.name = user.name
+    u.name = if(user.name != null) user.name else u.name
     u.username = user.username
-    u.role = user.role
+    u.role = user.role 
     u.locked = user.locked
-    u.email = user.email
-    u.bookmarks = user.bookmarks
+    u.email = if(user.email != null) user.email else u.email
     userRepository.save(u)
   }
 
@@ -111,8 +122,6 @@ class UserService @Autowired()(val userRepository: UserRepository) extends UserD
     userRepository.save(me)
   }
 
-
-
   def delete(id: Long): User = {
     val user = userRepository.findOne(id);
     if(user.system){
@@ -123,8 +132,19 @@ class UserService @Autowired()(val userRepository: UserRepository) extends UserD
     }
   }
 
-  def search(exp: String) = {
-    userRepository.search(exp)
+  /*!
+    this can only be accessed from the shell 
+  */
+  def deleteSystemUser(id: Long): User = {
+    val user = userRepository.findOne(id);
+    if(user == null){
+      throw new RuntimeException(s"'${user.username}'' is not found")
+    }else if(user != null && !user.system){
+      throw new RuntimeException(s"'${user.username}' is not a system user")
+    }else{
+      userRepository.delete(id);
+      user;
+    }
   }
 
   def forgotPassword(str: String) = {
