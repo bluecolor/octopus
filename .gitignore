@@ -28,3 +28,6 @@ src/test/**
 .swp
 private-docs
 octopus.properties
+
+.jekyll-metadata
+.sass-cache
