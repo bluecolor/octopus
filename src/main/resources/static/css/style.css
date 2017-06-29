@@ -414,6 +414,15 @@ div.dataTables_wrapper {
 .toggle.android .toggle-handle {
   border-radius: 0px; }
 
+.table-controls .btn {
+  opacity: 0.7;
+  border-color: transparent;
+  background-color: transparent; }
+  .table-controls .btn:focus, .table-controls .btn.focus, .table-controls .btn:active, .table-controls .btn.active, .table-controls .btn:hover {
+    opacity: 1;
+    background-color: transparent;
+    border-color: transparent; }
+
 .combo {
   width: 100%; }
   .combo .combo-action {
