@@ -113,12 +113,12 @@ class UserService @Autowired()(val userRepository: UserRepository) extends UserD
       throw new RuntimeException("Password can not be empty!")
     }
 
-    val o = new BCryptPasswordEncoder().encode(oldp)
-
-    if(o != oldp){
+    val encoder = new BCryptPasswordEncoder 
+    
+    if(!encoder.matches(oldp, me.password)){
       throw new RuntimeException("Wrong old password!")
     }
-    me.username = new BCryptPasswordEncoder().encode(newp)
+    me.password = encoder.encode(newp)
     userRepository.save(me)
   }
 

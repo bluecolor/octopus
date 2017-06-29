@@ -39,7 +39,7 @@ define([
       Message.error('Unable change password!');
     };
     return $.ajax({
-      url     : "api/v1/users/profile/password",
+      url     : "api/v1/users/password",
       data    : JSON.stringify(p),
       dataType: 'json',
       type    : 'put',
