@@ -14,6 +14,16 @@ import io.octopus.model.Role
 import io.octopus.service.UserService
 
 /*
+  usage: Su [-u | --username] [-p | --password] [-n | --name] [-e | --email] [-m | --mode] [-h | --help]
+   [-u | --username] username
+   [-p | --password] password
+   [-n | --name]     name
+   [-e | --email]    email
+   [-m | --mode]     mode c(create) u(update) d(delete)
+   [-h | --help]     this help
+  
+  examples:
+
   CREATE:
     su -m c -u system -p system -n system -e system@bluecolor.io
 

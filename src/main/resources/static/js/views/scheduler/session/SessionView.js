@@ -6,7 +6,7 @@ define([
   'collections/SessionStore',
   'views/scheduler/session/ZeroSession',
   'views/scheduler/session/SessionTable',
-  'views/scheduler/session/Session',
+  'views/scheduler/session/Session'
   ], function (_, Backbone, template, Route, SessionStore, ZeroSession, SessionTable, Session) {
 	'use strict';
 
@@ -33,6 +33,18 @@ define([
       }
     },
 
+    showZeroSession: function(){
+      console.log('show zero session')
+      this.hideActiveView();
+      if(!this.zeroSession){
+        this.zeroSession = new ZeroSession();
+        this.$el.append(this.zeroSession.render().el);
+      }else {
+        this.zeroSession.$el.show();
+      }
+      this.config.activeView = this.zeroSession; 
+    },
+
     showSession: function(o){
       this.hideActiveView(); 
       this.session = new Session(o.id);   
@@ -50,11 +62,6 @@ define([
         this.activeView = this.sessionTable;
       }
     },
-
-    showZeroSession: function(){
-      console.log('IMPLEMENT SHOW ZERO SESSION!');      
-    },
-
 
     show: function(o){
       switch(o.route){

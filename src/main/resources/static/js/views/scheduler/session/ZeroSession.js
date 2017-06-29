@@ -1,14 +1,14 @@
 define([
 	'underscore',
   'backbone',
-  'text!templates/scheduler/plan/html/zero-plan.html'
+  'text!templates/scheduler/session/html/zero-session.html'
 ], function (_, Backbone, template) {
 	'use strict';
 
-	var ZeroPlan = Backbone.View.extend({
+	var ZeroSession = Backbone.View.extend({
 
 		tagName   : 'div',
-    className : 'empty-plans',
+    className : '.no-connection',
 		template  : _.template(template),
     events    : {
 		},
@@ -23,5 +23,5 @@ define([
 
 	});
 
-	return ZeroPlan;
+	return ZeroSession;
 });

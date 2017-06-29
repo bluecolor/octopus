@@ -103,6 +103,15 @@ define([
       this.$tableBody = this.$el.find('.js-table-body');
       this.load(alerts); 
 
+      if(me.config.collection.state.totalPages){
+        this.initPagination();
+      }
+
+      return this;  
+    },
+
+    initPagination: function(){
+      const me = this;
       this.$el.find('.pagination').twbsPagination({
         totalPages  : me.config.collection.state.totalPages,
         visiblePages: 10,
@@ -114,8 +123,6 @@ define([
           this.disableLoad = false;
         }
       });
-
-      return this;  
     }
 
   });
