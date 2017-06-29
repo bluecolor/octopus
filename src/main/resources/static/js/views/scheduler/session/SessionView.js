@@ -34,7 +34,6 @@ define([
     },
 
     showZeroSession: function(){
-      console.log('show zero session')
       this.hideActiveView();
       if(!this.zeroSession){
         this.zeroSession = new ZeroSession();

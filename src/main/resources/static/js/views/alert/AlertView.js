@@ -2,8 +2,10 @@ define([
 	'underscore',
   'backbone',
   'constants/Route',
-  'views/alert/AlertTable'
-], function (_, Backbone, Route, AlertTable ) {
+  'collections/index',
+  'views/alert/AlertTable',
+  'views/alert/ZeroAlert',
+], function (_, Backbone, Route, Store, AlertTable, ZeroAlert ) {
 	'use strict';
 
 	var AlertView = Backbone.View.extend({
@@ -29,11 +31,26 @@ define([
       }
     },
 
+    showZeroAlert: function(){
+      this.hideActiveView();
+      if(!this.zeroAlert){
+        this.zeroAlert = new ZeroAlert();
+        this.$el.append(this.zeroAlert.render().el);
+      }else {
+        this.zeroAlert.$el.show();
+      }
+      this.config.activeView = this.zeroAlert; 
+    },
+
     showAlertTable: function(){
       this.hideActiveView();
-      this.alertTable = new AlertTable();
-      this.$el.append(this.alertTable.render().el);
-      this.config.activeView = this.alertTable;
+      if(_.isEmpty(Store.AlertStore.models)){
+        this.showZeroAlert();
+      }else {
+        this.alertTable = new AlertTable();
+        this.$el.append(this.alertTable.render().el);
+        this.config.activeView = this.alertTable;
+      }
     },
 
     show: function(o){
