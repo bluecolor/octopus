@@ -28,7 +28,7 @@ src/test/**
 .project
 .swp
 private-docs
-octopus.properties
+/application.properties
 
 .jekyll-metadata
 .sass-cache
