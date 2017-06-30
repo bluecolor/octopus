@@ -1,6 +1,12 @@
 # Octopus - Open Source Task Scheduler
 
 
+### Config
+- configure `octopus.shell` using the `application.properties.template` file in `OCTOPUS_HOME`
+  - rename the `application.properties.template` file to `application.properties` and enter the 
+  repository connection parameters and octopus shell initiation parameters.
+
+
 ### Boot
 ```
 git clone https://github.com/bluecolor/octopus
@@ -15,11 +21,6 @@ gulp
 ```
 
 ### Usage
-
-- configure `octopus.shell` using the `application.properties.template` file in `OCTOPUS_HOME`
-  - rename the `application.properties.template` file to `application.properties` and enter the 
-  repository connection parameters and octopus shell initiation parameters.
-
 - create system user from the `octopus shell`:
   ```
     ssh user@localhost -p 2000
