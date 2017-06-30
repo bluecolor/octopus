@@ -1,7 +1,7 @@
 # Octopus - Open Source Task Scheduler
 
 
-### Config
+### Configuration
 - configure `octopus.shell` using the `application.properties.template` file in `OCTOPUS_HOME`
   - rename the `application.properties.template` file to `application.properties` and enter the 
   repository connection parameters and octopus shell initiation parameters.
