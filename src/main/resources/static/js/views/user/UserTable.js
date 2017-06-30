@@ -3,9 +3,9 @@ define([
   'backbone',
   'text!templates/user/html/user-table.html',
   'text!templates/user/html/user-record.html',
-  'collections/UserStore',
+  'collections/index',
   'plugins/Message'
-], function (_, Backbone, template, recordTemplate, UserStore, Message) {
+], function (_, Backbone, template, recordTemplate, Store, Message) {
 	'use strict';
 
   let UserRecord = Backbone.View.extend({
@@ -30,16 +30,16 @@ define([
       'click .js-user-checkbox' : 'onCheckbox',
       'click .js-trash-btn'     : 'onDeleteUser',
       'click .js-reload-btn'    : 'onReload',
-      'input .js-search'        : 'onSearch'
+      'input .js-search'        : 'onSearch',
     },
 
     initialize: function() {
       const me = this;
       me.config = {
-        collection: UserStore,
+        collection: Store.UserStore,
       };
 
-      this.listenTo(UserStore, 'remove add change reset', function(){
+      this.listenTo(Store.UserStore, 'remove add change reset', function(){
         me.load();
       });
 
@@ -48,12 +48,12 @@ define([
 
     onSearch: function(e){
       const str = e.target.value,
-            users = UserStore.search(str);
+            users = Store.UserStore.search(str);
       this.load(users);
     },
 
     onReload: function(){
-      UserStore.fetch({reset:true, data:{fetch:true, type:"get"}});
+      Store.UserStore.fetch({reset:true, data:{fetch:true, type:"get"}});
     },
 
     onDeleteUser: function(){
@@ -64,7 +64,7 @@ define([
         wait:true,
         success: function(){
           Message.notifySuccess('User deleted.');
-          UserStore.remove([model]);
+          Store.UserStore.remove([model]);
         },
         error: function(){
           Message.notifySuccess('Unable to delete user.');
@@ -100,22 +100,32 @@ define([
     },
 
     load: function(u){
-      const me = this,
-        users = u || UserStore.models
-
+      const me = this, users = u || Store.UserStore.models
       this.$tableBody.empty();      
-      _.each(users, function(user){
-        me.addRecord(user);
-      });
+      _.each(users, user => me.addRecord(user));
     },
 
 		render: function (users) {
       const me = this;
-      this.$el.empty();
-      this.$el.html(this.template());
-      this.$tableBody = this.$el.find('.js-table-body');
-      this.load(users); 
+      me.$el.empty();
+      me.$el.html(this.template());
+      me.$tableBody = this.$el.find('.js-table-body');
+      me.load(users); 
+      me.initPagination();
+      
+      const m = Store.SettingStore.find(m => m.get('name')=='MAIL');
+    
+      if(m == null || _.isEmpty(m)){
+        me.$el.find('.js-warn-btn').removeClass('hidden');
+      }else{
+        me.$el.find('.js-warn-btn').addClass('hidden');
+      }
 
+      return this;  
+    },
+
+    initPagination: function(){
+      const me = this;
       this.$el.find('.pagination').twbsPagination({
         totalPages  : me.config.collection.state.totalPages,
         visiblePages: 10,
@@ -126,8 +136,6 @@ define([
           this.disableLoad = false;
         }
       });
-
-      return this;  
     }
 
   });
