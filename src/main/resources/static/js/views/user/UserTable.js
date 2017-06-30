@@ -113,7 +113,7 @@ define([
       me.load(users); 
       me.initPagination();
       
-      const m = Store.SettingStore.find(m => m.get('name')=='MAIL');
+      const m = Store.SettingStore.find(m => m.get('name')=='MAIL' && m.get('active')=="yes" );
     
       if(m == null || _.isEmpty(m)){
         me.$el.find('.js-warn-btn').removeClass('hidden');

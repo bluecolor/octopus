@@ -36,7 +36,7 @@ class MailService {
   def test = {
     var mail = new Mail
     val s = settingService.findMailSettings
-    if(s != None){
+    if(s != None && s.get.isActive){
       mail.to = s.get.sendFrom 
       mail.from = s.get.sendFrom
       mail.subject= "Test mail from octopus"    
@@ -54,7 +54,7 @@ class MailService {
   def sendTaskInstanceMail(instance: TaskInstance) = {
     var mail = new Mail
     val s = settingService.findMailSettings
-    if(s != None){
+    if(s != None && s.get.isActive){
       mail.to = s.get.sendTo match {
         case "o" => instance.task.owners.map(_.email).mkString(",") 
         case "p" => instance.task.primaryOwner.email
@@ -71,7 +71,7 @@ class MailService {
   def sendUserPasswordMail(user: User, password: String) = {
     var mail = new Mail
     val s = settingService.findMailSettings
-    if(s != None){
+    if(s != None && s.get.isActive){
       if(user.email != null){
         mail.to = user.email 
         mail.subject= s"${user.name} welcome to Octopus scheduler"    
@@ -84,7 +84,7 @@ class MailService {
   def sendNewPasswordMail(user: User, password: String) = {
     var mail = new Mail
     val s = settingService.findMailSettings
-    if(s != None){
+    if(s != None && s.get.isActive){
       if(user.email != null){
         mail.to = user.email 
         mail.subject= s"New password - Octopus"    

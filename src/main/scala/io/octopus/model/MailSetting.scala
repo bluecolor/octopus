@@ -3,6 +3,10 @@ package io.octopus.model
 import scala.beans.BeanProperty
 
 class MailSetting {
+
+  @BeanProperty
+  var active: String = _
+  
   @BeanProperty
   var host: String = _
   
@@ -23,4 +27,7 @@ class MailSetting {
 
   @BeanProperty
   var connectionSecurity: String = "ssl"
+
+  def isActive = active == "yes"
+
 }

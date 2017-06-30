@@ -40,7 +40,6 @@ define([
         if (!param.id) {
           SettingStore.add(me.model);
         }
-        window.history.back();
         Message.notifySuccess('Mail settings saved');
       },
         onError = function (err, response) {
@@ -73,7 +72,8 @@ define([
       
       const m = JSON.parse(this.model.attributes.value);
       this.modelId = id;
-
+      
+      this.$el.find(`[name="active"][_value="${m.active}"]`).prop('checked', "1");
       this.$el.find('input[name="host"]').val(m.host);
       this.$el.find('input[name="port"]').val(m.port);
       this.$el.find('input[name="username"]').val(m.username);
@@ -90,6 +90,7 @@ define([
     getProps: function () {
       let p = {};
       
+      p.active = this.$el.find('[name="active"]:checked').attr('_value');
       p.host = this.$el.find('input[name="host"]').val();
       p.port = parseInt(this.$el.find('input[name="port"]').val());
       p.username = this.$el.find('input[name="username"]').val();

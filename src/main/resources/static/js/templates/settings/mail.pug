@@ -5,6 +5,17 @@
         h3.box-title Mail Settings
       form(role='form')
         .box-body
+          .form-group
+            label Mail service active
+            fieldset
+              .radio.radio-inline.radio-danger(style="display:inline")
+                input#radio-service-1(type='radio', name='active', _value='yes', checked='1')
+                label(for='radio-service-1')
+                  | Yes
+              .radio.radio-inline.radio-danger(style="display:inline")
+                input#radio-service-2(type='radio', name='active', _value='no')
+                label(for='radio-service-2')
+                  | No
           .row
             div.col-xs-9
               .form-group
