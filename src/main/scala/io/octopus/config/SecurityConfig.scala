@@ -28,6 +28,7 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
       .ignoring()
       .antMatchers("/forgot-password")
       .antMatchers("/api/v1/users/forgot-password")
+      .antMatchers("/api/v1/settings/active-mail-service")
       .antMatchers("/static/**")
       .antMatchers("/bower_components/**");
   }

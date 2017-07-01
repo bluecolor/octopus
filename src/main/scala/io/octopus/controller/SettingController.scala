@@ -22,7 +22,11 @@ class SettingController  @Autowired()(private val settingService: SettingService
 
   @RequestMapping(value = Array("/{id}"), method = Array(RequestMethod.GET))
   def findOne(@PathVariable("id") id: Long) = settingService.findOne(id)
-  
+
+  @RequestMapping(value = Array("/active-mail-service"), method = Array(RequestMethod.GET))
+  def activeMailService: Boolean = settingService.activeMailService
+ 
+
   @RequestMapping(method = Array(RequestMethod.POST))
   def create(@RequestBody setting: Setting) = {
     var s:Setting = null; 

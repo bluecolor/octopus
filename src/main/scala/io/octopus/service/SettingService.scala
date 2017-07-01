@@ -71,6 +71,17 @@ class SettingService @Autowired()(val settingRepository: SettingRepository){
     return None
   }
 
+  def activeMailService: Boolean = {
+    val s = settingRepository.findByNameIgnoreCase("mail")
+    if(!s.isEmpty) {
+      val mapper = new ObjectMapper
+      val m = mapper.readValue(s(0).value, classOf[MailSetting])
+      return m.active.toLowerCase == "yes"
+    }else{
+      return false
+    }  
+  }
+
 
 
 }
