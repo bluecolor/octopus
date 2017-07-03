@@ -27,6 +27,18 @@ define([
 		},
 
     drawGroupStats: function(){
+      
+      const models = Store.GroupStore.models;
+      if(_.isEmpty(models)){
+        this.$el.find('.js-group-stats').addClass('hidden');
+        this.$el.find('.js-group-stats-zd').removeClass('hidden');
+        return;
+      }else{
+        this.$el.find('.js-group-stats').removeClass('hidden');
+        this.$el.find('.js-group-stats-zd').addClass('hidden');
+      }
+      
+      
       const ctx = this.$el.find('.js-group-stats')      
       let data = {
         labels : _.map(Store.GroupStore.models,m => m.get('name') ),

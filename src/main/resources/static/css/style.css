@@ -481,6 +481,17 @@ footer {
   padding: 2px 3px;
   line-height: .9; }
 
+.lo-center {
+  margin: 100px auto;
+  text-align: center;
+  width: 100px;
+  height: 100px;
+  text-align: center;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0; }
+
 .main-header {
   position: relative;
   max-height: 100px;
@@ -871,6 +882,17 @@ div[data-notify="container"].alert-warning {
 
 .strength {
   float: right; }
+
+.zero-data {
+  margin: 0 auto 0 auto;
+  text-align: center;
+  width: 100px;
+  height: 100px;
+  text-align: center;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0; }
 
 .search-view {
   padding-top: 20px; }

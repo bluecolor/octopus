@@ -3,11 +3,21 @@
     .box(style="border-top=0px")
       .box-header
         h3.box-title Plan Tasks
-      .box-body.no-padding
-        canvas.js-plan-stats(width='400', height='200')
+      .box-body
+        canvas.hidden.js-plan-stats(width='400')
+        div.lo-center.zero-data.js-plan-stats-zd(style="background-color:white; width:200px; height:100%;")
+          div(style="width:200px;")
+            i.fa.big-icon.text-gray-harbor.fa-calendar-check-o(style="text-align: center;")
+          div(style="width: 200px; margin-top:20px;")
+            a.btn.btn-block.btn-primary.btn-lg.js-new-connection(href='#/scheduler/plans/new') Create Plan
   .col-md-6
-    .box(style="border-top=0px")
+    .box(style="border-top=0px" )
       .box-header
         h3.box-title Group Tasks
-      .box-body.no-padding
-        canvas.js-group-stats(width='400', height='200')
+      .box-body
+        canvas.hidden.js-group-stats(width='400')
+        div.lo-center.zero-data.js-group-stats-zd(style="background-color:white; width:200px; height:100%;")
+          div(style="width:200px;")
+            i.fa.big-icon.text-gray-harbor.fa-cubes(style="text-align: center;")
+          div(style="width: 200px;margin-top: 20px;")
+            a.btn.btn-block.btn-primary.btn-lg.js-new-group(href='#/scheduler/groups/new') Create Group
