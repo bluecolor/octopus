@@ -44,9 +44,9 @@ class PlanController  @Autowired()(private val planService: PlanService) {
   }
 
   @RequestMapping(value = Array("/{id}"), method = Array(RequestMethod.PUT))
-  def update(@PathVariable("id") id: Long, @RequestBody plan: Plan) = {
+  def update(@PathVariable("id") id: Long, @RequestBody plan: Plan) = 
     planService.update(plan)
-  }
+  
 
   @RequestMapping(value = Array("/{id}"), method = Array(RequestMethod.DELETE))
   def delete(@PathVariable("id") id: Long) = {

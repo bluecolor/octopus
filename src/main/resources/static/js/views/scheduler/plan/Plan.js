@@ -37,16 +37,19 @@ define([
       let cons = new ConnectionList(),$cons= cons.render().$el;
       $cons.attr('name', 'plan-connection');
       $cons.insertAfter(this.$el.find('.form-group.js-plan-name'));
-      
+      this.initSlider();
+      me.show(me.modelId);
+      return this;
+    },
+
+    initSlider: function(){
+      const me = this;
       setTimeout(function(){
         me.$el.find("input.slider").slider({
           ticks: [1,2,3,4],
           ticks_labels: ["Low", "Medium", "High","Top"],
         });
       },10);
-
-      me.show(me.modelId);
-      return this;
     },
 
     setValues: function(){
@@ -62,8 +65,10 @@ define([
       
       if(this.modelId){
         this.$el.find('.js-tasks').removeClass('disabled');
+        this.$el.find('.js-active').removeAttr('disabled');
       }
       
+
       return this;
   
     },

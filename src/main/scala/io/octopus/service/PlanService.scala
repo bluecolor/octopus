@@ -86,6 +86,11 @@ class PlanService @Autowired()(val planRepository: PlanRepository) {
     if(!CronExpression.isValidExpression(p.schedule)){
       throw InvalidCronExpressionException(plan.schedule)
     }
+
+    if(p.tasks.isEmpty && plan.active){
+      throw RuntimeException("Can not activate plan with no tasks!");
+    }
+
     p.connection = plan.connection
     p.priority = plan.priority
     p.active = plan.active
