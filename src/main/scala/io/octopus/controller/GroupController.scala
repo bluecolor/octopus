@@ -4,7 +4,7 @@ import java.util.Date
 import java.text.SimpleDateFormat
 import javax.servlet.http.HttpServletResponse
 
-
+import org.springframework.security.access.annotation.Secured 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation._
 
@@ -22,6 +22,7 @@ class GroupController  @Autowired()(private val groupService: GroupService) {
   
 
   @RequestMapping(method = Array(RequestMethod.POST))
+  @Secured(Array("ROLE_MASTER","ROLE_OPERATOR"))
   def create(@RequestBody group: Group) = {
     var g:Group = null; 
     try{
@@ -34,11 +35,13 @@ class GroupController  @Autowired()(private val groupService: GroupService) {
   }
 
   @RequestMapping(value = Array("/{id}"), method = Array(RequestMethod.PUT))
+  @Secured(Array("ROLE_MASTER","ROLE_OPERATOR"))
   def update(@PathVariable("id") id: Long,@RequestBody group: Group) = {
     groupService.update(group)
   }
 
   @RequestMapping(value = Array("/{id}"), method = Array(RequestMethod.DELETE))
+  @Secured(Array("ROLE_MASTER","ROLE_OPERATOR"))
   def delete(@PathVariable("id") id: Long) = {
     groupService.delete(id)
   }
