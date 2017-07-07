@@ -65,6 +65,7 @@ define([
         me.$el.find('input[name="username"]').val(d.username);
         me.$el.find('input[name="name"]').val(d.name);
         me.$el.find('input[name="email"]').val(d.email);
+        me.$el.find('input[name="role"]').val(d.role);
       }).fail(()=>{
         Message.error("Unable to get user profile!")
       });

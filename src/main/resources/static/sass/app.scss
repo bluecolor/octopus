@@ -305,3 +305,8 @@ div.dataTables_wrapper{
   right: 0;
 }
 
+
+.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
+    background-color: rgba(255, 229, 127, 0.24);
+    /* opacity: 1; */
+}

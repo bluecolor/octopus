@@ -27,7 +27,7 @@ class UserController  @Autowired()(private val userService: UserService) {
 
 
   @RequestMapping(method = Array(RequestMethod.POST))
-  @Secured(Array("MASTER"))
+  @Secured(Array("ROLE_MASTER"))
   def create(@Validated @RequestBody user: User) = {
     var u: User = null 
     try{
@@ -40,6 +40,7 @@ class UserController  @Autowired()(private val userService: UserService) {
   }
 
   @RequestMapping(value = Array("/{id}"), method = Array(RequestMethod.PUT))
+  @Secured(Array("ROLE_MASTER"))
   def update(@PathVariable("id") id: Long, @RequestBody user: User) =
     userService.update(user)
   
@@ -55,7 +56,7 @@ class UserController  @Autowired()(private val userService: UserService) {
 
 
   @RequestMapping(value = Array("/{id}"), method = Array(RequestMethod.DELETE))
-  @Secured(Array("MASTER"))
+  @Secured(Array("ROLE_MASTER"))
   def delete(@PathVariable("id") id: Long) = userService.delete(id)
 
   @RequestMapping(value = Array("/forgot-password"), method = Array(RequestMethod.POST))

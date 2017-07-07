@@ -4,6 +4,7 @@ import java.util.Date
 import java.text.SimpleDateFormat
 import javax.servlet.http.HttpServletResponse
 
+import org.springframework.security.access.annotation.Secured 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation._
@@ -20,12 +21,13 @@ class ParameterController  @Autowired()(private val parameterService: ParameterS
   @RequestMapping(method = Array(RequestMethod.GET) )
   def findAll = parameterService.findAll
 
+  
   @RequestMapping(value = Array("/{id}"), method = Array(RequestMethod.GET))
-  def findOne(@PathVariable("id") id: Long) = {
-    parameterService.findOne(id)
-  }
+  def findOne(@PathVariable("id") id: Long) = parameterService.findOne(id)
+  
 
   @RequestMapping(method = Array(RequestMethod.POST))
+  @Secured(Array("ROLE_MASTER","ROLE_OPERATOR"))
   def create(@RequestBody parameter: Parameter) = {
     var p:Parameter = null; 
     try{
@@ -37,15 +39,17 @@ class ParameterController  @Autowired()(private val parameterService: ParameterS
     p
   }
 
+
   @RequestMapping(value = Array("/{id}"), method = Array(RequestMethod.PUT))
-  def update(@PathVariable("id") id: Long, @RequestBody parameter: Parameter) = {
+  @Secured(Array("ROLE_MASTER","ROLE_OPERATOR"))
+  def update(@PathVariable("id") id: Long, @RequestBody parameter: Parameter) = 
     parameterService.update(parameter)
-  }
+  
 
   @RequestMapping(value = Array("/{id}"), method = Array(RequestMethod.DELETE))
-  def delete(@PathVariable("id") id: Long) = {
-    parameterService.delete(id)
-  }
+  @Secured(Array("ROLE_MASTER","ROLE_OPERATOR"))
+  def delete(@PathVariable("id") id: Long) = parameterService.delete(id)
+
 
   @RequestMapping(value=Array("/export/{ids}"), method=Array(RequestMethod.GET))
   def export(@PathVariable("ids") ids: java.util.List[java.lang.Long], response: HttpServletResponse): Unit = {
