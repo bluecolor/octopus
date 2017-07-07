@@ -5,8 +5,9 @@ define([
   'text!templates/scheduler/plan/html/plan-record.html',
   'collections/PlanStore',
   'plugins/Message',
-  'ajax/Plan'
-], function (_, Backbone, template, recordTemplate, PlanStore, Message, AjaxPlan) {
+  'ajax/Plan',
+  'constants/index'
+], function (_, Backbone, template, recordTemplate, PlanStore, Message, AjaxPlan, Constants) {
 	'use strict';
 
   let PlanRecord = Backbone.View.extend({
@@ -221,6 +222,7 @@ define([
                 dialog.close();
                 Message.notifySuccess('Plan deleted.');
                 PlanStore.remove([model]);
+                Backbone.trigger("route",{route: Constants.Route.SCHEDULER_PLANS});
               },
               error: function(){
                 dialog.enableButtons(true);

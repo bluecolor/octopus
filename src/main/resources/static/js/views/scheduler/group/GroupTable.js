@@ -74,6 +74,7 @@ define([
           me.$el.find('.js-trash-btn, .js-run-btn').addClass('hidden');
           Message.notifySuccess('Group deleted.');
           GroupStore.remove([model]);
+          Backbone.trigger("route",{route: Constants.Route.SCHEDULER_PLANS});
         },
         error: function(){
           Message.notifyDanger('Unable delete group!');
