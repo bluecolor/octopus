@@ -88,7 +88,7 @@ class PlanService @Autowired()(val planRepository: PlanRepository) {
     }
 
     if(p.tasks.isEmpty && plan.active){
-      throw RuntimeException("Can not activate plan with no tasks!");
+      throw new RuntimeException("Can not activate plan with no tasks!");
     }
 
     p.connection = plan.connection
