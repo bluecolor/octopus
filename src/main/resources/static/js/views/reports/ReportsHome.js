@@ -1,10 +1,11 @@
 define([
 	'underscore',
   'backbone',
-  'constants/Route',
+  'constants/index',
   'text!templates/reports/html/reports-home.html',
-  'collections/index'
-], function (_, Backbone, Route, template, Store ) {
+  'collections/index',
+  'ajax/User'  
+], function (_, Backbone, Constants, template, Store, User ) {
 	'use strict';
 
 	var ReportsHome = Backbone.View.extend({
@@ -102,9 +103,20 @@ define([
       this.$el.html(this.template());
       this.drawPlanStats();
       this.drawGroupStats();
+      this.initAuth();
       return this;
     },
     
+    initAuth: function(){
+      if(User.hasAccess(Constants.Role.OPERATOR)){
+        this.$el.find('.js-new-connection').removeClass('hidden');
+        this.$el.find('.js-new-group').removeClass('hidden');
+      }else{
+        this.$el.find('.js-new-connection').addClass('hidden');
+        this.$el.find('.js-new-group').addClass('hidden');
+      }
+    }
+
 	});
 
 	return ReportsHome;
