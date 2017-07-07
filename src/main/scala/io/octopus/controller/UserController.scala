@@ -25,6 +25,7 @@ class UserController  @Autowired()(private val userService: UserService) {
   @RequestMapping(value = Array("/count"), method = Array(RequestMethod.GET) )
   def count = userService.count
 
+
   @RequestMapping(method = Array(RequestMethod.POST))
   @Secured(Array("MASTER"))
   def create(@Validated @RequestBody user: User) = {
@@ -39,19 +40,19 @@ class UserController  @Autowired()(private val userService: UserService) {
   }
 
   @RequestMapping(value = Array("/{id}"), method = Array(RequestMethod.PUT))
-  def update(@PathVariable("id") id: Long, @RequestBody user: User) = {
+  def update(@PathVariable("id") id: Long, @RequestBody user: User) =
     userService.update(user)
-  }
+  
 
   @RequestMapping(value = Array("/profile"), method = Array(RequestMethod.PUT))
-  def updateProfile(@RequestBody user: User) = {
+  def updateProfile(@RequestBody user: User) = 
     userService.updateProfile(user)
-  }
+
 
   @RequestMapping(value = Array("/password"), method = Array(RequestMethod.PUT))
-  def changePassword(@RequestBody pass: Map[String,String]) = {
+  def changePassword(@RequestBody pass: Map[String,String]) =
     userService.changePassword(pass.get("currentPassword").get,pass.get("newPassword").get)
-  }
+
 
   @RequestMapping(value = Array("/{id}"), method = Array(RequestMethod.DELETE))
   @Secured(Array("MASTER"))

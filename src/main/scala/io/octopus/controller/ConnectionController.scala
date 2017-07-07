@@ -23,7 +23,7 @@ class ConnectionController  @Autowired()(private val connectionService: Connecti
   def findAll = connectionService.findAll
 
 
-  @Secured(Array("OPERATOR"))
+  @Secured(Array("ROLE_OPERATOR","ROLE_MASTER"))
   @RequestMapping(method = Array(RequestMethod.POST))
   def create(@RequestBody connection: Connection) = {
     var con:Connection = null; 
@@ -38,13 +38,13 @@ class ConnectionController  @Autowired()(private val connectionService: Connecti
 
 
   @RequestMapping(value = Array("/{id}"), method = Array(RequestMethod.PUT))
-  @Secured(Array("OPERATOR"))
+  @Secured(Array("ROLE_OPERATOR","ROLE_MASTER"))
   def update(@PathVariable("id") id: Long, @RequestBody connection: Connection) = 
     connectionService.update(connection)
 
 
   @RequestMapping(value = Array("/{id}"), method = Array(RequestMethod.DELETE))
-  @Secured(Array("OPERATOR"))
+  @Secured(Array("ROLE_OPERATOR","ROLE_MASTER"))
   def delete(@PathVariable("id") id: Long) =
     connectionService.delete(id)
 

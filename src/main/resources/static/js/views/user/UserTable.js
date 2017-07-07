@@ -92,7 +92,7 @@ define([
     },
 
     findChecked: function(){
-      return this.$el.find('.js-table-body').find('input[type="checkbox"]:checked');
+      return this.$el.find('.js-table-body input[type="checkbox"]:checked');
     },
 
     showHideButtons: function(){

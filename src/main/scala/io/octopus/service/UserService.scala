@@ -34,7 +34,7 @@ class UserService @Autowired()(val userRepository: UserRepository) extends UserD
 	override def loadUserByUsername(username: String): UserDetails = {
 		
     val user = userRepository.findByUsername(username);
-    val auth = AuthorityUtils.createAuthorityList( user.getRole.toString )
+    val auth = AuthorityUtils.createAuthorityList( s"ROLE_${user.role}" )
     
 		new org.springframework.security.core.userdetails.User(
       user.username, 

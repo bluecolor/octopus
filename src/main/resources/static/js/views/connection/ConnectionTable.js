@@ -5,8 +5,10 @@ define([
   'text!templates/connections/html/connection-record.html',
   'collections/ConnectionStore',
   'ajax/Connection',
-  'plugins/Message'
-], function (_, Backbone, template, recordTemplate, ConnectionStore,AjaxConnection, Message) {
+  'plugins/Message',
+  'ajax/User',
+  'constants/index'
+], function (_, Backbone, template, recordTemplate, ConnectionStore,AjaxConnection, Message, User, Constants) {
 	'use strict';
 
   let ConnectionRecord = Backbone.View.extend({
@@ -69,7 +71,6 @@ define([
       };
 
       AjaxConnection.test(model.attributes, cb);
-      
     },
 
     onSearchConnections: function(e){
@@ -242,7 +243,13 @@ define([
       const me = this;
       let data = this.getPaginationData();
       this.$el.html(this.template(data));
-      
+      me.initPagination();
+      me.initAuth();
+      return this;  
+    },
+
+    initPagination: function(){
+      const me = this;
       this.$el.find('.pagination').twbsPagination({
         totalPages  : me.config.collection.state.totalPages,
         visiblePages: 10,
@@ -254,8 +261,14 @@ define([
           this.disableLoad = false;
         }
       });
-      
-      return this;  
+    },
+
+    initAuth: function(){
+      if(User.hasAccess(Constants.Role.OPERATOR)){
+        this.$el.find('.js-item').removeClass('hidden');
+      }else{
+        this.$el.find('.js-item').addClass('hidden');
+      }
     }
 
 	});

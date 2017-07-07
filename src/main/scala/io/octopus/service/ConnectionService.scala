@@ -91,7 +91,7 @@ class ConnectionService @Autowired()(val connectionRepository: ConnectionReposit
 
   @throws(classOf[ConnectionNameExistException])
   def create(connection: Connection): Connection = {
-    if(connectionRepository.findByNameIgnoreCase(connection.name) == null){
+    if(connectionRepository.findByNameIgnoreCase(connection.name) != null){
       throw new ConnectionNameExistException(connection.name)
     }
     connectionRepository.save(connection)
