@@ -194,6 +194,7 @@ define([
       _.each(cons, function(connection){
         me.addRecord(connection);
       });
+      me.initAuth();
       this.checkPagination();
     },
 
@@ -244,7 +245,6 @@ define([
       let data = this.getPaginationData();
       this.$el.html(this.template(data));
       me.initPagination();
-      me.initAuth();
       return this;  
     },
 
@@ -265,9 +265,9 @@ define([
 
     initAuth: function(){
       if(User.hasAccess(Constants.Role.OPERATOR)){
-        this.$el.find('.js-item').removeClass('hidden');
+        this.$el.find('.checkbox, .js-item').removeClass('hidden');
       }else{
-        this.$el.find('.js-item').addClass('hidden');
+        this.$el.find('.checkbox, .js-item').addClass('hidden');
       }
     }
 

@@ -5,8 +5,10 @@ define([
   'plugins/Message',
   'collections/ConnectionStore',
   'models/ConnectionModel',
-  'ajax/Connection'
-], function (_, Backbone, template,Message, ConnectionStore, ConnectionModel, AjaxConnection) {
+  'ajax/Connection',
+  'ajax/User',
+  'constants/index'
+], function (_, Backbone, template,Message, ConnectionStore, ConnectionModel, AjaxConnection, User, Constants) {
 	'use strict';
 
 	let Connection = Backbone.View.extend({
@@ -29,6 +31,7 @@ define([
 
 		render: function () { 	
       this.$el.html(this.template());
+      this.initAuth();
       return this;
     },
 
@@ -181,6 +184,16 @@ define([
 
     show: function(id){
       return this.setValues(id);
+    },
+
+    initAuth: function(){
+      if(User.hasAccess(Constants.Role.OPERATOR)){
+        this.$el.find('.js-save-btn').removeClass('hidden');
+        this.$el.find('.js-item').attr("disabled","false");
+      }else{
+        this.$el.find('.js-save-btn').addClass('hidden');
+        this.$el.find('.js-item').attr("disabled","disabled");
+      }
     }
 
 	});
