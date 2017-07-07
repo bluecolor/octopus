@@ -73,6 +73,11 @@ class PlanService @Autowired()(val planRepository: PlanRepository) {
     if(!CronExpression.isValidExpression(plan.schedule)){
       throw InvalidCronExpressionException(plan.schedule)
     }
+
+    if(plan.activate){
+      throw new RuntimeException("You can not create an active plan!");
+    }
+
     planRepository.save(plan)
     if(plan.active == true){
       askToSupervisor(SchedulePlan(plan), classOf[ScheduledPlan]).plan
@@ -88,7 +93,7 @@ class PlanService @Autowired()(val planRepository: PlanRepository) {
     }
 
     if(p.tasks.isEmpty && plan.active){
-      throw new RuntimeException("Can not activate plan with no tasks!");
+      throw new RuntimeException("You can not activate plan with no tasks!");
     }
 
     p.connection = plan.connection
