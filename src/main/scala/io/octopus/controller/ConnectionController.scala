@@ -4,6 +4,7 @@ import java.util.Date
 import java.text.SimpleDateFormat
 import javax.servlet.http.HttpServletResponse
 
+import org.springframework.security.access.annotation.Secured 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation._
@@ -21,6 +22,8 @@ class ConnectionController  @Autowired()(private val connectionService: Connecti
   @RequestMapping(method = Array(RequestMethod.GET) )
   def findAll = connectionService.findAll
 
+
+  @Secured(Array("MASTER","OPERATOR"))
   @RequestMapping(method = Array(RequestMethod.POST))
   def create(@RequestBody connection: Connection) = {
     var con:Connection = null; 
@@ -33,20 +36,23 @@ class ConnectionController  @Autowired()(private val connectionService: Connecti
     con
   }
 
+
   @RequestMapping(value = Array("/{id}"), method = Array(RequestMethod.PUT))
-  def update(@PathVariable("id") id: Long, @RequestBody connection: Connection) = {
+  @Secured(Array("MASTER","OPERATOR"))
+  def update(@PathVariable("id") id: Long, @RequestBody connection: Connection) = 
     connectionService.update(connection)
-  }
+
 
   @RequestMapping(value = Array("/{id}"), method = Array(RequestMethod.DELETE))
-  def delete(@PathVariable("id") id: Long) = {
+  @Secured(Array("MASTER","OPERATOR"))
+  def delete(@PathVariable("id") id: Long) =
     connectionService.delete(id)
-  }
+
 
   @RequestMapping(value = Array("/test"), method = Array(RequestMethod.POST))
-  def test(@RequestBody connection: Connection): Boolean = {
+  def test(@RequestBody connection: Connection): Boolean = 
     connectionService.test(connection)
-  }
+
 
   @RequestMapping(value=Array("/export/{id}"), method=Array(RequestMethod.GET))
   def export(@PathVariable("id") id: java.lang.Long, response: HttpServletResponse): Unit = {

@@ -3,8 +3,9 @@ define([
   'constants/Technology',
   'constants/Color',
   'constants/Status',
-  'constants/Settings'
-],function(Route, Technology, Color, Status, Settings){
+  'constants/Settings',
+  'constants/Role',
+],function(Route, Technology, Color, Status, Settings, Role){
 
   const getPriority =(p)=>{
     switch (p){
@@ -21,6 +22,7 @@ define([
     getPriority,
     Color,
     Status,
-    Settings
+    Settings,
+    Role
   }
 });

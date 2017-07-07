@@ -5,8 +5,9 @@ define([
   'views/Footer',
   'views/Center',
   'collections/index',
-  'ajax/Socket'
-], function (_, Backbone, Sidebar, Footer, Center, Store,Socket) {
+  'ajax/Socket',
+  'ajax/User',
+], function (_, Backbone, Sidebar, Footer, Center, Store,Socket,User) {
 	'use strict';
 
 	let App = Backbone.View.extend({
@@ -67,6 +68,7 @@ define([
           loadAlerts();  
         });
       },30000);
+      User.init();
   
     },
 

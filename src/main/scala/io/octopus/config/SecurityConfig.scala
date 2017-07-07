@@ -16,8 +16,8 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity
 import io.octopus.service.UserService
 
 @Configuration
-@EnableGlobalMethodSecurity(prePostEnabled = true)
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
+@EnableGlobalMethodSecurity(securedEnabled = true,prePostEnabled = true)
 class SecurityConfig extends WebSecurityConfigurerAdapter {
     
   @Autowired

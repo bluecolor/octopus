@@ -32,7 +32,6 @@ define([
     },
 
     validate: function(){
-      console.log('v')
       let isValid= true, p = this.getProps();
        isValid = !( 
         _.isEmpty(p.username) ||
@@ -70,13 +69,17 @@ define([
     },
 
     setValues: function(id){
+      
       this.modelId = id || this.modelId;
       this.model = UserStore.get(this.modelId) || new UserModel();  
       const attr = this.model.attributes;
+      
+      
+      
       this.$el.find('input[name="username"]').val(attr.username);
       this.$el.find('input[name="name"]').val(attr.name);
       this.$el.find('input[name="email"]').val(attr.email);
-      this.$el.find('input[name="role"]').val(attr.role);
+      this.$el.find('select[name="role"]').val(attr.role).change();
       this.$el.find('#user-locked-1').prop('checked', attr.locked);
     },
 

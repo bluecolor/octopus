@@ -4,6 +4,23 @@ define([
 ], function (_, Message) {
 	'use strict';
 
+  let me = {};
+
+  const init = function(){
+    const that = this;
+    findMe().done(function(d){
+      that.me = d;
+    });
+  }
+
+  const hasAccess = function(role){
+    role = role || "GUEST";
+    if(this.me.role === "MASTER") return true;
+    const roleIndex = {guest:1,operator:2,master:3};
+    return roleIndex[role.toLowerCase] <= roleIndex[this.me.role.toLowerCase]
+  }
+
+
   const findMe = ()=> {
     return findCurrentUser();
   }
@@ -56,7 +73,10 @@ define([
     findMe,
     findCurrentUser,
     updateProfile,
-    changePassword
+    changePassword,
+    me,
+    init,
+    hasAccess
   };
 
 
