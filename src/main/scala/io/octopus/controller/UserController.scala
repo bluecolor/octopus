@@ -1,5 +1,6 @@
 package io.octopus.controller 
 
+import org.springframework.security.access.annotation.Secured 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation._
@@ -25,6 +26,7 @@ class UserController  @Autowired()(private val userService: UserService) {
   def count = userService.count
 
   @RequestMapping(method = Array(RequestMethod.POST))
+  @Secured(Array("MASTER"))
   def create(@Validated @RequestBody user: User) = {
     var u: User = null 
     try{
@@ -52,13 +54,10 @@ class UserController  @Autowired()(private val userService: UserService) {
   }
 
   @RequestMapping(value = Array("/{id}"), method = Array(RequestMethod.DELETE))
-  def delete(@PathVariable("id") id: Long) = {
-    userService.delete(id)
-  }
+  @Secured(Array("MASTER"))
+  def delete(@PathVariable("id") id: Long) = userService.delete(id)
 
   @RequestMapping(value = Array("/forgot-password"), method = Array(RequestMethod.POST))
-  def forgotPassword(@RequestBody str: String) = {
-    userService.forgotPassword(str)
-  }
+  def forgotPassword(@RequestBody str: String) = userService.forgotPassword(str)
 
 }

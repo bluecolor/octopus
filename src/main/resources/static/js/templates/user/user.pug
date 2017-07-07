@@ -8,27 +8,27 @@
           .box-body
             .form-group
               label Username
-              input.form-control.js-username(name="username", type='text', required=true, autofocus=true)
+              input.js-item.form-control.js-username(name="username", type='text', required=true, autofocus=true)
             .form-group
               label Name
-              input.form-control.js-name(name="name", type='text',  required=true)
+              input.js-item.form-control.js-name(name="name", type='text',  required=true)
             .form-group
               label Email
-              input.form-control.js-name(name="email", type='text', required=true)
+              input.js-item.form-control.js-name(name="email", type='text', required=true)
             .form-group
               label Role
-              select.form-control.js-role(name="role")
+              select.js-item.form-control.js-role(name="role")
                 option(value="GUEST")     GUEST
                 option(value="OPERATOR")  OPERATOR
                 option(value="MASTER")    MASTER
             .form-group
               label Locked
-              fieldset
+              fieldset.js-item
                 .radio.radio-inline.radio-danger(style="display:inline")
                   input#user-locked-1(type='radio', name='locked', value='1')
                   label(for='radio1')
                     | Yes
-                .radio.radio-inline.radio-info(style="display:inline")
+                .radio.radio-inline.radio-danger(style="display:inline")
                   input#user-locked-2(type='radio', name='locked', value='0', checked='1')
                   label(for='radio4')
                     | No    

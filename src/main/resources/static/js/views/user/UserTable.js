@@ -4,8 +4,10 @@ define([
   'text!templates/user/html/user-table.html',
   'text!templates/user/html/user-record.html',
   'collections/index',
-  'plugins/Message'
-], function (_, Backbone, template, recordTemplate, Store, Message) {
+  'plugins/Message',
+  'constants/index',
+  'ajax/User'
+], function (_, Backbone, template, recordTemplate, Store, Message, Constants, User) {
 	'use strict';
 
   let UserRecord = Backbone.View.extend({
@@ -53,7 +55,10 @@ define([
     },
 
     onReload: function(){
-      Store.UserStore.fetch({reset:true, data:{fetch:true, type:"get"}});
+      const me = this;
+      Store.UserStore.fetch({reset:true, data:{fetch:true, type:"get"}}).done(function(){
+        me.initPagination();
+      });
     },
 
     onDeleteUser: function(){
@@ -81,16 +86,23 @@ define([
       if($(e.target).prop('checked')){
         r.addClass('selected-record');
       }
-      
-      let checked = this.$el.find('.js-table-body').find('input[type="checkbox"]:checked');
+
+      this.showHideButtons();  
+      this.$el.find('.js-user-checkbox input[type="checkbox"]').not(e.target).prop('checked', false);
+    },
+
+    findChecked: function(){
+      return this.$el.find('.js-table-body').find('input[type="checkbox"]:checked');
+    },
+
+    showHideButtons: function(){
+      const checked = this.findChecked();
       
       if(checked.length!=0){
         this.$el.find('.js-trash-btn').removeClass('hidden');
       }else{
         this.$el.find('.js-trash-btn').addClass('hidden');
       }
-      
-      this.$el.find('.js-user-checkbox input[type="checkbox"]').not(e.target).prop('checked', false);
     },
 
 
@@ -103,6 +115,7 @@ define([
       const me = this, users = u || Store.UserStore.models
       this.$tableBody.empty();      
       _.each(users, user => me.addRecord(user));
+      me.showHideButtons();
     },
 
 		render: function (users) {
@@ -121,7 +134,8 @@ define([
         me.$el.find('.js-warn-btn').addClass('hidden');
       }
 
-      return this;  
+      me.initAuth();
+      return me;  
     },
 
     initPagination: function(){
@@ -136,6 +150,14 @@ define([
           this.disableLoad = false;
         }
       });
+    },
+
+    initAuth: function(){
+      if(User.hasAccess(Constants.Role.MASTER)){
+        this.$el.find('.checkbox, .js-new-user, .js-trash-btn, .js-warn-btn').removeClass('hidden');
+      }else{
+        this.$el.find('.checkbox, .js-new-user, .js-trash-btn, .js-warn-btn').addClass('hidden');
+      }
     }
 
   });

@@ -4,8 +4,10 @@ define([
   'text!templates/user/html/user.html',
   'models/UserModel',
   'collections/UserStore',
-  'plugins/Message'
-], function (_, Backbone, template, UserModel, UserStore, Message ) {
+  'plugins/Message',
+  'constants/index',
+  'ajax/User'
+], function (_, Backbone, template, UserModel, UserStore, Message, Constants, AjaxUser ) {
 	'use strict';
 
 	var User = Backbone.View.extend({
@@ -28,7 +30,18 @@ define([
 		render: function () { 	
       this.$el.html(this.template());
       this.setValues();
+      this.initAuth();
       return this;
+    },
+
+    initAuth: function(){
+      if(AjaxUser.hasAccess(Constants.Role.MASTER)){
+        this.$el.find('.js-save-btn').removeClass('hidden');
+        this.$el.find('.js-item').attr("disabled","false");
+      }else{
+        this.$el.find('.js-save-btn').addClass('hidden');
+        this.$el.find('.js-item').attr("disabled","disabled");
+      }
     },
 
     validate: function(){
@@ -73,8 +86,6 @@ define([
       this.modelId = id || this.modelId;
       this.model = UserStore.get(this.modelId) || new UserModel();  
       const attr = this.model.attributes;
-      
-      
       
       this.$el.find('input[name="username"]').val(attr.username);
       this.$el.find('input[name="name"]').val(attr.name);

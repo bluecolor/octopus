@@ -88,7 +88,7 @@ class SessionActor extends Actor {
 
   def checkNewSessions = {
     val statuses = Array(Status.IDLE, Status.ERROR)
-    sessionService.findByStatusIn(statuses).asScala.foreach(self!RunSession(_))
+    sessionService.findByStatusIn(statuses).foreach(self ! RunSession(_))
   }
 
   def isSessionSuccess(id: Long): Boolean = 
