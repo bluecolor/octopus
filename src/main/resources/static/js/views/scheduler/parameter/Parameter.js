@@ -4,8 +4,10 @@ define([
   'text!templates/scheduler/parameter/html/parameter.html',
   'plugins/Message',
   'collections/ParameterStore',
-  'models/ParameterModel'
-], function (_, Backbone, template, Message, ParameterStore, ParameterModel) {
+  'models/ParameterModel',
+  'constants/index',
+  'ajax/User'
+], function (_, Backbone, template, Message, ParameterStore, ParameterModel, Constants, User) {
 	'use strict';
 
 	let Parameter = Backbone.View.extend({
@@ -100,8 +102,20 @@ define([
 
 		render: function () { 	
       this.$el.html(this.template());
+      this.initAuth();
       return this;
+    },
+
+    initAuth: function(){
+      if(User.hasAccess(Constants.Role.OPERATOR)){
+        this.$el.find('.js-save-btn').removeClass('hidden');
+        this.$el.find('.js-item').attr("disabled","false");
+      }else{
+        this.$el.find('.js-save-btn').addClass('hidden');
+        this.$el.find('.js-item').attr("disabled","disabled");
+      }
     }
+
 	});
 
 	return Parameter;

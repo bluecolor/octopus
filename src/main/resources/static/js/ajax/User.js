@@ -10,6 +10,7 @@ define([
     const that = this;
     findMe().done(function(d){
       that.me = d;
+      $('.js-nav-username').text(d.username)
     });
   }
 

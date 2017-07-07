@@ -4,8 +4,10 @@ define([
   'text!templates/scheduler/parameter/html/parameter-table.html', 
   'text!templates/scheduler/parameter/html/parameter-record.html',  
   'collections/ParameterStore',
-  'plugins/Message'
-],function(_, Backbone, template, recordTemplate,ParameterStore, Message ){
+  'plugins/Message',
+  'constants/index',
+  'ajax/User'
+],function(_, Backbone, template, recordTemplate,ParameterStore, Message, Constants, User ){
   'use strict';
 
   let ParameterRecord = Backbone.View.extend({
@@ -92,6 +94,8 @@ define([
       _.each(p, function(parameter){
         me.addRecord(parameter);
       });
+
+      me.initAuth();
       this.$el.find('.js-trash-btn').addClass('hidden');
     },
 
@@ -140,6 +144,14 @@ define([
 
     hide: function(){
       this.$el.hide();
+    },
+
+    initAuth: function(){
+      if(User.hasAccess(Constants.Role.OPERATOR)){
+        this.$el.find('.checkbox, .js-new-btn, .js-import-btn').removeClass('hidden');
+      }else{
+        this.$el.find('.checkbox, .js-new-btn, .js-import-btn').addClass('hidden');
+      }
     }
 
   });
