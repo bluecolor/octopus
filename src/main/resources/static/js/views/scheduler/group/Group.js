@@ -5,8 +5,9 @@ define([
   'plugins/Message',
   'models/GroupModel',
   'collections/GroupStore',
-  'views/scheduler/group/GroupGeneral',
-], function (_, Backbone, template, Message, GroupModel, GroupStore) {
+  'constants/index',
+  'ajax/User'
+], function (_, Backbone, template, Message, GroupModel, GroupStore, Constants, User) {
 	'use strict';
 
 	var Group = Backbone.View.extend({
@@ -30,17 +31,39 @@ define([
 
 		render: function () { 	
       const me = this;
-      this.$el.html(this.template());
-      
+      me.$el.html(this.template());
+      me.initColorPicker()
+      me.initAuth();  
+      return me;
+    },
+
+    initColorPicker: function(){
+      const me = this;
       setTimeout(function(){
         $('.js-group-color').colorpicker();
-          me.$el.find("input.slider").slider({
+        me.$el.find("input.slider").slider({
           ticks: [1,2,3,4],
           ticks_labels: ["Low", "Medium", "High","Top"],
         });
+        if(User.hasAccess(Constants.Role.OPERATOR)){
+          me.$el.find("input.slider").slider("enable");
+        }else{
+          me.$el.find("input.slider").slider("disable")
+        }
       },10);
-      
-      return this;
+      return me;
+    },
+
+    initAuth: function(){
+      const me = this;
+      if(User.hasAccess(Constants.Role.OPERATOR)){
+        this.$el.find('.js-save-btn').removeClass('hidden');
+        this.$el.find('.js-item').attr("disabled","false");
+      }else{
+        this.$el.find('.js-save-btn').addClass('hidden');
+        this.$el.find('.js-item').attr("disabled","disabled");
+      }
+      return me;
     },
 
     setValues: function(id){

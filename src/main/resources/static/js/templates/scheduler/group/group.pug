@@ -7,10 +7,10 @@
         .box-body
           .form-group
             label Name
-            input.form-control(name="name", type='text', placeholder='Group name ...', required=true, autofocus=true)
+            input.js-item.form-control(name="name", type='text', placeholder='Group name ...', required=true, autofocus=true)
           .form-group
             label Parallel
-            input.form-control(name="parallel", type='number', required=false, min='1')
+            input.js-item.form-control(name="parallel", type='number', required=false, min='1')
           .form-group
             label Priority
             div(style="min-width:400px")
@@ -18,12 +18,12 @@
           .form-group
             label Color
             .input-group.colorpicker-component.js-group-color
-              input.form-control(type='text', name='color', value='#00AABB')
-              span.input-group-addon
+              input.js-item.form-control(type='text', name='color', value='#00AABB')
+              span.js-item.input-group-addon
                 i
           .form-group
             label Description
-            textarea.form-control(name="description" rows="3")
+            textarea.js-item.form-control(name="description" rows="3")
         .box-footer
           a.btn.btn-danger.js-cancel-btn Cancel
           a.disabled.ladda-button.btn.btn-primary.pull-right.js-save-btn(data-style="expand-left") Save

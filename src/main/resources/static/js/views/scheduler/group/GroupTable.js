@@ -5,8 +5,9 @@ define([
   'text!templates/scheduler/group/html/group-record.html',
   'collections/GroupStore',
   'constants/index',
-  'plugins/Message'
-], function (_, Backbone, template, recordTemplate, GroupStore, Constants, Message) {
+  'plugins/Message',
+  'ajax/User'
+], function (_, Backbone, template, recordTemplate, GroupStore, Constants, Message, User) {
 	'use strict';
 
   let GroupRecord = Backbone.View.extend({
@@ -81,14 +82,12 @@ define([
     },
 
     load: function(groups){
-      const me= this,
-            g = groups || GroupStore.models;
-      this.$tableBody.empty();
-
-      _.each(g, function(group){
-        me.addRecord(group);
-      });
-      this.$el.find('.js-trash-btn').addClass('hidden');
+      const me= this, g = groups || GroupStore.models;
+      
+      me.$tableBody.empty();
+      _.each(g, group => me.addRecord(group));
+      me.initAuth();
+      me.$el.find('.js-trash-btn').addClass('hidden');
     },
 
 		render: function (groups) { 	
@@ -145,6 +144,14 @@ define([
 
     hide: function(){
       this.$el.hide();
+    },
+
+    initAuth: function(){
+      if(User.hasAccess(Constants.Role.OPERATOR)){
+        this.$el.find('.checkbox, .js-new-btn, .js-import-btn').removeClass('hidden');
+      }else{
+        this.$el.find('.checkbox, .js-new-btn, .js-import-btn').addClass('hidden');
+      }
     }
 
 	});
