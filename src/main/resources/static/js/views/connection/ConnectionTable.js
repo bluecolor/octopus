@@ -147,6 +147,8 @@ define([
                 dialog.close();
                 ConnectionStore.remove(id);
                 Message.success('Connection deleted.');
+                Backbone.trigger("route",{route: Constants.Route.CONNECTIONS});
+
               },
               error: function(){
                 dialog.enableButtons(true);
