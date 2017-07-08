@@ -154,9 +154,9 @@ define([
 
     initAuth: function(){
       if(User.hasAccess(Constants.Role.MASTER)){
-        this.$el.find('.checkbox, .js-new-user, .js-trash-btn, .js-warn-btn').removeClass('hidden');
+        this.$el.find('.checkbox, .js-new-user, .js-warn-btn').removeClass('hidden');
       }else{
-        this.$el.find('.checkbox, .js-new-user, .js-trash-btn, .js-warn-btn').addClass('hidden');
+        this.$el.find('.checkbox, .js-new-user, .js-warn-btn').addClass('hidden');
       }
     }
 
