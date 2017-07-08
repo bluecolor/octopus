@@ -74,6 +74,7 @@ define([
           me.$el.find('.js-trash-btn, .js-run-btn').addClass('hidden');
           Message.notifySuccess('Parameter deleted.');
           ParameterStore.remove([model]);
+          Backbone.trigger("route",{route: Constants.Route.SCHEDULER_PARAMETERS});
         },
         error: function(){
           Message.notifyDanger('Unable delete parameter!');

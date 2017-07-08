@@ -74,7 +74,7 @@ class PlanService @Autowired()(val planRepository: PlanRepository) {
       throw InvalidCronExpressionException(plan.schedule)
     }
 
-    if(plan.activate){
+    if(plan.active){
       throw new RuntimeException("You can not create an active plan!");
     }
 

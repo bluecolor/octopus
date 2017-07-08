@@ -109,7 +109,7 @@ define([
     initAuth: function(){
       if(User.hasAccess(Constants.Role.OPERATOR)){
         this.$el.find('.js-save-btn').removeClass('hidden');
-        this.$el.find('.js-item').attr("disabled","false");
+        this.$el.find('.js-item').removeAttr("disabled");
       }else{
         this.$el.find('.js-save-btn').addClass('hidden');
         this.$el.find('.js-item').attr("disabled","disabled");
