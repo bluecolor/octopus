@@ -193,9 +193,7 @@ define([
     
       this.$tableBody.empty();      
 
-      _.each(cons, function(connection){
-        me.addRecord(connection);
-      });
+      _.each(cons, c => me.addRecord(c));
       me.initAuth();
       this.checkPagination();
     },
@@ -208,6 +206,7 @@ define([
       this.listenTo(ConnectionStore, 'reset add remove', function(){
         me.reload();
       });
+      return this;
     },
 
     checkPagination: function(){

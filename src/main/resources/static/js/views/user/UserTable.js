@@ -115,6 +115,7 @@ define([
       const me = this, users = u || Store.UserStore.models
       this.$tableBody.empty();      
       _.each(users, user => me.addRecord(user));
+      me.initAuth();
       me.showHideButtons();
     },
 
@@ -126,11 +127,14 @@ define([
       me.load(users); 
       me.initPagination();
       
-      const m = Store.SettingStore.find(m => m.get('name')=='MAIL' && m.get('active')=="yes" );
-    
-      if(m == null || _.isEmpty(m)){
+      const m = Store.SettingStore.find(m => m.get('name')=='MAIL');
+      const v = JSON.parse(m.get('value'));
+      const active = v.active || '';  
+
+      if(active.toLowerCase() != "yes"){
         me.$el.find('.js-warn-btn').removeClass('hidden');
       }else{
+        console.log('ww')
         me.$el.find('.js-warn-btn').addClass('hidden');
       }
 
@@ -154,9 +158,9 @@ define([
 
     initAuth: function(){
       if(User.hasAccess(Constants.Role.MASTER)){
-        this.$el.find('.checkbox, .js-new-user, .js-warn-btn').removeClass('hidden');
+        this.$el.find('.checkbox, .js-new-user').removeClass('hidden');
       }else{
-        this.$el.find('.checkbox, .js-new-user, .js-warn-btn').addClass('hidden');
+        this.$el.find('.checkbox, .js-new-user').addClass('hidden');
       }
     }
 
