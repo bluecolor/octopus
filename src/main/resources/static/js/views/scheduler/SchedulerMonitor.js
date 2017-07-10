@@ -33,10 +33,9 @@ define([
         me.render();
       });
 
-
-      // setInterval(function(){
-      //   me.render();
-      // },5000)
+      setInterval(function(){
+        me.render();
+      },5000)
       return this;
     },
 
