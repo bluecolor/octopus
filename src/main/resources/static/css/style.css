@@ -398,6 +398,9 @@ div.dataTables_wrapper {
   background-color: rgba(255, 229, 127, 0.24);
   /* opacity: 1; */ }
 
+.panel-footer {
+  background-color: transparent; }
+
 .btn-group-sm > .btn, .btn-sm {
   padding: 5px 10px !important;
   font-size: 12px;
