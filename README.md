@@ -6,18 +6,23 @@
   - rename the `application.properties.template` file to `application.properties` and enter the 
   repository connection parameters and octopus shell initiation parameters.
 
-
-### Boot
+### Bower
 ```
-git clone https://github.com/bluecolor/octopus
-cd octopus
-gradle bootrun
+cd octopus/src/main/resources/static
+bower install
 ```
 
 ### Gulp
 ```
 cd octopus/src/main/resources/static
 gulp
+```
+
+### Boot
+```
+git clone https://github.com/bluecolor/octopus
+cd octopus
+gradle bootrun
 ```
 
 ### Usage
