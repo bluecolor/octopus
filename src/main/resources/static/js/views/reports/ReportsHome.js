@@ -70,6 +70,18 @@ define([
     },
 
     drawPlanStats: function(){
+
+      const models = Store.PlanStore.models;
+      if(_.isEmpty(models)){
+        this.$el.find('.js-plan-stats').addClass('hidden');
+        this.$el.find('.js-plan-stats-zd').removeClass('hidden');
+        return;
+      }else{
+        this.$el.find('.js-plan-stats').removeClass('hidden');
+        this.$el.find('.js-plan-stats-zd').addClass('hidden');
+      }
+
+
       const ctx = this.$el.find('.js-plan-stats')
       let data = {
         labels : _.map(Store.PlanStore.models,m => m.get('name') ),
