@@ -34,3 +34,7 @@ gulp
   ```
   http://localhost:8080
   ```
+
+### Documentation
+
+See [here](https://bluebooks.gitbooks.io/octopus/content/) for user guide and documentation.
