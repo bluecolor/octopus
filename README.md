@@ -12,6 +12,7 @@ cd octopus/src/main/resources/static
 bower install
 ```
 
+
 ### Gulp
 ```
 cd octopus/src/main/resources/static

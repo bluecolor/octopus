@@ -54,7 +54,7 @@ class TaskQuery extends Query{
     log.debug(q)
     var query = session.createQuery(q)
     p.count = query.list.length
-    if(page == 1) {
+    if(page == 0) {
       p.first = true
       p.totalPages = 
       if(p.count % pageSize == 0) 
@@ -64,6 +64,7 @@ class TaskQuery extends Query{
     }
     p.page = page
     p.pageSize = page
+
 
     val tasks = query.setFirstResult(page*pageSize).setMaxResults(pageSize).list.map(_.asInstanceOf[Task])
     p.content = tasks

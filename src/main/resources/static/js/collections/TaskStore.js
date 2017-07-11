@@ -28,8 +28,8 @@ define([
       };
     },
     state: {
-      firstPage:1,
-      page: 1,
+      firstPage:0,
+      page: 0,
       pageSize: 5,
       sortKey: 'name',
       order: 1,

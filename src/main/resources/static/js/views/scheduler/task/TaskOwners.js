@@ -35,6 +35,13 @@ define([
 		},  
 
     setPrimaryOwner: function(id){
+      if(!id ||this.config.value.indexOf(id) < 0){
+        if(_.isEmpty(this.config.value)) {
+          this.config.primaryOwner = undefined;
+          return;
+        }
+        id = this.config.value[0];
+      }
       const el = this.$el.find(`[model-id=${id}]>i`);
       this.onStarItem({target:el.get(0)});
     },
@@ -65,9 +72,13 @@ define([
     },
 
     onRemoveItem: function(e){
-      const id = $(e.target).parent().attr('model-id');
+      const me = this, id = $(e.target).parent().attr('model-id');
       this.removeItem(parseInt(id));
-      this.render();
+      const users = UserStore.where(function(u){
+        return me.config.value.indexOf(u.id) > -1;
+      })
+      
+      me.setValue(_.pluck(users,'attributes'), me.config.primaryOwner);
     },
 
     onChange: function(e){
@@ -119,9 +130,8 @@ define([
 
     setValue: function(users, primary){
       const me = this;
-      _.each(users,function(u){
-        me.addToTable(u);
-      });
+      this.$list.empty();
+      _.each(users, u => me.addToTable(u));
       this.setPrimaryOwner(primary);
     },
 
