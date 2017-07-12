@@ -32,7 +32,7 @@ define([
       'change': 'onChange',
       'click .js-rm-item': 'onRemoveItem',
       'click .js-fav': 'onStarItem'
-		},  
+    },  
 
     setPrimaryOwner: function(id){
       if(!id ||this.config.value.indexOf(id) < 0){
@@ -76,8 +76,7 @@ define([
       this.removeItem(parseInt(id));
       const users = UserStore.where(function(u){
         return me.config.value.indexOf(u.id) > -1;
-      })
-      
+      });
       me.setValue(_.pluck(users,'attributes'), me.config.primaryOwner);
     },
 

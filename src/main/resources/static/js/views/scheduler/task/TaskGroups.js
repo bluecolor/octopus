@@ -31,9 +31,40 @@ define([
       'change': 'onChange',
       'click .js-rm-item': 'onRemoveItem',
       'click .js-fav': 'onStarItem'
-		},  
+    },
+    
+    initialize: function() {
+      let me = this;
+
+      this.config = {
+        value: [],
+        primaryGroup: null,
+        collection: GroupStore
+      };
+
+
+      let selectOptions = {
+        label: 'Groups',
+        collection: me.config.collection,
+        button: '#/scheduler/groups/new'
+      };
+
+      this.selectList = new SelectList(selectOptions);  
+      this.selectList.delegateEvents();
+      this.$el.append(this.selectList.render().el);
+      this.$list = $('<ul class="list-group"></ul>')
+      this.$el.append(this.$list);
+      return this;
+    },
 
     setPrimaryGroup: function(id){
+      if(!id ||this.config.value.indexOf(id) < 0){
+        if(_.isEmpty(this.config.value)) {
+          this.config.primaryGroup = undefined;
+          return;
+        }
+        id = this.config.value[0];
+      }
       const el = this.$el.find(`[model-id=${id}]>i`);
       this.onStarItem({target:el.get(0)});
     },
@@ -64,9 +95,12 @@ define([
     },
 
     onRemoveItem: function(e){
-      const id = $(e.target).parent().attr('model-id');
+      const me = this, id = $(e.target).parent().attr('model-id');
       this.removeItem(parseInt(id));
-      this.render();
+      const groups = GroupStore.where(function(g){
+        return me.config.value.indexOf(g.id) > -1;
+      });
+      me.setValue(_.pluck(groups,'attributes'), me.config.primaryGroup);
     },
 
     onChange: function(e){
@@ -77,30 +111,6 @@ define([
           this.setPrimaryGroup(id);
         }
       }
-    },
-    
-		initialize: function() {
-      let me = this;
-
-      this.config = {
-        value: [],
-        primaryGroup: null,
-        collection: GroupStore
-      };
-
-
-      let selectOptions = {
-        label: 'Groups',
-        collection: me.config.collection,
-        button: '#/scheduler/groups/new'
-      };
-
-      this.selectList = new SelectList(selectOptions);  
-      this.selectList.delegateEvents();
-      this.$el.append(this.selectList.render().el);
-      this.$list = $('<ul class="list-group"></ul>')
-      this.$el.append(this.$list);
-      return this;
     },
 
     addToTable: function(id){
@@ -114,9 +124,8 @@ define([
 
     setValue: function(groups, primary){
       const me = this;
-      _.each(groups,function(g){
-        me.addToTable(g);
-      });
+      this.$list.empty();
+      _.each(groups,g => me.addToTable(g));
       this.setPrimaryGroup(primary);
     },
 
