@@ -82,7 +82,7 @@ define([
     },
 
     getValue: function(){
-      return this.config.value;
+      return _.without(this.config.value, null);
     },
 
     getPrimaryGroup: function(){
