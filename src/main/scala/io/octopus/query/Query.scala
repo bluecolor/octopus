@@ -10,73 +10,44 @@ import org.slf4j.LoggerFactory
 import java.lang.invoke.MethodHandles
 import scala.collection.mutable.ListBuffer
 
-class Query {
+trait Query {
 
   private val log:Logger  = LoggerFactory.getLogger(MethodHandles.lookup.lookupClass)
-  protected val searchPattern = "(\\w+\\s+)|(\\s*\\w+\\s*)(:#|:|~|<|>|!:)(\\s*\\w+\\s*)"
+  protected val searchPattern = "(\\w+\\s+)|(\\s*\\w+\\s*)(:#|:|~|<|>|!:)(\\s*\\w+\\s*|\\[[\\w+[\\s*\\w*]*,??]*\\]\\s*)"
   protected val pattern = Pattern.compile(searchPattern)
   
-  protected def parseSearchPattern(str: String):(String, List[Operation]) = {
+  protected def parseSearchPattern(str: String):( String, Map[String, AnyRef] )  = {
     val search = if(str == null) "" else str.trim
     if(search.isEmpty) return (" (1=1) ",null)
     log.debug(search)
-    val ops = buildFilter(pattern.matcher(search))
-    val f = ops.map(o => s"${o.l} ${o.o} ${o.r}").mkString(" and ")
-    (if(f == null) "(1=1)" else f,ops)
+    val (f,o) = buildFilter(pattern.matcher(search))
+    if(f.isEmpty) 
+      ("(1=1)", null) 
+    else
+      (f.map(f => s"(${f})").mkString(" and "), o)
   }
 
-  protected def buildFilter(m: Matcher) = {
-    def isNumber(s: String) = s forall Character.isDigit
-    var ops = new ListBuffer[Operation]
-    while(m.find) {
-      var w = m.group(1)
-      var p = m.group(2)
-      var o = m.group(3)
-      var v = m.group(4)
-      
-      if(w != null && !w.trim.isEmpty) {
-        ops += new Operation("lower(t.name)", "like", s"""lower('%${w.trim.replace("*", "%")}%')""")
-      }
-      if(p!=null && o!= null && v!= null) {
-        p=p.trim;o=o.trim;v=v.trim;
-        var op = new Operation
-        op.o = SearchOperation.operator(o)
-        p.toLowerCase match {
-          case "group" => 
-            if(o == SearchOperation.EQUAL_ID && isNumber(v)){
-              op.l = "t.primaryGroup.id"
-              op.r = v
-            }
-            else{
-              op.l = "lower(t.primaryGroup.name)"
-              op.r = s"""lower('%${v.replace("*", "%")}%')"""
-            }
-            ops += op
-          case "owner" => 
-            if(o == SearchOperation.EQUAL_ID && isNumber(v)){
-              op.l = "t.primaryOwner.id"
-              op.r = v
-            }
-            else{
-              op.l = "lower(t.primaryOwner.name)"
-              op.r = s"""lower('%${v.replace("*", "%")}%')"""
-            }
-            ops += op
-          case "plan" => 
-            if(o == SearchOperation.EQUAL_ID && isNumber(v)){
-              op.l = "t.plan.id"
-              op.r = v
-            }
-            else{
-              op.l = "lower(t.plan.name)"
-              op.r = s"""lower('%${v.replace("*", "%")}%')"""
-            }
-            ops += op
-        }
-      }
+  protected def build(p:String, o: String, v:String): String = {
+    var op = new Operation
+    var parameter= p
+    var operator:String = SearchOperation.operator(o)
+    var value = v.stripPrefix("[").stripSuffix("]")
+
+    if(operator == SearchOperation.SQL_LIKE){
+      return value
+      .split(",")
+      .map(vl => s"""${parameter.toLowerCase} like '%${vl.trim.toLowerCase.replace("*", "%")}%'""")
+      .mkString(" or ")
     }
-    ops.toList
+    if(operator == SearchOperation.SQL_EQUAL){
+      return s"${parameter} in (${value})"
+    }
+    else return "1=1"
   }
+
+  protected def buildFilter(m: Matcher): ( List[String], Map[String, AnyRef] )
+
+
 
   protected def orderBy(sortBy: String, order: String) = {
     val s = if(sortBy==null) "name" else sortBy.toLowerCase

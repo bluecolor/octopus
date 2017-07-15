@@ -39,7 +39,6 @@ define([
 
     showTaskTable: function(o){
       this.hideActiveView();
-      console.log(TaskStore.models);
       if(_.isEmpty(TaskStore.models)){
         this.showZeroTask();
       }else{

@@ -49,9 +49,10 @@ define([
       'click .js-export-task' : 'onExportTask',
       'click .js-duplicate-task': 'onDuplicate',
       'click li[class^="js-sort"]': 'onSort',
-      'click ul.js-plan-filter'   : 'onPlanSelect',
-      'click ul.js-group-filter'  : 'onGroupSelect',
-      'click ul.js-owner-filter'  : 'onOwnerSelect',
+
+      // 'click ul.js-plan-filter'   : 'onPlanSelect',
+      // 'click ul.js-group-filter'  : 'onGroupSelect',
+      // 'click ul.js-owner-filter'  : 'onOwnerSelect',
     },
 
     initialize: function(planId) {
@@ -60,23 +61,24 @@ define([
         collection: Store.TaskStore,
         filters: {
           q: '',
-          owner  : '',
-          planId : null,
-          groupId: null,
-          ownerId: null,
+          owner: [],
+          plan : [],
+          group: [],
           bookmarked: null,
           status: '',
           is:[],
           isNot:[]  
         },
         clearFilters: function(){
-          me.config.filters = Object.assign({},me.config.filtersTemplate)    
+          me.config.filters = Object.assign({},me.config.filtersTemplate);  
           me.config.filters.is = me.config.filters.isNot = [];
         }
       };
       this.config.filtersTemplate = _.clone(this.config.filters)
-      this.config.filters.planId = planId;
-      setTimeout(()=>{me.listen();},2000)
+      if(planId){
+        this.config.filters.plan = [planId];
+      }
+      setTimeout(()=>{me.listen();},2000);
 		},
 
     listen: function(){
@@ -175,23 +177,23 @@ define([
       return this;
     },
 
-    onPlanSelect: function(e){
-      const me = this;
-      me.config.filters.planId = $(e.target).attr('model-id')
-      me.filter();  
-    },
+    // onPlanSelect: function(e){
+    //   const me = this;
+    //   me.config.filters.planId = $(e.target).attr('model-id')
+    //   me.filter();  
+    // },
 
-    onGroupSelect: function(e){
-      const me = this;
-      me.config.filters.groupId = $(e.target).attr('model-id')
-      me.filter();  
-    },
+    // onGroupSelect: function(e){
+    //   const me = this;
+    //   me.config.filters.groupId = $(e.target).attr('model-id')
+    //   me.filter();  
+    // },
 
-    onOwnerSelect: function(e){
-      const me = this;
-      me.config.filters.ownerId = $(e.target).attr('model-id')
-      me.filter();  
-    },
+    // onOwnerSelect: function(e){
+    //   const me = this;
+    //   me.config.filters.ownerId = $(e.target).attr('model-id')
+    //   me.filter();  
+    // },
 
     onSearch: function(){
       this.config.filters.q = this.$el.find('.js-search').val();
@@ -223,6 +225,7 @@ define([
       const me = this;
       this.showClearFilter();  
       const search = me.buildFilters();
+      console.log(search)
       return Store.TaskStore.getPage(0,{reset:true, data:{fetch:true, type:"get",search:search}});
     },
 
@@ -232,11 +235,11 @@ define([
       return _.chain(me.config.filters).keys().filter((k)=>f[k] != null && !_.isEmpty(f[k])).map((k)=>{
         switch(k){
           case 'q'      : return f[k];
-          case 'ownerId':
-          case 'planId' : 
-          case 'groupId': return `${k}:#${f[k]}`;
-          case 'is'     : return `${k}:${f[k].join(',')}`;
-          case 'isNot'  : return `is!:${f[k].join(',')}`;
+          case 'owner':
+          case 'plan' : 
+          case 'group': return `${k}:#[${f[k]}]`;
+          case 'is'   : return `${k}:${f[k].join(',')}`;
+          case 'isNot': return `is!:${f[k].join(',')}`;
         }
         return '';    
       }).join(' ').value().trim();
@@ -431,30 +434,68 @@ define([
       const me= this,
             t = tasks || Store.TaskStore.models;
       this.$tableBody.empty();
-      _.each(t, function(task){
-        me.addRecord(task);
-      });
+      _.each(t, task=>me.addRecord(task) );
       this.$el.find('.js-trash-btn,.js-disable-btn,.js-enable-btn').addClass('hidden');
       this.showHideStats();
     },
 
+    initOwnerFilter: function(){
+      const me = this, select = this.$el.find('select[name="owner"]');
+      _.each(_.pluck(Store.UserStore.models,'attributes'),  (user)=>{
+        select.append(`<option value=${user.id} > ${user.name} </option>`)    
+      });
+      select.multiselect({
+        nonSelectedText: 'Owner',
+        allSelectedText: 'All Owners',
+        buttonClass: 'btn btn-sm',
+        enableHTML: true,
+        onChange: function(option, checked){
+          const owners = _.pluck(select.find('option:selected'), 'value');
+          me.config.filters.owner = owners;
+          me.filter();
+        }
+      });
+    },
+
+    initGroupFilter: function(){
+      const me= this, select = this.$el.find('select[name="group"]');
+      _.each(_.pluck(Store.GroupStore.models,'attributes'), (group)=>{
+        select.append(`<option value=${group.id}>${group.name}</option>`)    
+      });
+      select.multiselect({
+        nonSelectedText: 'Group',
+        allSelectedText: 'All Groups',
+        buttonClass: 'btn btn-sm',
+        onChange: function(option, checked){
+          const groups = _.pluck(select.find('option:selected'), 'value');
+          me.config.filters.group = groups;
+          me.filter();
+        }
+      });
+    },
+
+    initPlanFilter: function(){
+      const me= this,select = this.$el.find('select[name="plan"]');
+      _.each(_.pluck(Store.PlanStore.models,'attributes'), (plan)=>{
+        select.append(`<option value=${plan.id}>${plan.name}</option>`)    
+      });
+      select.multiselect({
+        nonSelectedText: 'Plan',
+        allSelectedText: 'All Plans',
+        buttonClass: 'btn btn-sm',
+        onChange: function(option, checked){
+          const plans = _.pluck(select.find('option:selected'), 'value');
+          me.config.filters.plan = plans;
+          me.filter();
+        }
+      });
+    },
+
+
     initFilters: function(){
-      
-      let ul = this.$el.find('.dropdown[name="owner"] ul.dropdown-menu');
-      _.each(Store.UserStore.models,(user)=>{
-        ul.append(`<li><a href="javascript:void(0)" model-id=${user.attributes.id}>${user.attributes.username} <span style="font-size:12px;color:#C8C9CA;">${user.attributes.name}</span>  </a></li>`)    
-      });
-      
-
-      ul = this.$el.find('.dropdown[name="group"] ul.dropdown-menu');
-      _.each(Store.GroupStore.models,(group)=>{
-        ul.append(`<li><a href="javascript:void(0)" model-id=${group.attributes.id}>${group.attributes.name}</a></li>`)    
-      });
-
-      ul = this.$el.find('.dropdown[name="plan"] ul.dropdown-menu');
-      _.each(Store.PlanStore.models,(plan)=>{
-        ul.append(`<li><a href="javascript:void(0)" model-id=${plan.attributes.id}>${plan.attributes.name}</a></li>`)    
-      });
+      this.initOwnerFilter();
+      this.initGroupFilter();      
+      this.initPlanFilter();
     },
 
 		render: function () { 	
@@ -463,8 +504,27 @@ define([
       this.initFilters();
       const me= this,
             tasks = this.config.collection.models;
+      
+      me.initPagination();
             
-      this.$el.find('.pagination').twbsPagination({
+      this.$tableBody = this.$el.find('.js-table-body');
+      
+      if(me.config.filters.planId){
+        me.filter().done(function(){
+          var tasks = me.config.collection.models;
+          me.load(tasks);
+        });
+      }else {
+        me.load(tasks);
+      }
+      
+      this.showHideStats();
+      return this;
+    },
+
+    initPagination: function(){
+      const me = this;
+      me.$el.find('.pagination').twbsPagination({
         totalPages  : me.config.collection.state.totalPages,
         visiblePages: 10,
         disableLoad : true,
@@ -475,20 +535,6 @@ define([
           this.disableLoad = false;
         }
       });
-            
-      this.$tableBody = this.$el.find('.js-table-body');
-      
-      if(me.config.filters.planId){
-        me.filter().done(function(){
-          var tasks = me.config.collection.models;
-          this.load(tasks);
-        });
-      }else {
-        me.load(tasks);
-      }
-      
-      this.showHideStats();
-      return this;
     },
 
     showHideStats: function(){

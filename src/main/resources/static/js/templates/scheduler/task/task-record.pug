@@ -22,7 +22,7 @@ td
   span.label(style!='background-color:<%= primaryGroup.color %>') <%- primaryGroup.name %> 
   <% } %>
 td.js-plan
-  <%- plan.name %>
+  a(href!='#/scheduler/plans/<%= plan.id %>') <%- plan.name %>
 td    
   a.js-stats(href='javascript:void(0)' data-toggle="popover" model-id!='<%- id %>')
     i.fa.fa-bar-chart.text-green-fade.fa-lg

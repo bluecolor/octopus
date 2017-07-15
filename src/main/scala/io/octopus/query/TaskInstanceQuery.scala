@@ -47,6 +47,7 @@ class TaskInstanceQuery extends Query {
         left join fetch task.stats  stats
         left join fetch task.primaryGroup primaryGroup
         left join fetch task.primaryOwner primaryOwner
+        left join fetch task.bookmarkers  bookmarkers
       where 
         instance.session.id = ${id} and
         ${filter} 
@@ -70,9 +71,10 @@ class TaskInstanceQuery extends Query {
     p
   }
 
+  
   override def buildFilter(m: Matcher) = {
-    var ops = new ListBuffer[Operation]
-    
+    var filters = new ListBuffer[String]
+
     while(m.find) {
       var w = m.group(1)
       var p = m.group(2)
@@ -80,61 +82,39 @@ class TaskInstanceQuery extends Query {
       var v = m.group(4)
       
       if(w != null && !w.trim.isEmpty) {
-        ops += new Operation("lower(task.name)", "like", s"""lower('%${w.trim.replace("*", "%")}%')""")
+        filters += s"""lower(task.name) like lower('%${w.trim.replace("*", "%")}%')"""
       }
       if(p!=null && o!= null && v!= null) {
         p=p.trim;o=o.trim;v=v.trim;
         var op = new Operation
-        op.r = v
+        
         op.o = SearchOperation.operator(o)
         p.toLowerCase match {
-          case "status"=>
-            op.l = "instance.status"
-            op.r = s"'${v.toUpperCase}'"
-            ops += op
           case "group" => 
-            op.l = "lower(primaryGroup.name)"
-            op.r = s"""lower('%${v.replace("*", "%")}%')"""
-            op.o = SearchOperation.LIKE
-            ops += op
-          case "groupid" => 
-            op.l = "primaryGroup.id"
-            ops += op
+            val parameter = if(o == SearchOperation.EQUAL_ID) "primaryGroup.id" else "primaryGroup.name"
+            filters += build(parameter, o, v)
           case "owner" => 
-            op.l = "lower(primaryOwner.name)"
-            op.r = s"""lower('%${v.replace("*", "%")}%')"""
-            op.o = SearchOperation.LIKE
-            ops += op
-          case "ownerid" => 
-            op.l = "primaryOwner.id"
-            ops += op
-          case "sessionid" => 
-            op.l = "session.id"
-            ops += op
+            val parameter = if(o == SearchOperation.EQUAL_ID) "primaryOwner.id" else "primaryOwner.name"
+            filters += build(parameter, o, v)
+          case "plan" => 
+            val parameter = if(o == SearchOperation.EQUAL_ID) "plan.id" else "plan.name"
+            filters += build(parameter, o, v)
           case "is" =>
-            v.toLowerCase.split(",").foreach{ i => 
-              i match {
-                case "bookmarked" => 
-                  op.l = "task.bookmarkers.id"
-                  op.r = userService.findMe.id.toString
-                  ops += op
-                case "active" => 
-                  op.l = "task.active"
-                  op.r = "true"
-                  ops += op  
-                case "mine" => 
-                  op.l = "primaryOwner.id"
-                  op.r = userService.findMe.id.toString
-                  ops += op
-                case _ =>
-              }
+            v.toLowerCase.stripPrefix("[").stripSuffix("]") match {
+              case "bookmarked" =>
+                filters += s"bookmarkers.id = ${userService.findMe.id.toString}"
+              case "active" => 
+                filters += s"task.active = true"
+              case "mine" =>
+                filters += s"primaryOwner.id = ${userService.findMe.id.toString}"
             }
           case _ =>
         }
       }
     }
-    ops.toList
+    (filters.toList, null)
   }
+
 
   override protected def orderBy(sortBy: String, order: String) = {
     val s = if(sortBy==null) "name" else sortBy.toLowerCase

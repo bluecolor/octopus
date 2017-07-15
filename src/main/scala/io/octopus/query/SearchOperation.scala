@@ -14,6 +14,14 @@ object SearchOperation {
   val IN           = "~:"    
   val CONTAINS     = "::"
 
+  val SQL_EQUAL:String    = "="
+  val SQL_LIKE:String     = "like"
+  val SQL_IN:String       = "IN"
+  val SQL_NOT_IN:String   = "NOT IN"
+  val SQL_NOT_EQUAL:String= "NOT_EQUAL"
+  val SQL_GREATER_THAN    = ">"
+  val SQL_LESS_THAN       = "<" 
+
   val operator = Map(
     LIKE          -> "like",
     EQUAL         -> "=",

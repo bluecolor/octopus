@@ -14,6 +14,7 @@ import io.octopus.model._
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.lang.invoke.MethodHandles
+import scala.collection.mutable.ListBuffer
 
 
 @Component
@@ -29,7 +30,7 @@ class SessionQuery extends Query{
     val em = entityManagerFactory.createEntityManager
     val session = em.unwrap(classOf[HibernateSession])
     var page = new io.octopus.model.Page[Session]
-    var (filter,ops) = parseSearchPattern(search) 
+    var (filter,vals) = parseSearchPattern(search) 
     var sort = orderBy(sortBy, order)
     val q = s"""
       select s 
@@ -43,10 +44,9 @@ class SessionQuery extends Query{
     log.debug(q)
     var query = session.createQuery(q)
     
-    if(ops != null){
-      ops.filter(_.p != null).foreach{o=>
-        log.debug(o.r)
-        query.setParameter(o.r.stripPrefix(":"),o.p)
+    if(vals != null){
+      vals foreach {
+        case (k,v) => query.setParameter(k,v)
       }
     }
     
@@ -82,9 +82,8 @@ class SessionQuery extends Query{
   }
 
   override def buildFilter(m: Matcher) = {
-    import scala.collection.mutable.ListBuffer
-    def isNumber(s: String) = s forall Character.isDigit
-    var ops = new ListBuffer[Operation]
+    var filters = new ListBuffer[String]
+
     while(m.find) {
       var w = m.group(1)
       var p = m.group(2)
@@ -92,42 +91,20 @@ class SessionQuery extends Query{
       var v = m.group(4)
       
       if(w != null && !w.trim.isEmpty) {
-        ops += new Operation("lower(p.name)", "like", s"""lower('%${w.trim.replace("*", "%")}%')""")
+        filters += s"""lower(p.name) like lower('%${w.trim.replace("*", "%")}%')"""
       }
       if(p!=null && o!= null && v!= null) {
         p=p.trim;o=o.trim;v=v.trim;
-        var op = new Operation
-        op.o = SearchOperation.operator(o)
+        
         p.toLowerCase match {
-          case "startdatebegin"=> 
-            op.l="s.startDate" 
-            op.r=":startDateBegin"
-            op.p = new java.util.Date(v.toLong*1000)
-            ops += op
-          case "startdateend" => 
-            op.l="s.startDate" 
-            op.r=":startDateEnd"
-            op.p = new java.util.Date(v.toLong*1000) 
-            ops += op
           case "plan" => 
-            if(o == SearchOperation.EQUAL_ID && isNumber(v)){
-              op.l = "p.id"
-              op.r = v
-            }
-            else{
-              op.l = "lower(p.name)"
-              op.r = s"""lower('%${v.replace("*", "%")}%')"""
-            }
-            ops += op
-          case "status" =>
-            op.l = "s.status"
-            op.r = s"'${v}'"
-            ops += op
+            val parameter = if(o == SearchOperation.EQUAL_ID) "p.id" else "p.name"
+            filters += build(parameter, o, v)
+          case _ =>
         }
       }
     }
-    ops.toList
+    (filters.toList,null)
   }
-
 
 }

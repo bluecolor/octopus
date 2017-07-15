@@ -51,6 +51,7 @@ class TaskQuery extends Query{
         ${filter} 
       ${sort}
     """
+    log.debug(filter)
     log.debug(q)
     var query = session.createQuery(q)
     p.count = query.list.length
@@ -65,15 +66,14 @@ class TaskQuery extends Query{
     p.page = page
     p.pageSize = page
 
-
     val tasks = query.setFirstResult(page*pageSize).setMaxResults(pageSize).list.map(_.asInstanceOf[Task])
     p.content = tasks
     p
   }
 
   override def buildFilter(m: Matcher) = {
-    var ops = new ListBuffer[Operation]
-    
+    var filters = new ListBuffer[String]
+
     while(m.find) {
       var w = m.group(1)
       var p = m.group(2)
@@ -81,7 +81,7 @@ class TaskQuery extends Query{
       var v = m.group(4)
       
       if(w != null && !w.trim.isEmpty) {
-        ops += new Operation("lower(t.name)", "like", s"""lower('%${w.trim.replace("*", "%")}%')""")
+        filters += s"""lower(t.name) like lower('%${w.trim.replace("*", "%")}%')"""
       }
       if(p!=null && o!= null && v!= null) {
         p=p.trim;o=o.trim;v=v.trim;
@@ -90,55 +90,28 @@ class TaskQuery extends Query{
         op.o = SearchOperation.operator(o)
         p.toLowerCase match {
           case "group" => 
-            op.l = "lower(g.name)"
-            op.r = s"""lower('%${v.replace("*", "%")}%')"""
-            op.o = SearchOperation.LIKE
-            ops += op
-          case "groupid" => 
-            op.l = "g.id"
-            op.r = v
-            ops += op
+            val parameter = if(o == SearchOperation.EQUAL_ID) "g.id" else "g.name"
+            filters += build(parameter, o, v)
           case "owner" => 
-            op.l = "lower(o.name)"
-            op.r = s"""lower('%${v.replace("*", "%")}%')"""
-            op.o = SearchOperation.LIKE
-            ops += op
-          case "ownerid" => 
-            op.l = "o.id"
-            op.r = v
-            ops += op
+            val parameter = if(o == SearchOperation.EQUAL_ID) "o.id" else "o.name"
+            filters += build(parameter, o, v)
           case "plan" => 
-            op.l = "lower(p.name)"
-            op.r = s"""lower('%${v.replace("*", "%")}%')"""
-            op.o = SearchOperation.LIKE
-            ops += op
-          case "planid" => 
-            op.l = "p.id"
-            op.r = v
-            ops += op
+            val parameter = if(o == SearchOperation.EQUAL_ID) "p.id" else "p.name"
+            filters += build(parameter, o, v)
           case "is" =>
-            v.toLowerCase.split(",").foreach{ i => 
-              i match {
-                case "bookmarked" => 
-                  op.l = "b.id"
-                  op.r = userService.findMe.id.toString
-                  ops += op
-                case "active" => 
-                  op.l = "t.active"
-                  op.r = "true"
-                  ops += op  
-                case "mine" => 
-                  op.l = "o.id"
-                  op.r = userService.findMe.id.toString
-                  ops += op
-                case _ =>
-              }
+            v.toLowerCase.stripPrefix("[").stripSuffix("]") match {
+              case "bookmarked" =>
+                filters += s"b.id = ${userService.findMe.id.toString}"
+              case "active" => 
+                filters += s"t.active = true"
+              case "mine" =>
+                filters += s"o.id = ${userService.findMe.id.toString}"
             }
           case _ =>
         }
       }
     }
-    ops.toList
+    (filters.toList,null)
   }
 
 
