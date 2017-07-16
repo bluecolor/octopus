@@ -90,6 +90,9 @@ class TaskInstanceQuery extends Query {
         
         op.o = SearchOperation.operator(o)
         p.toLowerCase match {
+          case "status"=>
+            val parameter = "instance.status"
+            filters += build(parameter, o, v) 
           case "group" => 
             val parameter = if(o == SearchOperation.EQUAL_ID) "primaryGroup.id" else "primaryGroup.name"
             filters += build(parameter, o, v)

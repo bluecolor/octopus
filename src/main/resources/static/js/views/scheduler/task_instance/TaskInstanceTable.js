@@ -50,9 +50,6 @@ define([
       'click .js-block-task': 'onBlockTask',
       'click .js-stop-task': 'onStopTask',
       'click .js-done-task': 'onDoneTask',
-      'click ul.js-group-filter'  : 'onGroupSelect',
-      'click ul.js-status-filter' : 'onStatusSelect',
-      'click ul.js-owner-filter'  : 'onOwnerSelect',
       'input .js-search': 'onSearch',
     },
 
@@ -63,14 +60,12 @@ define([
         collection: Store.TaskInstanceStore,
         filters: {
           q: '',
-          owner  : '',
-          sessionId : session.id,
-          groupId   : null,
-          ownerId   : null,
+          owner  : [],
+          group  : [],
+          status : [],
           bookmarked: null,
-          status: '',
-          is:[],
-          isNot:[]  
+          is     : [],
+          isNot  : []  
         },
         clearFilters: function(){
           me.config.filters = Object.assign({},me.config.filtersTemplate)    
@@ -135,11 +130,12 @@ define([
       return _.chain(me.config.filters).keys().filter((k)=>f[k] != null && !_.isEmpty(f[k])).map((k)=>{
         switch(k){
           case 'q'      : return f[k];
-          case 'ownerId': 
-          case 'groupId': return `${k}:#${f[k]}`;
-          case "status" : return `${k}:${f[k]}`
-          case 'is'     : return `${k}:${f[k].join(',')}`;
-          case 'isNot'  : return `is!:${f[k].join(',')}`;
+          case 'status' :
+          case 'owner':
+          case 'plan' : 
+          case 'group': return `${k}:#[${f[k]}]`;
+          case 'is'   : return `${k}:${f[k].join(',')}`;
+          case 'isNot': return `is!:${f[k].join(',')}`;
         }
         return '';    
       }).join(' ').value().trim();
@@ -336,17 +332,61 @@ define([
       this.$el.find('.js-checkbox input[type="checkbox"]').not(e.target).prop('checked', false);
     },
 
-    initFilters: function(){
-      
-      let ul = this.$el.find('.dropdown[name="owner"] ul.dropdown-menu');
-      _.each(Store.UserStore.models,(user)=>{
-        ul.append(`<li><a href="javascript:void(0)" model-id=${user.attributes.id} >${user.attributes.username} <span style="font-size:12px;color:#C8C9CA;">${user.attributes.name}</span>  </a></li>`)    
+    initOwnerFilter: function(){
+      const me = this, select = this.$el.find('select[name="owner"]');
+      _.each(_.pluck(Store.UserStore.models,'attributes'),  (user)=>{
+        select.append(`<option value=${user.id} > ${user.name} </option>`)    
       });
+      select.multiselect({
+        nonSelectedText: 'Owner',
+        allSelectedText: 'All Owners',
+        buttonClass: 'btn btn-sm',
+        enableHTML: true,
+        onChange: function(option, checked){
+          const owners = _.pluck(select.find('option:selected'), 'value');
+          me.config.filters.owner = owners;
+          me.filter();
+        }
+      });
+    },
 
-      ul = this.$el.find('.dropdown[name="group"] ul.dropdown-menu');
-      _.each(Store.GroupStore.models,(group)=>{
-        ul.append(`<li><a href="javascript:void(0)" model-id=${group.attributes.id}>${group.attributes.name}</a></li>`)    
+    initGroupFilter: function(){
+      const me= this, select = this.$el.find('select[name="group"]');
+      _.each(_.pluck(Store.GroupStore.models,'attributes'), (group)=>{
+        select.append(`<option value=${group.id}>${group.name}</option>`)    
       });
+      select.multiselect({
+        nonSelectedText: 'Group',
+        allSelectedText: 'All Groups',
+        buttonClass: 'btn btn-sm',
+        onChange: function(option, checked){
+          const groups = _.pluck(select.find('option:selected'), 'value');
+          me.config.filters.group = groups;
+          me.filter();
+        }
+      });
+    },
+
+    initStatusFilter: function(){
+      const me= this, select = this.$el.find('select[name="status"]');
+      
+      select.multiselect({
+        nonSelectedText: 'Status',
+        allSelectedText: 'All Statuses',
+        buttonClass: 'btn btn-sm',
+        onChange: function(option, checked){
+          const status = _.pluck(select.find('option:selected'), 'value');
+          me.config.filters.status = status;
+          me.filter();
+        }
+      });
+    },
+
+
+    initFilters: function(){
+      this.initOwnerFilter();
+      this.initGroupFilter();
+      this.initStatusFilter();
     },
 
 	});
