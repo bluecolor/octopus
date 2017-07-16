@@ -29,7 +29,7 @@ import io.octopus.connector._
 
 object TaskActor {
   def props(instance: TaskInstance): Props = {
-    if(instance.task.connection.connectionType == Technology.Database){
+    if(instance.getConnection.connectionType == Technology.Database){
       Props(new JdbcActor(instance))
     }else{
       Props(new SshActor(instance))
