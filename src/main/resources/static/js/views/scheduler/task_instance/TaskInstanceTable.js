@@ -110,8 +110,6 @@ define([
 
     },
 
-
-
     onSort: function(e){
       const me = this, 
         name = $(e.target).attr('name'), 
@@ -158,6 +156,9 @@ define([
       const me = this;
       this.showClearFilter();  
       const search = me.buildFilters();
+      if(_.isEmpty(search)){
+        this.showClearFilter(false);  
+      }
       return Store.TaskInstanceStore.getPage(0,{reset:true, data:{fetch:true, type:"get",search:search}});
     },
 
