@@ -80,14 +80,13 @@ class TaskQuery extends Query{
       var o = m.group(3)
       var v = m.group(4)
       
+      log.debug(w,p,o,v);
+
       if(w != null && !w.trim.isEmpty) {
         filters += s"""lower(t.name) like lower('%${w.trim.replace("*", "%")}%')"""
       }
       if(p!=null && o!= null && v!= null) {
         p=p.trim;o=o.trim;v=v.trim;
-        var op = new Operation
-        
-        op.o = SearchOperation.operator(o)
         p.toLowerCase match {
           case "group" => 
             val parameter = if(o == SearchOperation.EQUAL_ID) "g.id" else "g.name"

@@ -20,7 +20,7 @@ trait Query {
     val search = if(str == null) "" else str.trim
     if(search.isEmpty) return (" (1=1) ",null)
     log.debug(search)
-    val (f,o) = buildFilter(pattern.matcher(search))
+    val (f,o) = buildFilter(pattern.matcher(search+" "))
     if(f.isEmpty) 
       ("(1=1)", null) 
     else

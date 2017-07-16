@@ -49,10 +49,6 @@ define([
       'click .js-export-task' : 'onExportTask',
       'click .js-duplicate-task': 'onDuplicate',
       'click li[class^="js-sort"]': 'onSort',
-
-      // 'click ul.js-plan-filter'   : 'onPlanSelect',
-      // 'click ul.js-group-filter'  : 'onGroupSelect',
-      // 'click ul.js-owner-filter'  : 'onOwnerSelect',
     },
 
     initialize: function(planId) {
@@ -164,6 +160,14 @@ define([
     },
 
     onClearFilter: function(){
+      const me=this,ms = ['select[name="owner"]','select[name="group"]','select[name="plan"]' ];
+
+      _.each(ms, function(m){
+        const i = me.$el.find(m)
+        i.multiselect('deselectAll',false);
+        i.multiselect('updateButtonText'); 
+      });
+
       this.config.clearFilters();
       this.reload();
       this.showClearFilter(false);
@@ -177,26 +181,8 @@ define([
       return this;
     },
 
-    // onPlanSelect: function(e){
-    //   const me = this;
-    //   me.config.filters.planId = $(e.target).attr('model-id')
-    //   me.filter();  
-    // },
-
-    // onGroupSelect: function(e){
-    //   const me = this;
-    //   me.config.filters.groupId = $(e.target).attr('model-id')
-    //   me.filter();  
-    // },
-
-    // onOwnerSelect: function(e){
-    //   const me = this;
-    //   me.config.filters.ownerId = $(e.target).attr('model-id')
-    //   me.filter();  
-    // },
-
     onSearch: function(){
-      this.config.filters.q = this.$el.find('.js-search').val();
+      this.config.filters.q = this.$el.find('input[name=search]').val();
       this.filter();  
     },
 
@@ -225,7 +211,9 @@ define([
       const me = this;
       this.showClearFilter();  
       const search = me.buildFilters();
-      console.log(search)
+      if(_.isEmpty(search)){
+        this.showClearFilter(false);  
+      }
       return Store.TaskStore.getPage(0,{reset:true, data:{fetch:true, type:"get",search:search}});
     },
 
