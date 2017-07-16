@@ -156,7 +156,7 @@ class SessionService @Autowired()(val sessionRepository: SessionRepository) {
     def isDependenciesOk(dependencies: List[TaskInstance]) = {
       dependencies == null ||
       dependencies
-      .filter(d => Array(Status.IDLE,Status.ERROR, Status.BLOCKED,Status.KILLED) contains d.status) == None
+      .filter(d => Array(Status.IDLE,Status.ERROR, Status.BLOCKED,Status.KILLED) contains d.status).isEmpty
     }
 
     def setSlots(instance: TaskInstance) = {
