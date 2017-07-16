@@ -81,16 +81,15 @@ class TaskInstanceService @Autowired()(val taskInstanceRepository: TaskInstanceR
       instance.dependencies = findDependencies(instance)
       instance
     }.asJava
-
     p  
   } 
 
-  private def withDependencies(instance: TaskInstance) = {
+  def withDependencies(instance: TaskInstance) = {
     instance.dependencies = findDependencies(instance)
     instance
   }
 
-  private def findDependencies(instance: TaskInstance): List[TaskInstance] = {
+  def findDependencies(instance: TaskInstance): List[TaskInstance] = {
     taskInstanceRepository
       .findByTaskIdIn(instance.task.dependencies.map(_.id).asJava)
       .groupBy(_.task.id)

@@ -153,7 +153,7 @@ class SessionService @Autowired()(val sessionRepository: SessionRepository) {
       return null
     }
 
-    def isDependenciesOk(dependencies: List[TaskInstance]) = {
+    def isDependenciesOk(dependencies: List[TaskInstance]) = {      
       dependencies == null ||
       dependencies
       .filter(d => Array(Status.IDLE,Status.ERROR, Status.BLOCKED,Status.KILLED) contains d.status).isEmpty
@@ -177,7 +177,7 @@ class SessionService @Autowired()(val sessionRepository: SessionRepository) {
       }
       setSlots(instance)
     }
-    val runnable = idle.filter(i=> isDependenciesOk(i.dependencies) && hasSlot(i) ).asJava 
+    val runnable = idle.filter(i=> isDependenciesOk(taskInstanceService.findDependencies(i)) && hasSlot(i) ).asJava 
     
     log.debug(s"Found ${runnable.length} instances")    
 
