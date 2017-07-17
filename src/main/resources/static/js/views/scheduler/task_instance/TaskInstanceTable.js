@@ -128,7 +128,7 @@ define([
       return _.chain(me.config.filters).keys().filter((k)=>f[k] != null && !_.isEmpty(f[k])).map((k)=>{
         switch(k){
           case 'q'      : return f[k];
-          case 'status' :
+          case 'status' : return `${k}:[${f[k]}]`;
           case 'owner':
           case 'plan' : 
           case 'group': return `${k}:#[${f[k]}]`;
@@ -163,6 +163,15 @@ define([
     },
 
     onClearFilter: function(){
+      
+      const me=this,ms = ['select[name="owner"]','select[name="group"]','select[name="status"]' ];
+
+      _.each(ms, function(m){
+        const i = me.$el.find(m)
+        i.multiselect('deselectAll',false);
+        i.multiselect('updateButtonText'); 
+      });
+      
       this.config.clearFilters();
       this.reload();
       this.showClearFilter(false);

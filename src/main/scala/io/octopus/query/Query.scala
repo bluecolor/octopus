@@ -30,17 +30,21 @@ trait Query {
   protected def build(p:String, o: String, v:String): String = {
     var op = new Operation
     var parameter= p
-    var operator:String = SearchOperation.operator(o)
     var value = v.stripPrefix("[").stripSuffix("]")
 
-    if(operator == SearchOperation.SQL_LIKE){
+    if(o == SearchOperation.LIKE){
       return value
       .split(",")
       .map(vl => s"""${parameter.toLowerCase} like '%${vl.trim.toLowerCase.replace("*", "%")}%'""")
       .mkString(" or ")
     }
-    if(operator == SearchOperation.SQL_EQUAL){
+    if(o == SearchOperation.EQUAL_ID){
       return s"${parameter} in (${value})"
+    }
+    if(o == SearchOperation.EQUAL){
+      return s"${parameter.toLowerCase} in (" + 
+        value.split(",").map(vl=> s"'${vl}'").mkString(",") + 
+      ")"
     }
     else return "1=1"
   }

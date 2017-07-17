@@ -86,9 +86,7 @@ class TaskInstanceQuery extends Query {
       }
       if(p!=null && o!= null && v!= null) {
         p=p.trim;o=o.trim;v=v.trim;
-        var op = new Operation
         
-        op.o = SearchOperation.operator(o)
         p.toLowerCase match {
           case "status"=>
             val parameter = "instance.status"
