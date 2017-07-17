@@ -161,7 +161,7 @@ define([
 
     onClearFilter: function(){
       const me=this,ms = ['select[name="owner"]','select[name="group"]','select[name="plan"]' ];
-
+      this.$el.find('input[name=search]').val('');
       _.each(ms, function(m){
         const i = me.$el.find(m)
         i.multiselect('deselectAll',false);

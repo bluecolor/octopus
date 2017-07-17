@@ -50,7 +50,7 @@ define([
       'click .js-block-task': 'onBlockTask',
       'click .js-stop-task': 'onStopTask',
       'click .js-done-task': 'onDoneTask',
-      'input .js-search': 'onSearch',
+      'input input[name=search]': 'onSearch',
     },
 
 		initialize: function(session) {
@@ -148,7 +148,7 @@ define([
     },
 
     onSearch: function(){
-      this.config.filters.q = this.$el.find('.js-search').val();
+      this.config.filters.q = this.$el.find('input[name=search]').val();
       this.filter();
     },
 
@@ -163,7 +163,6 @@ define([
     },
 
     onClearFilter: function(){
-      
       const me=this,ms = ['select[name="owner"]','select[name="group"]','select[name="status"]' ];
 
       _.each(ms, function(m){
@@ -171,6 +170,8 @@ define([
         i.multiselect('deselectAll',false);
         i.multiselect('updateButtonText'); 
       });
+      
+      this.$el.find('input[name=search]').val('');
       
       this.config.clearFilters();
       this.reload();
