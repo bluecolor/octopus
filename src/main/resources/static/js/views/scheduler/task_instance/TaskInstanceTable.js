@@ -201,6 +201,7 @@ define([
       const me = this;
       me.$tableBody.empty();
       _.each(tasks, t => me.addRecord(t));
+      this.$el.find('.js-trash-btn,.js-more-btn').addClass('hidden');
       return this;
     },
 
