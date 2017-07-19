@@ -100,6 +100,9 @@ class SessionQuery extends Query{
           case "plan" => 
             val parameter = if(o == SearchOperation.EQUAL_ID) "p.id" else "p.name"
             filters += build(parameter, o, v)
+          case "status"=>
+            val parameter = "s.status"
+            filters += build(parameter, o, v)
           case _ =>
         }
       }

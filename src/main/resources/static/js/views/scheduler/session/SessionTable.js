@@ -3,12 +3,11 @@ define([
   'backbone',
   'text!templates/scheduler/session/html/session-table.html',
   'text!templates/scheduler/session/html/session-record.html',
-  'collections/SessionStore',
-  'collections/PlanStore',
+  'collections/index',
   'constants/Color',
   'plugins/Time',
   'plugins/Message'
-], function (_, Backbone, template, recordTemplate, SessionStore,PlanStore, Color, Time, Message) {
+], function (_, Backbone, template, recordTemplate, Store, Color, Time, Message) {
 	'use strict';
 
   let SessionRecord = Backbone.View.extend({
@@ -48,29 +47,28 @@ define([
       'click .js-trash-btn' : 'onDelete',
       'click ul.js-sort'    : 'onSort',
       'click ul.js-plan-filter'   : 'onPlanSelect',
-      'click ul.js-status-filter' : 'onStatusSelect',
       'input .js-search'          : 'onSearch',
       'click .js-clear-filter-btn': 'onClearFilter'
     },
 
 		initialize: function() {
       const me = this;
-      this.listenTo(SessionStore, 'reset', ()=>{
+      this.listenTo(Store.SessionStore, 'reset', ()=>{
         console.log('load')
         me.load();
       });
 
     
       this.config = {
-        collection: SessionStore,
+        collection: Store.SessionStore,
         filters: {
           q: '',
           plan: '',
+          status: '',
           startDateBegin: moment().subtract(3, 'months').unix(),
           startDateEnd: moment().unix(),
           scheduleDateBegin: '', 
           scheduleDateEnd: '',
-          status: ''
         },
         clearFilters: function(){
           me.config.filters = Object.assign({},me.config.filtersTemplate)    
@@ -87,7 +85,7 @@ define([
 
       this.$tableBody = this.$el.find('.js-table-body');
       const me= this,
-            s = sessions || SessionStore.models;      
+            s = sessions || Store.SessionStore.models;      
       me.load(s);
 
       me.resetPagination();
@@ -119,13 +117,16 @@ define([
       const me = this;
       this.showClearFilter();  
       const search = me.buildFilters();
-      SessionStore.getPage(0,{reset:true, data:{fetch:true, type:"get",search:search}});
+      if(!search || _.isEmpty(search)){
+        this.showClearFilter(false);
+      }
+      Store.SessionStore.getPage(0,{reset:true, data:{fetch:true, type:"get",search:search}});
     },
 
     onClearFilter: function(){
       this.config.clearFilters();
       this.showClearFilter(false);
-      SessionStore.getPage(0,{reset:true, data:{fetch:true, type:"get"}});
+      Store.SessionStore.getPage(0,{reset:true, data:{fetch:true, type:"get"}});
     },
 
     buildFilters: function(){
@@ -134,20 +135,51 @@ define([
       return _.chain(me.config.filters).keys().filter((k)=>f[k] != null && !_.isEmpty(`${f[k]}`)).map((k)=>{
         switch(k){
           case "q": return f[k];
-          case "plan": return `${k}:#${f[k]}`;
-          case "status": return `${k}:${f[k]}`
-          case "startDateBegin": return `${k}>${f[k]}`  
-          case "startDateEnd": return `${k}<${f[k]}`;
+          case "plan": return `${k}:#[${f[k]}]`;
+          case "status": return `${k}:[${f[k]}]`
         }
         return '';    
       }).join(' ').value().trim();
     },
 
-    initFilters: function(){
-      const ul = this.$el.find('.dropdown[name="plan"] ul.dropdown-menu');
-      _.each(PlanStore.models,(plan)=>{
-        ul.append(`<li><a model-id=${plan.attributes.id} href="javascript:void(0)">${plan.attributes.name}</a></li>`)    
+
+    initStatusFilter: function(){
+      const me = this, select = this.$el.find('select[name="status"]');
+      select.multiselect({
+        nonSelectedText: 'Status',
+        allSelectedText: 'All Status',
+        buttonClass: 'btn btn-sm',
+        enableHTML: true,
+        onChange: function(option, checked){
+          const status = _.pluck(select.find('option:selected'), 'value');
+          me.config.filters.status = status;
+          me.filter();
+        }
       });
+    },
+
+    initPlanFilter: function(){
+      const me = this, select = this.$el.find('select[name="plan"]');
+      _.each(_.pluck(Store.PlanStore.models,'attributes'),  (plan)=>{
+        select.append(`<option value=${plan.id} > ${plan.name} </option>`)    
+      });
+      select.multiselect({
+        nonSelectedText: 'Plan',
+        allSelectedText: 'All Plans',
+        buttonClass: 'btn btn-sm',
+        enableHTML: true,
+        onChange: function(option, checked){
+          const plans = _.pluck(select.find('option:selected'), 'value');
+          me.config.filters.plan = plans;
+          me.filter();
+        }
+      });
+    },
+
+
+    initFilters: function(){
+      this.initStatusFilter();
+      this.initPlanFilter();
     },
 
     showClearFilter: function(b){
@@ -190,12 +222,10 @@ define([
 
     load: function(sessions){
       const me= this,
-            s = sessions || SessionStore.models;
+            s = sessions || Store.SessionStore.models;
       this.$tableBody.empty();
-      _.each(s, function(session){
-        me.addRecord(session);
-      });
-      me.$el.find('.js-trash-btn').addClass('hidden');
+      _.each(s,session => me.addRecord(session) );
+      me.$el.find('.js-trash-btn, .js-more-btn').addClass('hidden');
       return me;
     },
 
@@ -204,7 +234,7 @@ define([
     },
 
     onReload: function(){
-      SessionStore.fetch({reset:true, data:{fetch:true, type:"get"}});
+      Store.SessionStore.fetch({reset:true, data:{fetch:true, type:"get"}});
     },
 
     addRecord: function(p){
@@ -215,7 +245,7 @@ define([
     onDelete: function(){
       const me   = this;
       const id   = this.getSelected();
-      const model= SessionStore.get(id);
+      const model= Store.SessionStore.get(id);
 
       const o = {
         name: model.get('name'),
@@ -229,7 +259,7 @@ define([
                 me.$el.find('.js-trash-btn, .js-run-btn').addClass('hidden');
                 dialog.close();
                 Message.notifySuccess('Session deleted.');
-                SessionStore.remove([model]);
+                Store.SessionStore.remove([model]);
               },
               error: function(){
                 dialog.enableButtons(true);
@@ -266,8 +296,8 @@ define([
       const me = this, 
         name = $(e.target).attr('name'), 
         order = parseInt($(e.target).attr('order')); 
-      SessionStore.setSorting(name, order);
-      SessionStore.getPage(0,{reset:true, data:{fetch:true, type:"get"}}).done(function(){
+      Store.SessionStore.setSorting(name, order);
+      Store.SessionStore.getPage(0,{reset:true, data:{fetch:true, type:"get"}}).done(function(){
         me.resetPagination();
       });
       
@@ -281,11 +311,11 @@ define([
       }
       
       me.$pagination = me.$el.find('.pagination').twbsPagination({
-        totalPages  :  SessionStore.state.totalPages,
+        totalPages  :  Store.SessionStore.state.totalPages,
         visiblePages: 10,  
         startPage: 1,
         onPageClick : function (event, page) {
-          SessionStore.getPage(page-1,{reset:true, data:{fetch:true, type:"get"}});
+          Store.SessionStore.getPage(page-1,{reset:true, data:{fetch:true, type:"get"}});
         }
       });
 

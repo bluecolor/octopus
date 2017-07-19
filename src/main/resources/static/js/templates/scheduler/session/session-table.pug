@@ -51,23 +51,18 @@
                 a(href='javascript:void(0);', name="startdate", order="-1") Start date ascending
               li
                 a(href='javascript:void(0);', name="startdate", order="1") Start date descending              
-          .dropdown.pull-right(style="display:inline; margin-right:10px;")
-            a.btn.btn-default.btn-sm.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
-              | Status
-              span.caret
-            ul.dropdown-menu.js-status-filter(aria-labelledby='dropdownMenu1')
-              li
-                a(href='javascript:void(0);', name="running") RUNNING
-              li
-                a(href='javascript:void(0);', name="idle") IDLE
-              li
-                a(href='javascript:void(0);', name="success")  SUCCESS
-              li
-                a(href='javascript:void(0);', name="error")  ERROR
-          .dropdown.pull-right(name="plan")
-            button.btn.btn-sm.btn-default.dropdown-toggle(type='button', data-toggle='dropdown') Plan
-              span.caret
-            ul.dropdown-menu.js-plan-filter
+          
+          
+          .pull-right
+            select(name="status" style="margin-right:10px;" multiple="multiple")
+              option(name="running", value="RUNNING") RUNNING
+              option(name="idle", value="IDLE") IDLE
+              option(name="success", value="SUCCESS") SUCCESS
+              option(name="error", value="ERROR") ERROR
+
+          
+          .pull-right
+            select(name="plan" style="margin-right:10px;" multiple="multiple")
           .js-daterangepicker.pull-right.date-picker(data-toggle="tooltip" title="Schedule date")
             i.glyphicon.glyphicon-calendar.fa.fa-calendar
             //- span
