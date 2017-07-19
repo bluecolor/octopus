@@ -467,8 +467,10 @@ div.dataTables_wrapper {
   cursor: pointer;
   margin-right: 10px;
   padding: 4px 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px; }
+  border-radius: 4px;
+  opacity: 0.8; }
+  .date-picker:hover {
+    opacity: 1; }
   .date-picker span {
     padding-left: 5px; }
 

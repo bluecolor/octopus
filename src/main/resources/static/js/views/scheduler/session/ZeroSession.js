@@ -11,10 +11,16 @@ define([
     className : '.no-connection',
 		template  : _.template(template),
     events    : {
+      'click .js-cancel-btn': 'onClose'
 		},
 
 		initialize: function() {
-		},
+      return this;
+    },
+
+    onClose: function(){
+      window.history.back();
+    },
 
 		render: function () { 	
       this.$el.html(this.template());
