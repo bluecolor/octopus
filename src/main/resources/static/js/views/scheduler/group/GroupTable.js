@@ -88,7 +88,7 @@ define([
       me.$tableBody.empty();
       _.each(g, group => me.addRecord(group));
       me.initAuth();
-      me.$el.find('.js-trash-btn').addClass('hidden');
+      me.$el.find('.js-trash-btn, .js-export-btn').addClass('hidden');
     },
 
 		render: function (groups) { 	
