@@ -195,7 +195,7 @@ define([
       _.each(p, function(plan){
         me.addRecord(plan);
       });
-      this.$el.find('.js-trash-btn').addClass('hidden');
+      this.$el.find('.js-trash-btn, .js-more-btn').addClass('hidden');
       this.showHideStats();
     },
 
