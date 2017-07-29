@@ -9,7 +9,7 @@ import scala.concurrent.duration.FiniteDuration
 import java.util.concurrent.TimeUnit
 import scala.collection.JavaConversions._
 
-import java.sql.{Connection=>JdbcConnection}
+import java.sql.{Connection=>JdbcConnection, SQLException}
 import java.lang.InterruptedException
 import java.util.concurrent.Future
 import org.springframework.scheduling.annotation.Async
@@ -27,6 +27,12 @@ import org.apache.commons.lang3.exception.ExceptionUtils
 class JdbcActor(private var instance:TaskInstance) extends TaskActor(instance) {
 
   private var connection: JdbcConnection = null
+
+  @throws(classOf[SQLException])
+  override def stop ={
+    connection.close
+    terminate
+  } 
 
   @Async
   @throws(classOf[InterruptedException])

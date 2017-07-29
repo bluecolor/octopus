@@ -17,7 +17,7 @@ import org.springframework.core.convert.converter.Converter
 import io.octopus.search._
 import io.octopus.repository.TaskInstanceRepository
 import io.octopus.model._
-import io.octopus.actor.message.{IncTaskStatsStatus,SendTaskInstanceMail}
+import io.octopus.actor.message.{IncTaskStatsStatus,SendTaskInstanceMail, StopTask}
 import io.octopus.AppInit
 import io.octopus.exception._
 
@@ -75,7 +75,6 @@ class TaskInstanceService @Autowired()(val taskInstanceRepository: TaskInstanceR
 
   def findBySession(id: Long, page: Int, pageSize: Int, search:String,sortBy:String, order:String) = {
     // val me = userService.findMe     
-    
     var p = taskInstanceQuery.findBySession(id, page, pageSize, search,sortBy, order) 
     p.content = p.content.map{ instance =>
       instance.dependencies = findDependencies(instance)
@@ -210,6 +209,8 @@ class TaskInstanceService @Autowired()(val taskInstanceRepository: TaskInstanceR
     instance.status = Status.KILLED
     update(instance)
     setStats(instance)
+    val supervisor = appInit.system.actorSelection("/user/supervisor")
+    supervisor ! StopTask(instance.id)
     sendTaskInstanceMail(instance)
   }
 

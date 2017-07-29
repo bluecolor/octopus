@@ -52,6 +52,7 @@ abstract class TaskActor(private var instance:TaskInstance) extends Actor {
   def receive = {
     case Tick => tick
     case StartTask => run
+    case StopTask  => stop
   }
 
   def tick= { 
@@ -62,6 +63,8 @@ abstract class TaskActor(private var instance:TaskInstance) extends Actor {
   def terminate = {
     self ! PoisonPill
   }
+
+  protected def stop
 
   def run = {
     instance.retryCount += 1 

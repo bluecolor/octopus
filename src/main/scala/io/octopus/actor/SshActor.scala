@@ -32,6 +32,14 @@ class SshActor(private var instance:TaskInstance) extends TaskActor(instance) {
   private var session: SSHSession = null 
   private var ssh: SSHClient = null
 
+  override def stop ={
+    if(session!=null && ssh != null) {
+      session.close
+      ssh.disconnect
+    }
+    terminate
+  }
+
   @Async
   @throws(classOf[InterruptedException])
   override def asyncExec:Future[TaskInstance] = {

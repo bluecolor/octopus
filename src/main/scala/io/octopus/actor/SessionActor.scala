@@ -63,8 +63,17 @@ class SessionActor extends Actor {
     case TaskSuccess(instance: TaskInstance) => taskInstanceSuccess(instance)
     case TaskError(instance: TaskInstance, error: String) => taskInstanceError(instance,error)
     case StartedTask(id: Long) => setTaskRunning(id)
+    case StopTask(id: Long) => stopTask(id)
     case message:String => println(message)
     case _  => log.debug("huh?")
+  }
+
+  def stopTask(id: Long) = {
+    taskActors get id match {
+      Some(actor) => 
+        actor.forward(StopTask(id))
+      None => 
+    }  
   }
 
   def setTaskRunning(id: Long) = {
