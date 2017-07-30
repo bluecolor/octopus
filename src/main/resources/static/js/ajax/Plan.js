@@ -30,9 +30,25 @@ define([
     });
   };
 
+  const deleteAllSessions = (id) => {
+    let error = function(){
+      Message.notifyDanger('Unable to remove plan sessions!');
+    };
+    return $.ajax({
+      url     : `/api/v1/scheduler/plans/${id}/sessions`,
+      dataType: 'json',
+      type    : 'delete',
+      contentType: 'application/json',
+      error   : error
+    });
+  };
+
+
+
   return {
     protect,
-    unProtect
+    unProtect,
+    deleteAllSessions
   }
 
 

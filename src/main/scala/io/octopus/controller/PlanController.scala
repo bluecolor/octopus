@@ -53,6 +53,11 @@ class PlanController  @Autowired()(private val planService: PlanService) {
     planService.delete(id)
   }
 
+  @RequestMapping(value = Array("/{id}/sessions"), method = Array(RequestMethod.DELETE))
+  def deleteSessions(@PathVariable("id") id: Long) = {
+    planService.deleteSessions(id)
+  }
+
   @RequestMapping(method=Array(RequestMethod.DELETE))
   def deleteAll() = {
     planService.deleteAll()

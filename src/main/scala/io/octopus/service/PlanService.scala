@@ -38,7 +38,7 @@ class PlanService @Autowired()(val planRepository: PlanRepository) {
   private var appInit: AppInit = _
 
   @(Autowired @setter)
-  private var sessionService: SessionService = _
+  private var sessionService: SessionService = _  
 
   @(Autowired @setter)
   private var taskService: TaskService = _
@@ -113,6 +113,10 @@ class PlanService @Autowired()(val planRepository: PlanRepository) {
     val plan = planRepository.findOne(id)
     planRepository.delete(id)
     askToSupervisor(RemovePlanTrigger(plan), classOf[RemovedPlanTrigger]).plan
+  }
+
+  def deleteSessions(id: Long) = {
+    sessionService.deleteByPlanId(id)
   }
 
   def deleteAll() = {

@@ -46,7 +46,8 @@ define([
       'click .js-export-tasks'  : 'onExportTasks',
       'click .js-stats'         : 'onStats',
       'click .js-protect'       : 'onProtect',
-      'click .js-un-protect'    : 'onUnProtect'
+      'click .js-un-protect'    : 'onUnProtect',
+      'click .js-delete-sessions': 'onDeleteSessions'
     },
 
 		initialize: function() {
@@ -254,6 +255,31 @@ define([
       
       $('.js-plan-checkbox input[type="checkbox"]').not(e.target).prop('checked', false);
     },
+
+    onDeleteSessions: function(){
+      const me = this;
+      const id   = this.getSelected();
+      const model= PlanStore.get(id);
+      
+      const o = {
+        name: model.get('name'),
+        buttonLabel: 'I understand the consequences, delete this sessions',
+        action: function(dialog){
+          dialog.enableButtons(false);
+          dialog.setClosable(false);
+          AjaxPlan.deleteAllSessions(id).done(function(){
+            me.$el.find('.js-trash-btn, .js-run-btn, .js-more-btn').addClass('hidden');
+            Message.notifySuccess('Sessions deleted.');
+          }).error(function(){
+            dialog.enableButtons(true);
+            dialog.setClosable(true); 
+          });
+        }
+      };
+
+      Message.confirmDanger(o);
+
+    }
 
 
 	});

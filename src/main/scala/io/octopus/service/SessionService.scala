@@ -204,6 +204,11 @@ class SessionService @Autowired()(val sessionRepository: SessionRepository) {
     session
   }
 
+  def deleteByPlanId(id: Long) = {
+    sessionRepository.deleteByPlanId(id)
+  }
+
+
   def setRunning(id: Long): Session = {
     var session = findOne(id)
     session.status = Status.RUNNING

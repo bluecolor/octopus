@@ -70,9 +70,9 @@ class SessionActor extends Actor {
 
   def stopTask(id: Long) = {
     taskActors get id match {
-      Some(actor) => 
+      case Some(actor) => 
         actor.forward(StopTask(id))
-      None => 
+      case _ =>
     }  
   }
 
