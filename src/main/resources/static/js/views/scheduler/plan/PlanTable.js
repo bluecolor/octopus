@@ -263,16 +263,18 @@ define([
       
       const o = {
         name: model.get('name'),
-        buttonLabel: 'I understand the consequences, delete this sessions',
+        buttonLabel: 'I understand the consequences, delete all sessions',
         action: function(dialog){
           dialog.enableButtons(false);
           dialog.setClosable(false);
-          AjaxPlan.deleteAllSessions(id).done(function(){
+          AjaxPlan.deleteSessions(id).done(function(){
             me.$el.find('.js-trash-btn, .js-run-btn, .js-more-btn').addClass('hidden');
             Message.notifySuccess('Sessions deleted.');
-          }).error(function(){
+          }).fail(function(){
             dialog.enableButtons(true);
             dialog.setClosable(true); 
+          }).always(function(){
+            dialog.close();
           });
         }
       };

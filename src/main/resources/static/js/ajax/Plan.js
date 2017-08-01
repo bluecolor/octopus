@@ -30,7 +30,7 @@ define([
     });
   };
 
-  const deleteAllSessions = (id) => {
+  const deleteSessions = (id) => {
     let error = function(){
       Message.notifyDanger('Unable to remove plan sessions!');
     };
@@ -48,7 +48,7 @@ define([
   return {
     protect,
     unProtect,
-    deleteAllSessions
+    deleteSessions
   }
 
 

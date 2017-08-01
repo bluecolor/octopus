@@ -13,5 +13,5 @@ trait SessionRepository extends JpaRepository[Session, java.lang.Long] with JpaS
   def countByStatusNotInAndPlanId(status: Array[String], planId: Long): Long
   def findByStatusIn(statuses: Array[String]): java.util.List[Session]
   def findByStatus(status: String): java.util.List[Session]
-  def deleteByPlanId(id: Long)
+  def deleteByPlanId(id: Long): java.util.List[Session]
 }

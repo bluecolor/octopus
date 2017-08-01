@@ -59,8 +59,8 @@ class PlanController  @Autowired()(private val planService: PlanService) {
   }
 
   @RequestMapping(method=Array(RequestMethod.DELETE))
-  def deleteAll() = {
-    planService.deleteAll()
+  def deleteAll = {
+    planService.deleteAll
   }
 
   @RequestMapping(value=Array("/export/{id}"), method=Array(RequestMethod.GET))

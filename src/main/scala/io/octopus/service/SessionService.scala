@@ -231,17 +231,13 @@ class SessionService @Autowired()(val sessionRepository: SessionRepository) {
   }
 
 
-  def setTaskInstanceSuccess(id: Long) = {
-    taskInstanceService.setSuccess(id)
-  }
+  def setTaskInstanceSuccess(id: Long) = taskInstanceService.setSuccess(id)
 
-  def setTaskInstanceError(id: Long, error: String) = {
+  def setTaskInstanceError(id: Long, error: String) = 
     taskInstanceService.setError(id, error)
-  }
 
-  def setTaskInstanceRunning(id: Long) = {
-    taskInstanceService.setRunning(id)
-  }
+  def setTaskInstanceRunning(id: Long) = taskInstanceService.setRunning(id)
+  
 
   def recover = {
     findByStatus(Status.RUNNING).foreach{s=>

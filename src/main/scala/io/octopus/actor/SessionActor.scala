@@ -150,7 +150,6 @@ class SessionActor extends Actor {
     }
   }
 
-
   def runSessions = {
     sessions.keys.foreach{ k=>
       self ! ( 

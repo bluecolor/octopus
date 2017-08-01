@@ -119,7 +119,7 @@ class PlanService @Autowired()(val planRepository: PlanRepository) {
     sessionService.deleteByPlanId(id)
   }
 
-  def deleteAll() = {
+  def deleteAll = {
     val plans = planRepository.findAll
     for(p <- plans) {
       planRepository.delete(p.id)
