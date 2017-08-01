@@ -53,7 +53,7 @@ define([
 
 		initialize: function() {
       const me = this;
-      this.listenTo(Store.SessionStore, 'reset', ()=>{
+      this.listenTo(Store.SessionStore, 'reset remove', ()=>{
         console.log('load')
         me.load();
       });
