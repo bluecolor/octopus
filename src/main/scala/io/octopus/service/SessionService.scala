@@ -76,9 +76,11 @@ class SessionService @Autowired()(val sessionRepository: SessionRepository) {
   def isActiveSessionOfPlanExist(planId: Long) = 
     if (sessionRepository.countByStatusNotInAndPlanId(Array(Status.DONE,Status.SUCCESS), planId) > 0) true else false
 
-  def isSessionSuccess(id: Long) = 
-    taskInstanceService.findBySessionIdAndStatusIn(id,Array(Status.ERROR,Status.KILLED,Status.IDLE)).length == 0
-
+  def isSessionSuccess(id: Long) = {
+    val blockers = Array(Status.ERROR,Status.KILLED,Status.BLOCKED, Status.IDLE)
+    taskInstanceService.findBySessionIdAndStatusIn(id,blockers).length == 0
+  }
+    
   def create(session: Session): Session = {
     sessionRepository.save(session)
   }
@@ -136,12 +138,12 @@ class SessionService @Autowired()(val sessionRepository: SessionRepository) {
   def findRunnable(id: Long): java.util.List[TaskInstance] = {
     val maxParallel = settingService.findByName("max_parallel")(0).value.toInt
     val session = findOne(id)
-    val runnign = taskInstanceService.findByStatus(Status.RUNNING)
+    val running = taskInstanceService.findByStatus(Status.RUNNING)
     val idle = taskInstanceService.findByStatus(Status.IDLE)
     
-    var runningSlots = runnign.length
-    var groupSlotMap = findGroupSlotMap(runnign)
-    var planSlots = findPlanSlots(session,runnign, maxParallel) 
+    var runningSlots = running.length
+    var groupSlotMap = findGroupSlotMap(running)
+    var planSlots = findPlanSlots(session,running, maxParallel) 
     
     if(maxParallel <= runningSlots || planSlots <= 0){
       log.debug(s"""
@@ -154,9 +156,10 @@ class SessionService @Autowired()(val sessionRepository: SessionRepository) {
     }
 
     def isDependenciesOk(dependencies: List[TaskInstance]) = {      
+      val blockers = Array(Status.IDLE,Status.ERROR, Status.BLOCKED,Status.KILLED)
       dependencies == null ||
       dependencies
-      .filter(d => Array(Status.IDLE,Status.ERROR, Status.BLOCKED,Status.KILLED) contains d.status).isEmpty
+      .filter(d => blockers contains d.status).isEmpty
     }
 
     def setSlots(instance: TaskInstance) = {
