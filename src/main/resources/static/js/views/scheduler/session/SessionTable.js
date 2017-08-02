@@ -6,8 +6,9 @@ define([
   'collections/index',
   'constants/Color',
   'plugins/Time',
-  'plugins/Message'
-], function (_, Backbone, template, recordTemplate, Store, Color, Time, Message) {
+  'plugins/Message',
+  'ajax/Session'
+], function (_, Backbone, template, recordTemplate, Store, Color, Time, Message, AjaxSession) {
 	'use strict';
 
   let SessionRecord = Backbone.View.extend({
@@ -43,6 +44,7 @@ define([
     
     events: {
       'click .js-stop-session': 'onStopSession',
+      'click .js-start-session': 'onStartSession',
       'click .js-checkbox'  : 'onCheckbox',
       'click .js-reload'    : 'onReload',
       'click .js-trash-btn' : 'onDelete',
@@ -323,7 +325,23 @@ define([
     },
 
     onStopSession: function(){
-      console.log('stop session');
+      const me=this,id   = this.getSelected();
+      AjaxSession.stop(id).done(function(){
+        Message.success('Session stopped');
+        me.onReload();
+      }).fail(function(){
+        Message.error('Unable to stop session');
+      });
+    },
+
+    onStartSession: function(){
+      const me=this,id   = this.getSelected();
+      AjaxSession.start(id).done(function(){
+        Message.success('Session started');
+        me.onReload();
+      }).fail(function(){
+        Message.error('Unable to start session');
+      });
     }
 
 

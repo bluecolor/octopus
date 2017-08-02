@@ -1,3 +1,5 @@
 package io.octopus.actor.message
 
-case class StopSession(sessionId: Long, status: String )
+import io.octopus.model.Status
+
+case class StopSession(sessionId: Long, status: String = Status.STOPPED)

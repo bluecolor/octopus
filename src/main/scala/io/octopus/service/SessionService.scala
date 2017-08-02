@@ -256,7 +256,16 @@ class SessionService @Autowired()(val sessionRepository: SessionRepository) {
     session.endDate= new Date 
     sessionRepository.save(session)
     val supervisor = appInit.system.actorSelection("/user/supervisor")
-    supervisor ! StopSession(id) 
+    supervisor ! StopSession(id)
+    session 
+  }
+
+  def start(id: Long) = {
+    var session = findOne(id)
+    session.status = Status.IDLE
+    session.endDate= null
+    sessionRepository.save(session)
+    session
   }
 
 }

@@ -53,7 +53,7 @@ class Supervisor extends Actor {
     case RemovePlanTrigger(plan: Plan) => quartzActor.forward(RemovePlanTrigger(plan))
     case SendTaskInstanceMail(instance:TaskInstance) => mailActor.forward(SendTaskInstanceMail(instance))
     case StopTask(id: Long) => sessionActor.forward(StopTask(id))
-    case StopSession(id: Long) => sessionActor.forward(StopSession(id))
+    case StopSession(id:Long, status: String) => sessionActor.forward(StopSession(id,status))
     case _ => println("Opps ?")
   }
 

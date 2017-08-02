@@ -42,5 +42,8 @@ class SessionController  @Autowired()(private val sessionService: SessionService
   def stop(@PathVariable("id") id: Long) = 
     sessionService.stop(id)
 
+  @RequestMapping(value = Array("/{id}/start"), method = Array(RequestMethod.PUT))
+  def start(@PathVariable("id") id: Long) = 
+    sessionService.start(id)
 
 }
