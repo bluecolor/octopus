@@ -20,6 +20,7 @@ define([
       case 'KILLED': return 'label-danger';
       case 'BLOCKED': return 'label-default';
       case 'RUNNING': return 'label-info';
+      case 'STOPPED': return 'label-danger';
     }   
     return 'label-default';
   };

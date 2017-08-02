@@ -42,6 +42,7 @@ define([
     
     
     events: {
+      'click .js-stop-session': 'onStopSession',
       'click .js-checkbox'  : 'onCheckbox',
       'click .js-reload'    : 'onReload',
       'click .js-trash-btn' : 'onDelete',
@@ -319,6 +320,10 @@ define([
         }
       });
 
+    },
+
+    onStopSession: function(){
+      console.log('stop session');
     }
 
 

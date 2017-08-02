@@ -7,7 +7,8 @@ define([
       ERROR   = 'ERROR', 
       KILLED  = 'KILLED',
       BLOCKED = 'BLOCKED',
-      RUNNING = 'RUNNING';
+      RUNNING = 'RUNNING',
+      STOPPED = 'STOPPED'; 
 
   const progress = (instance) => {
 
@@ -41,6 +42,7 @@ define([
     KILLED, 
     BLOCKED,
     RUNNING,
+    STOPPED,
     progress
   }
 });

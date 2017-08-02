@@ -7,7 +7,8 @@ object Status {
   val ERROR   = "ERROR"
   val KILLED  = "KILLED"
   val PAUSED  = "PAUSED"
-  val BLOCKED = "BLOCKED"  
+  val BLOCKED = "BLOCKED" 
+  val STOPPED = "STOPPED" 
   val DONE    = "DONE"
 
   val valid = Map( 
@@ -17,6 +18,7 @@ object Status {
     ERROR -> List(IDLE,RUNNING,DONE),
     KILLED -> List(KILLED,IDLE,RUNNING),
     PAUSED -> List(PAUSED,IDLE,RUNNING),
+    STOPPED-> List(STOPPED,IDLE,RUNNING),
     BLOCKED -> List(BLOCKED,IDLE, DONE),
     DONE -> List(DONE,IDLE,ERROR,BLOCKED,KILLED)
   )  

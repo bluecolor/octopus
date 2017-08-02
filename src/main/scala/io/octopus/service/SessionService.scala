@@ -21,7 +21,7 @@ import io.octopus.AppInit
 import io.octopus.repository.SessionRepository
 import io.octopus.model._
 import io.octopus.query._
-import io.octopus.actor.message.RunSession
+import io.octopus.actor.message._
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -223,14 +223,14 @@ class SessionService @Autowired()(val sessionRepository: SessionRepository) {
     var session = findOne(id)
     session.status = Status.SUCCESS
     session.endDate= new Date 
-    session
+    sessionRepository.save(session)
   }
 
   def setDone(id: Long): Session = {
     var session = findOne(id)
     session.status = Status.DONE
     session.endDate= new Date 
-    session
+    sessionRepository.save(session)
   }
 
 
@@ -250,5 +250,13 @@ class SessionService @Autowired()(val sessionRepository: SessionRepository) {
     taskInstanceService.recover
   }
 
+  def stop(id: Long) = {
+    var session = findOne(id)
+    session.status = Status.STOPPED
+    session.endDate= new Date 
+    sessionRepository.save(session)
+    val supervisor = appInit.system.actorSelection("/user/supervisor")
+    supervisor ! StopSession(id) 
+  }
 
 }

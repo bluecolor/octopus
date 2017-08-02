@@ -27,18 +27,20 @@ class SessionController  @Autowired()(private val sessionService: SessionService
     sessionService.findRunnable(id)
 
   @RequestMapping(value = Array("/{id}"), method = Array(RequestMethod.GET))
-  def findOne(@PathVariable("id") id: Long) = {
+  def findOne(@PathVariable("id") id: Long) = 
     sessionService.findOne(id)
-  }
 
   @RequestMapping(value = Array("/{id}"), method = Array(RequestMethod.PUT))
-  def update(@PathVariable("id") id: Long, @RequestBody session: Session) = {
+  def update(@PathVariable("id") id: Long, @RequestBody session: Session) = 
     sessionService.update(session)
-  }
 
   @RequestMapping(value = Array("/{id}"), method = Array(RequestMethod.DELETE))
-  def delete(@PathVariable("id") id: Long) = {
+  def delete(@PathVariable("id") id: Long) =
     sessionService.delete(id)
-  }
+  
+  @RequestMapping(value = Array("/{id}/stop"), method = Array(RequestMethod.PUT))
+  def stop(@PathVariable("id") id: Long) = 
+    sessionService.stop(id)
+
 
 }
