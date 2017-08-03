@@ -243,6 +243,7 @@ class TaskInstanceService @Autowired()(val taskInstanceRepository: TaskInstanceR
       log.error(s"TaskInstance(${instance.id}): ${msg}")
       throw InvalidStatusTransitionException(msg)
     }
+    instance.endDate= null
     instance.status = Status.IDLE
     update(instance)
   }

@@ -22,8 +22,8 @@ define([
       firstPage:0,
       page: 0,
       pageSize: 5,
-      sortKey: 'name',
-      order: 1,
+      sortKey: 'status',
+      order: -1,
       count: 0
     },
     queryParams: {
