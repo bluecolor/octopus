@@ -22,7 +22,9 @@ define([
         label: '',
         valueProp: 'id',
         displayProp: 'name',
-        button: null,
+        button: {
+          cls: 'fa-plus'
+        },
         typeAhead: false
       };
       this.config = _.extend(this.config,o);       

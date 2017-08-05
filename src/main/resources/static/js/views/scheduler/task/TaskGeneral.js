@@ -26,7 +26,10 @@ define([
       const connections = new Combo({ 
         label: 'Connection',
         store: Store.ConnectionStore,
-        name  : 'connection'
+        name  : 'connection',
+        button: {
+          ref: '#/connections/new',
+        }
       });
 
       connections.$el.insertAfter(me.$el.find('.form-group.js-task-name'));
@@ -34,7 +37,10 @@ define([
       const plans = new Combo({
         label : 'Run Plan',
         store : Store.PlanStore,
-        name  : 'plan'
+        name  : 'plan',
+        button: {
+          ref : '#/scheduler/plans/new',
+        }
       });
 
       plans.$el.insertAfter(me.$el.find('.form-group.js-task-name'));

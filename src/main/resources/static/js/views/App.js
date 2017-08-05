@@ -67,7 +67,7 @@ define([
         Store.AlertStore.fetch({data:{fetch:true, type:"get"}}).done(function(){
           loadAlerts();  
         });
-      },30000);
+      },15000);
       User.init();
   
     },
