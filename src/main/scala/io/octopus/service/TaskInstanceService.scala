@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort.Direction
 import org.springframework.data.domain.Sort.Order
 import org.springframework.data.domain.{Sort, Page,Pageable,PageRequest}
 import org.springframework.core.convert.converter.Converter
+import org.springframework.messaging.simp.SimpMessagingTemplate
 
 import io.octopus.search._
 import io.octopus.repository.TaskInstanceRepository
@@ -47,6 +48,9 @@ class TaskInstanceService @Autowired()(val taskInstanceRepository: TaskInstanceR
 
   @(Autowired @setter)
   private var taskInstanceQuery: TaskInstanceQuery = _
+
+  @(Autowired @setter)
+  private var mt: SimpMessagingTemplate = _
 
   private val log:Logger  = LoggerFactory.getLogger(MethodHandles.lookup.lookupClass)
 
@@ -171,6 +175,7 @@ class TaskInstanceService @Autowired()(val taskInstanceRepository: TaskInstanceR
     setStats(instance)
     logInstance(instance,error)
     sendTaskInstanceMail(instance)
+    mt.convertAndSend("/topic/task-instance", instance);
   }
 
   @throws(classOf[InvalidStatusTransitionException])

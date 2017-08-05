@@ -1,5 +1,6 @@
 package io.octopus.model
 
+import com.fasterxml.jackson.annotation._
 import java.util.Date
 import javax.persistence._
 import javax.validation.constraints.{NotNull}
@@ -11,6 +12,7 @@ object Technology {
   val ShellScript = "Shell Script" 
 }
 
+@JsonIgnoreProperties(ignoreUnknown=true)
 @Entity(name="technology")
 class Technology {
 

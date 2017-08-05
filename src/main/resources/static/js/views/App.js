@@ -61,7 +61,7 @@ define([
       Store.AlertStore.fetch({data:{fetch:true, type:"get"}}).done(function(){
         loadAlerts();
       });
-      // Socket.connect();
+      Socket.connect();
       
       setInterval(function(){
         Store.AlertStore.fetch({data:{fetch:true, type:"get"}}).done(function(){

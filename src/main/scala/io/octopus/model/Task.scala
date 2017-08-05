@@ -11,6 +11,7 @@ import scala.beans.BeanProperty
 
 import Priority._
 
+@JsonIgnoreProperties(ignoreUnknown=true)
 @Entity(name="task")
 class Task{
 
@@ -74,7 +75,7 @@ class Task{
 
   @BeanProperty
   @Fetch(value= FetchMode.JOIN)
-  @ManyToOne(optional = false, fetch = FetchType.LAZY)
+  @ManyToOne(optional = false)
   var technology: Technology = _
 
   @BeanProperty
