@@ -43,6 +43,9 @@ define([
         var checkElement = $this.next();
         var animationSpeed = 500;
 
+        $('.sidebar li.active').removeClass('active');
+        $this.parent("li").addClass('active');
+
         if ((checkElement.is('.treeview-menu')) && (checkElement.is(':visible')) && (!$('body').hasClass('sidebar-collapse'))) {
           checkElement.slideUp(animationSpeed, function () {
             checkElement.removeClass('menu-open');
