@@ -59,7 +59,8 @@ define([
       $s.typeahead({
         hint: true,
         highlight: true,
-        minLength: 1
+        minLength: 1,
+        autoselect: true
       },{
         limit  : 10,
         name   : 'name',
@@ -93,9 +94,25 @@ define([
         $('.tt-menu').width($s.outerWidth());
       });
 
+      $s.bind('typeahead:selected', function(obj, datum, name) {      
+        SearchStore.setQuery(datum.name).fetch({
+          reset: true,
+          fetch: true,
+          success: function(collection, data){
+            me.setPagination();
+            me.renderSearchResult();
+          }  
+        });
+      });
+
     },
 
     setPagination: function(){
+      
+      if(SearchStore.state.totalPages == 0 || SearchStore.state.totalPages == undefined){
+        return;
+      }
+      
       const me = this;
       this.$el.find('.pagination').twbsPagination({
         totalPages  : SearchStore.state.totalPages,
