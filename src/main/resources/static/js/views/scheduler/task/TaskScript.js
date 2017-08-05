@@ -4,9 +4,9 @@ define([
   'text!templates/scheduler/task/html/script.html',
   'constants/index',
   'views/widget/editor/Editor',
-  'views/shared/TechnologyList',
-  'collections/TechnologyStore'
-], function (_, Backbone, template, Constants, Editor, TechnologyList, TechnologyStore) {
+  'views/shared/Combo',
+  'collections/index'
+], function (_, Backbone, template, Constants, Editor, Combo, Store) {
 	'use strict';
 
 	let TaskScript = Backbone.View.extend({
@@ -37,10 +37,20 @@ define([
 		initialize: function () {
       const me = this;
       this.editor = new Editor();
-      this.technology = new TechnologyList({
+  
+      this.technology = new Combo({ 
         label: 'Technology',
-        collection: TechnologyStore,
+        store: Store.TechnologyStore,
+        name  : 'technology',
         button: false
+        // button: {
+        //   ref: 'javascript:void(0)',
+        //   cls: 'fa-pencil-square-o',
+        //   clear: false,
+        //   onb2 : function(){
+        //     console.log('hello');
+        //   }
+        // }
       });
 
       this.technology.on('change',function(e){

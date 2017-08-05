@@ -12,7 +12,8 @@ define([
 		template  : _.template(template),
 
     events    : {
-      'click .js-clear-btn': 'onClear' 
+      'click .js-combo-b1': 'onClear', 
+      'click .js-combo-b2': 'onb2'
     },
 
 		initialize: function(o) {
@@ -23,11 +24,13 @@ define([
         valueProp: 'id',
         displayProp: 'name',
         button: {
-          cls: 'fa-plus'
+          cls  : 'fa-plus',
+          clear: true,
+          onb2 : function(){;}
         },
         typeAhead: false
       };
-      this.config = _.extend(this.config,o);       
+      this.config = $.extend(true,{},this.config,o);       
       this.render();
       return this;
     },
@@ -53,9 +56,21 @@ define([
       return this;
     },
 
+    getValue: function(){
+      return this.$el.find('select').val();
+    },
+
+    setValue: function(v){
+      this.$el.find('select').val(v);
+    },
+
 
     onClear: function(){
       this.$el.find("select").val([]);
+    },
+
+    onb2: function(){
+      this.config.button.onb2();
     }
 
 	});
