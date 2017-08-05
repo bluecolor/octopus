@@ -53,7 +53,7 @@ class GroupController  @Autowired()(private val groupService: GroupService) {
     val date = df.format(now)
     
     response.setContentType("application/octet-stream; charset=utf-8")
-    response.setHeader("Content-Disposition", s"attachment; filename='sch.parameters.$date.json'")
+    response.setHeader("Content-Disposition", s"attachment; filename='sch.groups.$date.json'")
     response.getWriter().print(groupService.export(id))
   }
 
