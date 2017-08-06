@@ -13,6 +13,8 @@ define([
          body: `${instance.name} crashed`,
          icon: 'img/octo-red-32.png'
       });
+      const audio = new Audio('sound/just-like-that.mp3');
+      audio.play();  
     });
   },function(e){
     console.log(e)
