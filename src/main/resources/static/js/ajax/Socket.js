@@ -18,8 +18,12 @@ define([
     console.log(e)
   });
   
+  const connect = () => {
+
+  };
     
   return {
+    connect
   }
 
 
