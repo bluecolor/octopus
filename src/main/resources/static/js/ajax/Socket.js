@@ -7,13 +7,13 @@ define([
   const socket = new SockJS('/socket');
   const stomp = Stomp.over(socket);
   stomp.connect({}, function (f) {
-    stomp.subscribe('/topic/task-instance', function (d) {
+    stomp.subscribe('/topic/task-instance-error', function (d) {
       const instance = JSON.parse(d.body);
       Push.create('Task Crash',{
          body: `${instance.name} crashed`,
          icon: 'img/octo-red-32.png'
       });
-      const audio = new Audio('sound/just-like-that.mp3');
+      const audio = new Audio('sound/error.mp3');
       audio.play();  
     });
   },function(e){

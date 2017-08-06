@@ -12,3 +12,31 @@
   right: 0;
   // margin: 50px auto;
 }
+
+
+#chart1 {
+  width: 510px;
+  height: 550px;
+  border: none;
+  background-color: white;
+
+  .background {
+    fill: none;
+    pointer-events: all;  
+  }
+
+}
+
+
+
+
+#chart1 .node {
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+
+#chart1 .link {
+  stroke: #999;
+  stroke-opacity: .6;
+  stroke-width: 1.5px;
+}

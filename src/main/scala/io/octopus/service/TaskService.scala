@@ -59,16 +59,16 @@ class TaskService @Autowired()(val taskRepository: TaskRepository) {
     p
   }
 
-  def findOne(id: Long): Task = {
-    taskRepository.findOne(id)
-  }
+  def findOne(id: Long): Task = taskRepository.findOne(id)
 
-  def findByPlanId(id: Long) = 
-    taskRepository.findByPlanId(id)
+  def findByPlan(id: Long) =  taskRepository.findByPlanId(id)
+  
+  def findByPrimaryGroup(id: Long) = taskRepository.findByPrimaryGroupId(id)
 
-  def findByIdIn(tasks: java.util.List[java.lang.Long]) = {
+  def findByPrimaryOwner(id: Long) = taskRepository.findByPrimaryOwnerId(id)
+
+  def findByIdIn(tasks: java.util.List[java.lang.Long]) = 
     taskRepository.findByIdIn(tasks)
-  }
 
   def findBookmarked = {
     val username: String = SecurityContextHolder

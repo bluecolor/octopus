@@ -909,6 +909,24 @@ div[data-notify="container"].alert-warning {
   left: 0;
   right: 0; }
 
+#chart1 {
+  width: 510px;
+  height: 550px;
+  border: none;
+  background-color: white; }
+  #chart1 .background {
+    fill: none;
+    pointer-events: all; }
+
+#chart1 .node {
+  stroke: #fff;
+  stroke-width: 1.5px; }
+
+#chart1 .link {
+  stroke: #999;
+  stroke-opacity: .6;
+  stroke-width: 1.5px; }
+
 .search-view {
   padding-top: 20px; }
 

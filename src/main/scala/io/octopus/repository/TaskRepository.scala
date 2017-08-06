@@ -15,6 +15,7 @@ import io.octopus.model.User
 trait TaskRepository extends JpaRepository[Task, java.lang.Long] with JpaSpecificationExecutor[Task] {
   def findByIdIn(tasks: java.util.List[java.lang.Long]): java.util.List[Task]
   def findByPlanId(id: Long): java.util.List[Task]
+  def findByPrimaryGroupId(id: Long): java.util.List[Task]
   def findByNameContainingIgnoreCase(q: String): java.util.List[Task]
   def findByPrimaryOwnerId(id: java.lang.Long): java.util.List[Task]
   def findByBookmarkersContaining(user: User): java.util.List[Task]

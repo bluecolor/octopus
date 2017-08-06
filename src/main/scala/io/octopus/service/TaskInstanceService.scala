@@ -107,7 +107,7 @@ class TaskInstanceService @Autowired()(val taskInstanceRepository: TaskInstanceR
   }
 
   def createBySessionIdAndPlanId(sessionId: Long, planId: Long) = {
-    var instances = taskService.findByPlanId(planId).toList.map(task=>{
+    var instances = taskService.findByPlan(planId).toList.map(task=>{
       var instance = new TaskInstance
       instance.task = task 
       instance.session = new Session(sessionId)
@@ -175,7 +175,7 @@ class TaskInstanceService @Autowired()(val taskInstanceRepository: TaskInstanceR
     setStats(instance)
     logInstance(instance,error)
     sendTaskInstanceMail(instance)
-    mt.convertAndSend("/topic/task-instance", instance);
+    mt.convertAndSend("/topic/task-instance-error", instance);
   }
 
   @throws(classOf[InvalidStatusTransitionException])

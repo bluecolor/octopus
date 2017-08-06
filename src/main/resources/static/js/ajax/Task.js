@@ -61,7 +61,22 @@ define([
       contentType: 'application/json',
       error   : error
     });
-  }
+  };
+
+  const findByPlan = (id) => {
+    let error = function(){
+      Message.notifyDanger('Unable to find tasks!');
+    };
+
+    return $.ajax({
+      url     : `/api/v1/scheduler/tasks/plan/${id}`,
+      dataType: 'json',
+      type    : 'get',
+      contentType: 'application/json',
+      error   : error
+    });
+  };
+
 
   const findMyTasks = () => {
     
@@ -167,7 +182,8 @@ define([
     search,
     disable,
     enable,
-    run
+    run,
+    findByPlan
   }
 
 
