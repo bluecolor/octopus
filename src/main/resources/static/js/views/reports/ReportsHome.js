@@ -239,7 +239,7 @@ define([
       this.$el.html(this.template());
       this.drawPlanStats();
       this.drawGroupStats();
-      this.drawDependencies();
+      // this.drawDependencies();
       this.initAuth();
       return this;
     },
