@@ -77,7 +77,7 @@ class SessionService @Autowired()(val sessionRepository: SessionRepository) {
     if (sessionRepository.countByStatusNotInAndPlanId(Array(Status.DONE,Status.SUCCESS), planId) > 0) true else false
 
   def isSessionSuccess(id: Long) = {
-    val blockers = Array(Status.ERROR,Status.KILLED,Status.BLOCKED, Status.IDLE)
+    val blockers = Array(Status.ERROR,Status.KILLED,Status.BLOCKED, Status.IDLE, Status.RUNNING)
     taskInstanceService.findBySessionIdAndStatusIn(id,blockers).length == 0
   }
     
