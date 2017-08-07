@@ -4,7 +4,20 @@ define([
 ], function (_, Message) {
 	'use strict';
 
-  
+
+  const findOne = (id) => {
+    let error = function(){
+      Message.notifyDanger('Unable to get session task');
+    };
+    return $.ajax({
+      url     : `/api/v1/scheduler/task-instances/${id}`,
+      dataType: 'json',
+      type    : 'get',
+      contentType: 'application/json',
+      error   : error
+    });
+  };
+
   const done = (id) => {
     let error = function(){
       Message.notifyDanger('Unable to make task done!');
@@ -59,6 +72,7 @@ define([
 
 
   return {
+    findOne,
     block,
     stop,
     done,

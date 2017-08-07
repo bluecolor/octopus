@@ -30,7 +30,7 @@ define([
 	return new ConnectionStore([],{
     mode: "client",
     state: {
-      pageSize: 20,
+      pageSize: 25,
       sortKey : "name",
       order: 1
     }

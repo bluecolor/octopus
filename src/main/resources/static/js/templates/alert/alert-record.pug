@@ -1,7 +1,7 @@
 td(style="width:20px" obj-id!="<%-obj.id%>" obj-tp="<%-tp%>")
   div(style="height:100%; width:100%; overflow: hidden;") 
     div(style="float:left;")
-      a.alert-name(href="#") <%- obj.name %>
+      a.alert-name(href!="#/scheduler/task-instances/<%-obj.id%>") <%- obj.name %>
       span.alert-type - <%- objtpHuman %>
       span.alert-date - <%- alertDate %> 
     div(style="float:right;")

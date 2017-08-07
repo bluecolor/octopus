@@ -19,6 +19,7 @@ define([
   'views/widget/editor/Editor',
   'views/shared/TechnologyList',
   'constants/index',
+  'ajax/TaskInstance'
 ], function (
   _, 
   Backbone, 
@@ -39,7 +40,8 @@ define([
   TechnologyStore,
   Editor,
   TechnologyList,
-  Constants
+  Constants,
+  AjaxTaskInstance
 ) { 'use strict';
 
 
@@ -461,6 +463,9 @@ define([
 
 		initialize: function (id) {
       this.model = TaskInstanceStore.get(id);
+      
+      
+      
       this.modelId = id;
       return this;
     },
@@ -482,9 +487,21 @@ define([
     },
 
 		render: function () { 	
+      const me = this;
       this.$el.html(this.template());
-      this.renderComponents();
-      this.setValues();
+      
+      if(!this.model){
+        me.model = {};
+        AjaxTaskInstance.findOne(this.modelId).done(function(d){
+          me.model['attributes'] = d;
+          me.renderComponents();
+          me.setValues();
+        });
+      }else{
+        me.renderComponents();
+        me.setValues();
+      }
+      
       return this;
     },
 

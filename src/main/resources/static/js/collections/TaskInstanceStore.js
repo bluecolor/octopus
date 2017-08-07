@@ -26,7 +26,7 @@ define([
     state: {
       firstPage:0,
       order: -1,
-      pageSize: 20,
+      pageSize: 25,
       sortKey: 'name',
     },
     queryParams: {
