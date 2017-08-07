@@ -45,7 +45,8 @@ class StatsService @Autowired()(
 
     var v = stats.getv(status toLowerCase).asInstanceOf[Long]
     stats.setv(status toLowerCase, v+1)
-    stats
+    stats.task = task
+    taskStatsRepository.save(stats)
   }
 
 

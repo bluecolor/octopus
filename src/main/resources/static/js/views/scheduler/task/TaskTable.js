@@ -300,7 +300,7 @@ define([
       me.$pop = $(e.target); 
       me.$pop.popover(opts).popover('show').on('shown.bs.popover',function(){
         me.popActive = true;
-        const ctx = $('.js-popover-content');
+        const ctx = $('.js-popover-canvas');
         const data = {
           datasets: [{
             data: [s.success, s.done, s.error,],

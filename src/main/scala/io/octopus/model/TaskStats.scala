@@ -25,6 +25,7 @@ class TaskStats {
 
   @Id
   @BeanProperty
+  @GeneratedValue
   var id: Long = _
 
   @BeanProperty
@@ -60,7 +61,7 @@ class TaskStats {
   @JsonProperty("avgDuration")
   @JsonSerialize
   @BeanProperty
-  @Formula("case when success != 0 then duration/success end")
+  @Formula("case when success != 0 then duration/success else 0 end")
   var avgDuration: Long = _
 
   @JsonProperty("total")
