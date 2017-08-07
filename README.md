@@ -43,4 +43,4 @@ gradle bootrun
 
 ### Documentation
 
-See [here](https://bluebooks.gitbooks.io/octopus/content/) for user guide and documentation.
+See [here](https://github.com/bluecolor/octopus/wiki) for user guide and documentation.
