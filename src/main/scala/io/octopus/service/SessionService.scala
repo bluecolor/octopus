@@ -156,7 +156,7 @@ class SessionService @Autowired()(val sessionRepository: SessionRepository) {
     }
 
     def isDependenciesOk(dependencies: List[TaskInstance]) = {      
-      val blockers = Array(Status.IDLE,Status.ERROR, Status.BLOCKED,Status.KILLED)
+      val blockers = Array(Status.IDLE,Status.ERROR, Status.BLOCKED,Status.KILLED, Status.RUNNING)
       dependencies == null ||
       dependencies
       .filter(d => blockers contains d.status).isEmpty
