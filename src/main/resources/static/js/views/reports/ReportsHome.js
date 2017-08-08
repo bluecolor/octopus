@@ -5,8 +5,9 @@ define([
   'text!templates/reports/html/reports-home.html',
   'collections/index',
   'ajax/User',
-  'ajax/Task'  
-], function (_, Backbone, Constants, template, Store, User, AjaxTask ) {
+  'ajax/Task',
+  'ajax/Report',
+], function (_, Backbone, Constants, template, Store, User, AjaxTask, Report) {
 	'use strict';
 
 	var ReportsHome = Backbone.View.extend({
@@ -112,6 +113,41 @@ define([
           data: data,
           options: options
       });
+    },
+
+    drawOwnerStats: function(){
+      const me = this;
+      Report.ownerTaskStats().done(function(d){
+        if(_.isEmpty(d)){
+          me.$el.find('.js-owner-task-stats').addClass('hidden');
+          me.$el.find('.js-owner-task-stats-zd').removeClass('hidden');
+          return;
+        }else{
+          me.$el.find('.js-owner-task-stats').removeClass('hidden');
+          me.$el.find('.js-owner-task-stats-zd').addClass('hidden');
+        }
+        const ctx = me.$el.find('.js-owner-task-stats');
+        let options = {
+          responsive: true,
+          maintainAspectRatio: false,  
+          legend: {
+            display: true
+          }
+        };
+        let data = {
+          labels : _.map(d,r => r.owner.name),
+          datasets: [{
+            data : _.map(d,r => r.taskCount),
+            backgroundColor: _.map(d,x => Constants.Color.randomRgba(0.2)),
+          }]
+        };
+        let pie = new Chart(ctx,{
+          type: 'pie',
+          data: data,
+          options: options
+        });
+
+      });    
     },
 
     drawDependencies: function(){
@@ -241,6 +277,7 @@ define([
       this.$el.html(this.template());
       this.drawPlanStats();
       this.drawGroupStats();
+      this.drawOwnerStats();
       // this.drawDependencies();
       this.initAuth();
       return this;

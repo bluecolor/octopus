@@ -25,6 +25,22 @@
             span.text-gray-harbor(style="font-size:20px;") You do not have any group yet!  
           div(style="width: 200px;margin-top: 20px;")
             a.hidden.btn.btn-block.btn-primary.btn-lg.js-new-group(href='#/scheduler/groups/new') Create Group
+.row
+  .col-md-6
+    .box(style="border-top=0px" )
+      .box-header
+        h3.box-title Task Owners
+      .box-body
+        canvas.hidden.js-owner-task-stats(width="400px" height="400px")
+        div.lo-center.zero-data.js-owner-task-stats-zd(style="background-color:white; width:200px; height:100%;")
+          div(style="width:200px;")
+            i.fa.big-icon.text-gray-harbor.fa-cog(style="text-align: center;")
+          div(style="width:100%; margin-top: 20px;display: inline-block;")
+            span.text-gray-harbor(style="font-size:20px;") You do not have any task yet!  
+          div(style="width: 200px;margin-top: 20px;")
+            a.btn.btn-block.btn-primary.btn-lg.js-new-task(href='#/scheduler/tasks/new') Create Task
+
+
 //- .row
 //-   .col-md-6
 //-     .box(style="border-top=0px" )

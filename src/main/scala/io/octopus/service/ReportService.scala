@@ -18,15 +18,15 @@ class ReportService {
   private var taskService: TaskService = _
 
 
-  def ownerStats = {
-    @BeanProperty case class OwnerStats(owner: User, taskCount: Long)
+  def ownerTaskStats = {
+    @BeanProperty case class OwnerTaskStats(owner: User, taskCount: Long)
     var map: Map[User, Long] = Map() 
-    
+
     taskService.findAll.foreach { t => 
       val c: Long = map getOrElse(t.primaryOwner, 0)
       map +=  (t.primaryOwner -> (c+1))
     }
-    map.keys.map(k=>OwnerStats(k, map.get(k).get))
+    map.keys.map(k=>OwnerTaskStats(k, map.get(k).get))
   }
 
 
