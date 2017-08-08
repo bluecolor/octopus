@@ -1,5 +1,10 @@
 # Octopus - Open Source Task Scheduler
 
+### Clone
+```
+git clone https://github.com/bluecolor/octopus
+
+
 
 ### Configuration
 - configure `octopus.shell` using the `application.properties.template` file in `OCTOPUS_HOME`
@@ -21,7 +26,6 @@ gulp
 
 ### Boot
 ```
-git clone https://github.com/bluecolor/octopus
 cd octopus
 gradle bootrun
 ```
