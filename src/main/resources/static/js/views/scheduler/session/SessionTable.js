@@ -29,6 +29,14 @@ define([
         Math.floor(100*(model.stats.success + model.stats.done)/model.stats.total)
       
       this.$el.html(this.template(model));
+
+      if(model.stats.error>0){
+        this.$el.css({
+          'background-color': 'antiquewhite'
+        });
+      }
+
+      
       return this;
     }
 
