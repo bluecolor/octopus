@@ -138,8 +138,8 @@ class SessionService @Autowired()(val sessionRepository: SessionRepository) {
   def findRunnable(id: Long): java.util.List[TaskInstance] = {
     val maxParallel = settingService.findByName("max_parallel")(0).value.toInt
     val session = findOne(id)
-    val running = taskInstanceService.findByStatus(Status.RUNNING)
-    val idle = taskInstanceService.findByStatus(Status.IDLE)
+    val running = taskInstanceService.findBySessionAndStatus(id, Status.RUNNING)
+    val idle = taskInstanceService.findBySessionAndStatus(id, Status.IDLE)
     
     var runningSlots = running.length
     var groupSlotMap = findGroupSlotMap(running)

@@ -71,6 +71,9 @@ class TaskInstanceService @Autowired()(val taskInstanceRepository: TaskInstanceR
   def findByStatus(status: String) = 
     taskInstanceRepository.findByStatus(status)
 
+  def findBySessionAndStatus(id: Long, status: String) = 
+    taskInstanceRepository.findBySessionIdAndStatus(id, status)
+
   def countByStatus(status: String) = 
     taskInstanceRepository.countByStatus(status)
 
