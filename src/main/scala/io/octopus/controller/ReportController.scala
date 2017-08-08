@@ -13,7 +13,7 @@ import io.octopus.exception.UniqueConstraintViolationException
 @RequestMapping(Array("/api/v1/reports"))
 class ReportController  @Autowired()(private val reportService: ReportService) {
 
-  // @RequestMapping(value = Array("/plan-stats"), method = Array(RequestMethod.GET) )
-  // def planStats = reportService.planStats
+  @RequestMapping(value = Array("/owner-stats"), method = Array(RequestMethod.GET) )
+  def planStats = reportService.ownerStats
 
 }

@@ -76,10 +76,8 @@ class SessionActor extends Actor {
     }  
   }
 
-  def setTaskRunning(id: Long) = {
-    log.info("Set Task Running")
+  def setTaskRunning(id: Long) = 
     sessionService.setTaskInstanceRunning(id)
-  }
 
   def taskInstanceSuccess(instance: TaskInstance) = {
     log.info("Received TaskSuccess message")
@@ -109,9 +107,8 @@ class SessionActor extends Actor {
     sessions -= id
   }
 
-  def isSessionDone(sessionId: Long): Boolean = {
+  def isSessionDone(sessionId: Long): Boolean = 
     sessionService.findOne(sessionId).status == Status.DONE
-  }
 
   def sessionDone(id: Long) = {
     log.debug(s"Session(${id}) done")
