@@ -19,8 +19,9 @@ define([
   };
 
   const done = (id) => {
-    let error = function(){
-      Message.notifyDanger('Unable to make task done!');
+    let error = function(e){
+      const m = e.responseJSON.message || 'Unable make task done';
+      Message.notifyDanger(m);
     };
     return $.ajax({
       url     : `/api/v1/scheduler/task-instances/done/${id}`,
@@ -32,8 +33,9 @@ define([
   };
 
   const block = (id) => {
-    let error = function(){
-      Message.notifyDanger('Unable to block task');
+    let error = function(e){
+      const m = e.responseJSON.message || 'Unable to block task';
+      Message.notifyDanger(m);
     };
     return $.ajax({
       url     : `/api/v1/scheduler/task-instances/block/${id}`,
@@ -45,8 +47,9 @@ define([
   };
 
   const stop = (id) => {
-    let error = function(){
-      Message.notifyDanger('Unable to stop task');
+    let error = function(e){
+      const m = e.responseJSON.message || 'Unable to stop task'; 
+      Message.notifyDanger(m);
     };
     return $.ajax({
       url     : `/api/v1/scheduler/task-instances/stop/${id}`,
@@ -58,8 +61,9 @@ define([
   };
 
   const start = (id) => {
-    let error = function(){
-      Message.notifyDanger('Unable to start task');
+    let error = function(e){
+      const m = e.responseJSON.message || 'Unable start task';
+      Message.notifyDanger(m);
     };
     return $.ajax({
       url     : `/api/v1/scheduler/task-instances/start/${id}`,
@@ -69,7 +73,6 @@ define([
       error   : error
     });
   };
-
 
   return {
     findOne,
