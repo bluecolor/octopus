@@ -123,7 +123,10 @@ dependencies {
   compile("com.vladmihalcea.flexy-pool:flexy-pool-core:1.2.9")
   compile group: 'com.github.gavlyukovskiy', name: 'flexy-pool-spring-boot-starter', version: '1.2.1'
 
-  compile group: 'in.ashwanthkumar', name: 'slack-java-webhook', version: '0.0.7'
+  // compile group: 'in.ashwanthkumar', name: 'slack-java-webhook', version: '0.0.7'
+
+  // https://mvnrepository.com/artifact/com.github.seratch/jslack
+  compile group: 'com.github.seratch', name: 'jslack', version: '1.0.12'
 
 
 }

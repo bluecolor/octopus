@@ -13,6 +13,11 @@ class Notifications{
 
   @BeanProperty
   var taskDone: String = _
+
+  def taskErrorEnabled = taskError == "yes"
+  def taskblockedEnabled = taskBlocked == "yes"
+  def taskErrorDone = taskDone == "yes"
+
 }
 
 class Slack {
@@ -28,5 +33,7 @@ class Slack {
   
   @BeanProperty
   var url: String = _
+
+   def isActive = active == "yes"
 
 }

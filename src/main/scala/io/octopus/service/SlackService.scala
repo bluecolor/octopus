@@ -7,7 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import io.octopus.model.{TaskInstance, Slack=>SlackOptions}
-import in.ashwanthkumar.slack.webhook._
+import com.github.seratch.jslack._
+import com.github.seratch.jslack.api.webhook._
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -24,15 +25,23 @@ class SlackService {
   private val log:Logger  = LoggerFactory.getLogger(MethodHandles.lookup.lookupClass)
 
 
-  def taskInstanceError(instance: TaskInstance) = {
+  def taskInstanceError(instance: TaskInstance, error: String) = {
     
     val s = settingService.findSlackSettings
     def send(options: SlackOptions) = {      
-      new Slack(options.url)
-        .icon(":worried:") 
-        .sendToUser(options.channel)
-        .displayName("slack-octopus")
-        .push(new SlackMessage("Task error ").bold(instance.name));
+
+      if(options.isActive && options.notifications.taskErrorEnabled){
+        val payload = Payload.builder()
+          .channel(options.channel)
+          .username("octopus")
+          .text(s""":worried: Task error *${instance.name}*   
+            ```${error}```""")
+          .build();
+
+        val slack = Slack.getInstance
+        val response = slack.send(options.url, payload)
+      }
+      
     }
 
     s match {
@@ -43,13 +52,16 @@ class SlackService {
   }
 
   def test(options: SlackOptions): Boolean = {
-    new Slack(options.url)
-    .icon(":smiling_imp:")
-    .sendToUser(options.channel)
-    .displayName("slack-octopus")
-    .push(new SlackMessage("Testing slack integration"));
+    
+      val payload = Payload.builder()
+        .channel(options.channel)
+        .username("octopus")
+        .text(s":octopus: *Hello from Octopus*")
+        .build();
 
-    return true
+      val slack = Slack.getInstance();
+      val response = slack.send(options.url, payload);
+      return true
   }
 
 }

@@ -182,7 +182,7 @@ class TaskInstanceService @Autowired()(val taskInstanceRepository: TaskInstanceR
     logInstance(instance,error)
     sendTaskInstanceMail(instance)
     mt.convertAndSend("/topic/task-instance-error", instance);
-    slackService.taskInstanceError(instance)
+    slackService.taskInstanceError(instance, error)
   }
 
   @throws(classOf[InvalidStatusTransitionException])
