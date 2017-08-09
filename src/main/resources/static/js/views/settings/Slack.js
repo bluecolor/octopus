@@ -1,7 +1,7 @@
 define([
   'underscore',
   'backbone',
-  'text!templates/settings/html/mail.html',
+  'text!templates/settings/html/slack.html',
   'plugins/Message',
   'collections/SettingStore',
   'models/SettingModel',
@@ -12,7 +12,7 @@ define([
   let Mail = Backbone.View.extend({
 
     tagName: 'section',
-    className: 'content js-mail',
+    className: 'content js-slack',
     template: _.template(template),
 
     events: {

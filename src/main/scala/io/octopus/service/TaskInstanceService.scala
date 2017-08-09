@@ -32,6 +32,9 @@ import io.octopus.query.TaskInstanceQuery
 class TaskInstanceService @Autowired()(val taskInstanceRepository: TaskInstanceRepository) {
 
   @(Autowired @setter)
+  private var slackService: SlackService = _
+
+  @(Autowired @setter)
   private var taskService: TaskService = _
 
   @(Autowired @setter)
@@ -179,6 +182,7 @@ class TaskInstanceService @Autowired()(val taskInstanceRepository: TaskInstanceR
     logInstance(instance,error)
     sendTaskInstanceMail(instance)
     mt.convertAndSend("/topic/task-instance-error", instance);
+    slackService.taskInstanceError(instance)
   }
 
   @throws(classOf[InvalidStatusTransitionException])

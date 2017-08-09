@@ -49,6 +49,7 @@ define([
             break;
           case Route.SETTINGS_NO_MAIL:  
           case Route.SETTINGS_MAIL:
+          case Route.SETTINGS_SLACK:  
             me.showSettingsView(o);
             break;
           case Route.SEARCH:

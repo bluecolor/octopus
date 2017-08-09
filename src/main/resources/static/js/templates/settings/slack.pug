@@ -1,0 +1,42 @@
+.row
+  .col-md-6.col-md-offset-3  
+    .box.box-primary
+      .box-header.with-border
+        h3.box-title Slack Settings
+      form(role='form')
+        .box-body
+          .form-group
+            label Slack service active
+            fieldset
+              .radio.radio-inline.radio-danger(style="display:inline")
+                input#radio-service-1(type='radio', name='active', _value='yes', checked='1')
+                label(for='radio-service-1')
+                  | Yes
+              .radio.radio-inline.radio-danger(style="display:inline")
+                input#radio-service-2(type='radio', name='active', _value='no')
+                label(for='radio-service-2')
+                  | No
+          
+          .form-group
+            label Notifications
+            fieldset
+              .checkbox.checkbox-info
+                input#task-error(type='checkbox', name='task-error', _value='yes', checked='1')
+                label(for='task-error')
+                  | Enable slack notifications for 
+                  strong task errors 
+              .checkbox.checkbox-info(style="padding-top:7px;")
+                input#task-blocked(type='checkbox', name='task-blocked', _value='no')
+                label(for='task-blocked')
+                  | Enable slack notifications for 
+                  strong blocked tasks 
+              .checkbox.checkbox-info(style="padding-top:7px;")
+                input#task-done(type='checkbox', name='task-done', _value='no')
+                label(for='task-done')
+                  | Enable slack notifications for 
+                  strong tasks made done
+
+        .box-footer
+          a.btn.btn-danger.js-cancel-btn Close
+          a.disabled.ladda-button.btn.btn-primary.pull-right.js-save-btn(data-style="expand-left") Save
+          

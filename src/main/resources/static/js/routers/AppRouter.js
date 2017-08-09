@@ -141,6 +141,10 @@ define([
         const route= RouteConstants.SETTINGS_NO_MAIL;
         Backbone.trigger("route", {route: route});
       },
+      "settings/slack" : ()=>{
+        const route= RouteConstants.SETTINGS_SLACK;
+        Backbone.trigger("route", {route: route});
+      },
       "profile": ()=> {
         const route= RouteConstants.PROFILE;
         Backbone.trigger("route", {route: route});

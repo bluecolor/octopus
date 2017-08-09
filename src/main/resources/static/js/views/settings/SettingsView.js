@@ -3,8 +3,9 @@ define([
   'backbone',
   'constants/Route',
   'views/settings/Mail',
-  'views/settings/NoMail'
-], function (_, Backbone, Route, Mail, NoMail) {
+  'views/settings/NoMail',
+  'views/settings/Slack',
+], function (_, Backbone, Route, Mail, NoMail, Slack) {
 	'use strict';
 
 	let SettingsView = Backbone.View.extend({
@@ -36,6 +37,16 @@ define([
       this.mail.$el.show();
     },
 
+    showSlack: function(){
+      this.hideActiveView();
+      if(!this.slack){
+        this.slack = new Slack();
+        $(this.el).append(this.slack.render().el);
+      }
+      this.config.activeView = this.slack;
+      this.slack.$el.show();
+    },
+
     showNoMail: function(){
       this.hideActiveView();
       this.noMail = new NoMail();
@@ -57,6 +68,9 @@ define([
           break;
         case Route.SETTINGS_NO_MAIL:
           this.showNoMail(o);
+          break;
+        case Route.SETTINGS_SLACK:
+          this.showSlack();
           break;
       }
       this.$el.show();
