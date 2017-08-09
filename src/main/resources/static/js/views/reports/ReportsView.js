@@ -9,7 +9,7 @@ define([
 	var ReportsView = Backbone.View.extend({
 
     tagName   : 'section',
-    className : 'js-report-view',
+    className : 'content js-report-view',
 		events    : {
 		},
 

@@ -17,7 +17,7 @@ define([
 
 		el: '',
     tagName   : 'section',
-    className : 'content js-scheduler-view',
+    className : 'js-scheduler-view',
 		template  : _.template(template),
     events    : {
 		},

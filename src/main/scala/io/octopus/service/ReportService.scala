@@ -19,7 +19,7 @@ class ReportService {
 
 
   def ownerTaskStats = {
-    @BeanProperty case class OwnerTaskStats(owner: User, taskCount: Long)
+    case class OwnerTaskStats(owner: User, taskCount: Long)
     var map: Map[User, Long] = Map() 
 
     taskService.findAll.foreach { t => 

@@ -10,7 +10,7 @@ define([
 	var UserView = Backbone.View.extend({
 
     tagName   : 'section',
-    className : 'js-user-view',
+    className : 'content js-user-view',
 		events    : {
 		},
 

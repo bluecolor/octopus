@@ -27,4 +27,9 @@ class SchedulerController @Autowired()(private val schedulerService: SchedulerSe
     schedulerService.importScheduler(scheduler)
   }
 
+  @RequestMapping(value = Array("/version"), method = Array(RequestMethod.GET) )
+  def planStats = schedulerService.version
+
+
+
 }
