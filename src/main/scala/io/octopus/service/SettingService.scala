@@ -1,7 +1,7 @@
 package io.octopus.service
 
 
-
+import scala.reflect.ClassTag
 import scala.collection.JavaConversions._
 import scala.collection.JavaConverters._
 import scala.annotation.meta.setter
@@ -61,6 +61,8 @@ class SettingService @Autowired()(val settingRepository: SettingRepository){
     s
   }
 
+  // @Deprecated
+  // use findSettingsByName
   def findMailSettings : Option[MailSetting] = {
     val setting = settingRepository.findByNameIgnoreCase("mail")
     if(!setting.isEmpty) {
@@ -70,6 +72,30 @@ class SettingService @Autowired()(val settingRepository: SettingRepository){
     }
     return None
   }
+
+  // @Deprecated
+  // use findSettingsByName
+  def findSlackSettings: Option[Slack] = {
+    val setting = settingRepository.findByNameIgnoreCase("slack")
+    if(!setting.isEmpty) {
+      val mapper = new ObjectMapper
+      val m = mapper.readValue(setting(0).value, classOf[Slack]);
+      return Some(m)
+    }
+    return None
+  }
+
+  def findSettingsByName[T](c: T, name: String)(implicit tag: ClassTag[T]): Option[T] = {
+    val setting = settingRepository.findByNameIgnoreCase(name)
+    if(!setting.isEmpty) {
+      val mapper = new ObjectMapper
+      val m = mapper.readValue(setting(0).value, tag.runtimeClass);
+      return Some(m.asInstanceOf[T])
+    }
+    return None
+  } 
+
+
 
   def activeMailService: Boolean = {
     val s = settingRepository.findByNameIgnoreCase("mail")

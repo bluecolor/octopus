@@ -21,22 +21,27 @@
             label Notifications
             fieldset
               .checkbox.checkbox-info
-                input#task-error(type='checkbox', name='task-error', _value='yes', checked='1')
+                input#task-error(type='checkbox', name='taskError', _value='yes', checked='1')
                 label(for='task-error')
                   | Enable slack notifications for 
                   strong task errors 
               .checkbox.checkbox-info(style="padding-top:7px;")
-                input#task-blocked(type='checkbox', name='task-blocked', _value='no')
+                input#task-blocked(type='checkbox', name='taskBlocked', _value='no')
                 label(for='task-blocked')
                   | Enable slack notifications for 
                   strong blocked tasks 
               .checkbox.checkbox-info(style="padding-top:7px;")
-                input#task-done(type='checkbox', name='task-done', _value='no')
+                input#task-done(type='checkbox', name='taskDone', _value='no')
                 label(for='task-done')
                   | Enable slack notifications for 
                   strong tasks made done
-
+          .form-group
+            label Channel
+            input.form-control(name="channel" type='text' placeholder='# Slack channel ')
+          .form-group
+            label Webhook Url
+            input.form-control(name="url" type='text' placeholder='https://hooks.slack.com/services/...')
         .box-footer
           a.btn.btn-danger.js-cancel-btn Close
           a.disabled.ladda-button.btn.btn-primary.pull-right.js-save-btn(data-style="expand-left") Save
-          
+          a.disabled.ladda-button.btn.btn-warning.pull-right.js-test-btn(data-style="expand-left" style="margin-right:10px;") Test
