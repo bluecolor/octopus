@@ -26,6 +26,11 @@
                   | Enable slack notifications for 
                   strong task errors 
               .checkbox.checkbox-info(style="padding-top:7px;")
+                input#task-killed(type='checkbox', name='taskKilled', _value='no')
+                label(for='task-killed')
+                  | Enable slack notifications for 
+                  strong killed tasks 
+              .checkbox.checkbox-info(style="padding-top:7px;")
                 input#task-blocked(type='checkbox', name='taskBlocked', _value='no')
                 label(for='task-blocked')
                   | Enable slack notifications for 

@@ -34,7 +34,7 @@ class SlackService {
         val payload = Payload.builder()
           .channel(options.channel)
           .username("octopus")
-          .text(s""":worried: Task error *${instance.name}*   
+          .text(s""":worried: *${instance.name}* crashed. @Session: *${instance.session.name}*  
             ```${error}```""")
           .build();
 

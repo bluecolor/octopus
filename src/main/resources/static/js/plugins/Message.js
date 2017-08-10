@@ -3,6 +3,8 @@ define([
 ], function (_) {
 	'use strict';
 
+  const MESSAGE_POS = ['top', 'center']; 
+
 
   const confirmDanger = (o) =>{
     
@@ -52,21 +54,21 @@ define([
   const notifySuccess = (msg) => {
     $.notify({message:msg},{
       type: 'success',
-      placement: {from:'bottom', align:'right'}
+      placement: {from: MESSAGE_POS[0], align:MESSAGE_POS[1]}
     });
   };
 
   const notifyDanger = (msg) => {
     $.notify({message:msg},{
       type: 'danger',
-      placement: {from:'bottom', align:'right'}
+      placement: {from: MESSAGE_POS[0], align:MESSAGE_POS[1]}
     });
   };
 
   const warning = (msg) => {
     $.notify({message:msg},{
       type: 'warning',
-      placement: {from:'bottom', align:'right'}
+      placement: {from: MESSAGE_POS[0], align:MESSAGE_POS[1]}
     });
   };
 
