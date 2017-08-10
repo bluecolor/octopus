@@ -70,19 +70,20 @@ define([
       const $msg = $(`
         <div class="section">
         <div class="facebox-alert" data-facebox-id="facebox-description" id="facebox-description">
-          Configure new session.
+          Configure new session for <strong>${plan.name}</strong>.
         </div>
-        <p style="margin-bottom:20px">This action <strong>CANNOT</strong> be undone. 
-          This will permanently delete the <strong>${plan.name}</strong> 
-          and all the objects, that are directly or indirectly related, to this object.
+        <p style="margin-bottom:20px">
+          You can give custom <strong>session name</strong> and <strong>schedule date</strong> for the session to be created.
+          This will create a new session regardless of the plan parameters like <code>disabled</code> and 
+          <code>protected</code>.
         </p>
           <div class="form-group">
             <label>Session name</label>
-            <input name="name" type="text" required="required" class="form-control" autocomplete="off"/>
+            <input name="name" type="text" class="form-control" autocomplete="off" placeholder="Leave empty for default"/>
           </div>
           <div class="form-group">
             <label>Schedule date</label>
-            <input name="scheduleDate" type="text" required="required" class="form-control" autocomplete="off"/>
+            <input name="scheduleDate" type="text" class="form-control" autocomplete="off" placeholder="Leave empty for default"/>
           </div>
         </div>
       `);
@@ -96,16 +97,15 @@ define([
         closable: true,
         closeByBackdrop: false,
         onshow    : function(dialog){
-
           $msg.find('input[name="scheduleDate"]').daterangepicker({
               "singleDatePicker": true,
               "showDropdowns": true,
               "timePicker": true,
               "timePicker24Hour": true,
-              "startDate": "08/04/2017",
-              "endDate": "08/10/2017",
+               autoUpdateInput: false,
               locale: {
-                format: 'MM/DD/YYYY HH:mm'
+                format: 'MM/DD/YYYY HH:mm',
+                cancelLabel: 'Clear'
               }
             }, function(start, end, label) {
               console.log("New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')");
