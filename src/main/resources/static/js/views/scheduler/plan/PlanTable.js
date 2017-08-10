@@ -41,6 +41,7 @@ define([
       'input .js-search': 'onSearch',
       'click .js-plan-checkbox' : 'onCheckbox',
       'click .js-reload'        : 'onReload',
+      'click .js-run'           : 'onRun',
       'click .js-trash-btn'     : 'onDelete',
       'click .js-export-plan'   : 'onExportPlan',
       'click .js-export-tasks'  : 'onExportTasks',
@@ -56,7 +57,70 @@ define([
         this.load();
       });
       return this;
-		},
+    },
+    
+
+
+
+    onRun: function(){
+      const id = this.getSelected(),  
+            plan = PlanStore.get(id).attributes;
+
+
+      const $msg = $(`
+        <div class="section">
+        <div class="facebox-alert" data-facebox-id="facebox-description" id="facebox-description">
+          Configure new session.
+        </div>
+        <p style="margin-bottom:20px">This action <strong>CANNOT</strong> be undone. 
+          This will permanently delete the <strong>${plan.name}</strong> 
+          and all the objects, that are directly or indirectly related, to this object.
+        </p>
+          <div class="form-group">
+            <label>Session name</label>
+            <input name="name" type="text" required="required" class="form-control" autocomplete="off"/>
+          </div>
+          <div class="form-group">
+            <label>Schedule date</label>
+            <input name="scheduleDate" type="text" required="required" class="form-control" autocomplete="off"/>
+          </div>
+        </div>
+      `);
+
+      BootstrapDialog.show({
+        type  : BootstrapDialog.TYPE_DEFAULT,  
+        title : 'Configure and create session',
+        message   : $msg,
+        draggable : true,
+        autospin  : true,
+        closable: true,
+        closeByBackdrop: false,
+        onshow    : function(dialog){
+
+          $msg.find('input[name="scheduleDate"]').daterangepicker({
+              "singleDatePicker": true,
+              "showDropdowns": true,
+              "timePicker": true,
+              "timePicker24Hour": true,
+              "startDate": "08/04/2017",
+              "endDate": "08/10/2017",
+              locale: {
+                format: 'MM/DD/YYYY HH:mm'
+              }
+            }, function(start, end, label) {
+              console.log("New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')");
+          });
+        },
+        buttons: [{
+          id: 'confirm-btn',
+          label: 'Run',
+          cssClass: 'btn-block btn-success',
+          hotkey: 13,
+        }]
+      });
+
+    },
+
 
     onProtect: function(){
       const id = this.getSelected();  
