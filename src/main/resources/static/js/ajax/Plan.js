@@ -43,12 +43,22 @@ define([
     });
   };
 
+  const createSession = (id, o) => {
+    return $.ajax({
+      url     : `/api/v1/scheduler/plans/${id}/create-session`,
+      dataType: 'json',
+      type    : 'post',
+      data    : JSON.stringify(o),
+      contentType: 'application/json'
+    });
+  };
 
 
   return {
     protect,
     unProtect,
-    deleteSessions
+    deleteSessions,
+    createSession
   }
 
 

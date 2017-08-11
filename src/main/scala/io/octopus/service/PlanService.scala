@@ -128,6 +128,11 @@ class PlanService @Autowired()(val planRepository: PlanRepository) {
     plans
   }
 
+  def createSession(id: Long, options: java.util.HashMap[String, String]): Session = {
+    val plan = findOne(id)
+    sessionService.createByPlan(plan, options)
+  }
+
   def createSession(planId: Long, force: Boolean = false): Session = {
     val plan = findOne(planId)
     

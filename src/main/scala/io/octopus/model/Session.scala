@@ -74,19 +74,8 @@ class Session {
     } 
   }
 
-
-  @JsonProperty("name")
-  @JsonSerialize
   @BeanProperty
-  def name = {
-    val p = if(plan!=null) plan.name else "$"
-    val d = if(scheduleDate!=null) {
-      val df = new SimpleDateFormat("dd MMM HH:mm:ss")
-      df.format(scheduleDate)
-    } else ""
-    
-    s"${p} ${d}"
-  }
+  var name: String = _
 
   @JsonProperty("duration")
   @JsonSerialize
@@ -102,13 +91,18 @@ class Session {
   @JsonProperty("stats")
   @JsonSerialize
   @BeanProperty
-  def stats = {
+  def stats:SessionStats = {
+
+    if(taskInstances == null){
+      return SessionStats(0,0,0,0)
+    }
+
     val total:Int = taskInstances.size 
     val success:Int = taskInstances.filter(Array("SUCCESS") contains _.status).size
     val error:Int = taskInstances.filter(Array("ERROR", "KILLED") contains _.status).size
     val done:Int = taskInstances.filter(Array("DONE") contains _.status).size
 
-    SessionStats(total, success, done, error)
+    return SessionStats(total, success, done, error)
   }
 
 }

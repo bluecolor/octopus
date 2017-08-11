@@ -3,11 +3,11 @@ define([
   'backbone',
   'text!templates/scheduler/plan/html/plan-table.html',
   'text!templates/scheduler/plan/html/plan-record.html',
-  'collections/PlanStore',
+  'collections/index',
   'plugins/Message',
   'ajax/Plan',
   'constants/index'
-], function (_, Backbone, template, recordTemplate, PlanStore, Message, AjaxPlan, Constants) {
+], function (_, Backbone, template, recordTemplate, Store, Message, AjaxPlan, Constants) {
 	'use strict';
 
   let PlanRecord = Backbone.View.extend({
@@ -34,7 +34,7 @@ define([
 		},
     
     config: {
-      collection: PlanStore,
+      collection: Store.PlanStore,
     },
     
     events: {
@@ -52,7 +52,7 @@ define([
     },
 
 		initialize: function() {
-      this.listenTo(PlanStore, 'reset change', ()=>{
+      this.listenTo(Store.PlanStore, 'reset change', ()=>{
         console.log('load')
         this.load();
       });
@@ -65,7 +65,7 @@ define([
     onRun: function(){
       const me = this,
             id = this.getSelected(),  
-            plan = PlanStore.get(id).attributes;
+            plan = Store.PlanStore.get(id).attributes;
 
 
       const $msg = $(`
@@ -109,7 +109,7 @@ define([
                 cancelLabel: 'Clear'
               }
             }, function(start, end, label) {
-              $msg.find('input[name="scheduleDate"]').val(start.format('YYYY-MM-DD HH:MM'));
+              $msg.find('input[name="scheduleDate"]').val(start.format('YYYY-MM-DD HH:mm'));
           }).on('cancel.daterangepicker', function(){
             $msg.find('input[name="scheduleDate"]').val('');
           });
@@ -119,6 +119,18 @@ define([
           label: 'Run',
           cssClass: 'btn-block btn-success',
           hotkey: 13,
+          action: function(d){
+            const name = $msg.find('input[name="name"]').val(),
+                  scheduleDate = $msg.find('input[name="scheduleDate"]').val();
+            AjaxPlan.createSession(id, {name: name, scheduleDate: scheduleDate}).done(function(s){
+              Message.success('Session created for '+plan.name);
+              Store.SessionStore.fetch({reset:true, data:{fetch:true, type:"get"}});
+            }).always(function(){
+              d.close();
+            }).fail(function(){
+              Message.error('Unable to create session for '+plan.name);    
+            });
+          }
         }]
       });
 
@@ -128,7 +140,7 @@ define([
     onProtect: function(){
       const id = this.getSelected();  
       AjaxPlan.protect(id).done(function(){
-        PlanStore.get(id).set('protect',true);
+        Store.PlanStore.get(id).set('protect',true);
         Message.success('Plan protected')
       })
     },
@@ -136,14 +148,14 @@ define([
     onUnProtect: function(){
       const id = this.getSelected();  
       AjaxPlan.unProtect(id).done(function(){
-        PlanStore.get(id).set('protect',false);
+        Store.PlanStore.get(id).set('protect',false);
         Message.success('Removed plan protection')
       })
     },
 
     onSearch: function(e){
       const str = e.target.value,
-            plans = PlanStore.search(str);
+            plans = Store.PlanStore.search(str);
       this.load(plans);
     },
 
@@ -152,7 +164,7 @@ define([
       if(me.popActive) return;
 
       const id = $(e.target).parent().attr('model-id');
-      const plan = PlanStore.get(id).attributes; 
+      const plan = Store.PlanStore.get(id).attributes; 
       
       let opts = {
         content: function () {
@@ -209,7 +221,7 @@ define([
 
       this.$tableBody = this.$el.find('.js-plan-table-body');
       const me= this,
-            p = plans || PlanStore.models;
+            p = plans || Store.PlanStore.models;
       me.load(p);
 
       this.$el.find('.pagination').twbsPagination({
@@ -252,12 +264,12 @@ define([
     },
 
     onReload: function(){
-      PlanStore.fetch({reset:true, data:{fetch:true, type:"get"}});
+      Store.PlanStore.fetch({reset:true, data:{fetch:true, type:"get"}});
     },
 
     load: function(plans){
       const me= this,
-            p = plans || PlanStore.models;
+            p = plans || Store.PlanStore.models;
       this.$tableBody.empty();
 
       _.each(p, function(plan){
@@ -275,7 +287,7 @@ define([
     onDelete: function(){
       const me   = this;
       const id   = this.getSelected();
-      const model= PlanStore.get(id);
+      const model= Store.PlanStore.get(id);
 
       const o = {
         name: model.get('name'),
@@ -289,7 +301,7 @@ define([
                 me.$el.find('.js-trash-btn, .js-run-btn').addClass('hidden');
                 dialog.close();
                 Message.notifySuccess('Plan deleted.');
-                PlanStore.remove([model]);
+                Store.PlanStore.remove([model]);
                 Backbone.trigger("route",{route: Constants.Route.SCHEDULER_PLANS});
               },
               error: function(){
@@ -326,7 +338,7 @@ define([
     onDeleteSessions: function(){
       const me = this;
       const id   = this.getSelected();
-      const model= PlanStore.get(id);
+      const model= Store.PlanStore.get(id);
       
       const o = {
         name: model.get('name'),

@@ -18,13 +18,10 @@ import io.octopus.exception.UniqueConstraintViolationException
 class PlanController  @Autowired()(private val planService: PlanService) {
 
   @RequestMapping(method = Array(RequestMethod.GET) )
-  def findAll() = planService.findAll
+  def findAll = planService.findAll
 
   @RequestMapping(value = Array("/active"), method = Array(RequestMethod.GET))
-  def findActive() = {
-    planService.findActive
-  }  
-
+  def findActive = planService.findActive
 
   @RequestMapping(method = Array(RequestMethod.POST))
   def create(@RequestBody plan: Plan) = {
@@ -39,9 +36,8 @@ class PlanController  @Autowired()(private val planService: PlanService) {
   }
 
   @RequestMapping(value = Array("/{id}/create-session"), method = Array(RequestMethod.POST))
-  def createSession(@PathVariable("id") id: Long) = {
-    planService.createSession(id)
-  }
+  def createSession(@PathVariable("id") id: Long, @RequestBody options: java.util.HashMap[String,String]) =
+    planService.createSession(id,options)
 
   @RequestMapping(value = Array("/{id}"), method = Array(RequestMethod.PUT))
   def update(@PathVariable("id") id: Long, @RequestBody plan: Plan) = 

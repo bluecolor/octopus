@@ -1,6 +1,7 @@
 package io.octopus.service
 
-import java.util.Date
+import java.text.SimpleDateFormat
+import java.util.{Date, HashMap}
 import scala.collection.JavaConverters._
 import scala.collection.JavaConversions._
 import scala.annotation.meta.setter
@@ -81,22 +82,46 @@ class SessionService @Autowired()(val sessionRepository: SessionRepository) {
     taskInstanceService.findBySessionIdAndStatusIn(id,blockers).length == 0
   }
     
-  def create(session: Session): Session = {
+  def create(session: Session, options: HashMap[String,String] = null): Session = {
+
+    def buildName: String = {
+      if(session.name != null && !session.name.isEmpty){
+        return session.name
+      }
+      val p = if(session.plan!=null) session.plan.name else "$"
+      val d = if(session.scheduleDate!=null) {
+        val df = new SimpleDateFormat("dd MMM HH:mm:ss")
+        df.format(session.scheduleDate)
+      } else ""
+      return s"${p} ${d}"
+    }
+
+    if(options != null){
+      session.name = options.get("name")
+      val d  = options.get("scheduleDate")
+      if(d != null && !d.isEmpty){
+        val df = new SimpleDateFormat("yyyy-MM-dd HH:mm") 
+        session.scheduleDate = df.parse(d)  
+      }
+    }
+
+    session.name = buildName
     sessionRepository.save(session)
   }
 
-  def createByPlan(plan: Plan): Session = {
+
+  def createByPlan(plan: Plan, options: HashMap[String, String]=null): Session = {
     var session = new Session()
     session.plan= plan
     log.debug(s"Calling session create ${plan.active}")
-    session = create(session)
+    session = create(session, options)
     log.debug("session created")
     taskInstanceService.createBySessionIdAndPlanId(session.id, plan.id)
     session
   }
 
-  def createByTask(tasks: java.util.List[Task]) = {
-    var session = sessionRepository.save(new Session)
+  def createByTask(tasks: java.util.List[Task], options: HashMap[String, String]=null) = {
+    var session = create(new Session, options)
     val instances = taskInstanceService.createByTask(session, tasks)    
     session.taskInstances = instances
     session
