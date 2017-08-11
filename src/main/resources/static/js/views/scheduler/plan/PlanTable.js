@@ -63,7 +63,8 @@ define([
 
 
     onRun: function(){
-      const id = this.getSelected(),  
+      const me = this,
+            id = this.getSelected(),  
             plan = PlanStore.get(id).attributes;
 
 
@@ -75,7 +76,7 @@ define([
         <p style="margin-bottom:20px">
           You can give custom <strong>session name</strong> and <strong>schedule date</strong> for the session to be created.
           This will create a new session regardless of the plan parameters like <code>disabled</code> and 
-          <code>protected</code>.
+          <code>protected</code>. See <a href="https://github.com/bluecolor/octopus/wiki", target="_blank">documentation</a> for more about "creating sessions".
         </p>
           <div class="form-group">
             <label>Session name</label>
@@ -98,17 +99,19 @@ define([
         closeByBackdrop: false,
         onshow    : function(dialog){
           $msg.find('input[name="scheduleDate"]').daterangepicker({
-              "singleDatePicker": true,
-              "showDropdowns": true,
-              "timePicker": true,
-              "timePicker24Hour": true,
-               autoUpdateInput: false,
+              singleDatePicker: true,
+              showDropdowns: true,
+              timePicker: true,
+              timePicker24Hour: true,
+              autoUpdateInput: false,
               locale: {
                 format: 'MM/DD/YYYY HH:mm',
                 cancelLabel: 'Clear'
               }
             }, function(start, end, label) {
-              console.log("New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')");
+              $msg.find('input[name="scheduleDate"]').val(start.format('YYYY-MM-DD HH:MM'));
+          }).on('cancel.daterangepicker', function(){
+            $msg.find('input[name="scheduleDate"]').val('');
           });
         },
         buttons: [{
