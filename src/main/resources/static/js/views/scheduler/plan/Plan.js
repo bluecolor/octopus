@@ -15,7 +15,7 @@ define([
 
     tagName: 'section',
 
-    className: 'js-plan',
+    className: 'content js-plan',
 
 		template: _.template(template),
 

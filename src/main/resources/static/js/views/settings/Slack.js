@@ -79,6 +79,7 @@ define([
       this.$el.find(`[name="taskError"][_value="${m.notifications.taskError}"]`).prop('checked', "1");
       this.$el.find(`[name="taskBlocked"][_value="${m.notifications.taskBlocked}"]`).prop('checked', "1");
       this.$el.find(`[name="taskDone"][_value="${m.notifications.taskDone}"]`).prop('checked', "1");
+      this.$el.find(`[name="taskKilled"][_value="${m.notifications.taskKilled}"]`).prop('checked', "1");
       this.$el.find('input[name="channel"]').val(m.channel);
       this.$el.find('input[name="url"]').val(m.url);
       return this;
@@ -97,6 +98,7 @@ define([
       p.notifications.taskError = this.$el.find('[name="taskError"]:checked').attr('_value');
       p.notifications.taskBlocked = this.$el.find('[name="taskBlocked"]:checked').attr('_value');
       p.notifications.taskDone = this.$el.find('[name="taskDone"]:checked').attr('_value');
+      p.notifications.taskKilled = this.$el.find('[name="taskKilled"]:checked').attr('_value');
       p.channel = this.$el.find('input[name="channel"]').val();
       p.url = this.$el.find('input[name="url"]').val();
 

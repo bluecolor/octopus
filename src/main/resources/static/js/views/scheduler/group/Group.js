@@ -15,7 +15,7 @@ define([
 		el: '',
 
     tagName   : 'section',
-    className : 'js-group',
+    className : 'content js-group',
 		template  : _.template(template),
     events    : {
       "click .js-cancel-btn": "onCancel",

@@ -14,9 +14,16 @@ class Notifications{
   @BeanProperty
   var taskDone: String = _
 
-  def taskErrorEnabled = taskError == "yes"
-  def taskblockedEnabled = taskBlocked == "yes"
-  def taskErrorDone = taskDone == "yes"
+  @BeanProperty
+  var taskKilled: String = _
+
+  def notifyTaskError = taskError == "yes"
+  def notifyTaskBlocked = taskBlocked == "yes"
+  def notifyTaskKilled = taskKilled == "yes"
+  def notifyTaskDone = taskDone == "yes"
+
+
+
 
 }
 

@@ -183,6 +183,7 @@ class TaskInstanceService @Autowired()(val taskInstanceRepository: TaskInstanceR
     sendTaskInstanceMail(instance)
     mt.convertAndSend("/topic/task-instance-error", instance);
     slackService.taskInstanceError(instance, error)
+    instance
   }
 
   @throws(classOf[InvalidStatusTransitionException])
@@ -208,6 +209,11 @@ class TaskInstanceService @Autowired()(val taskInstanceRepository: TaskInstanceR
     }
     instance.status = Status.BLOCKED
     update(instance)
+    val me = userService.findMe
+    val message = s"Issued ${Status.BLOCKED} request by user ${me.name}"
+    slackService.taskInstanceBlocked(instance,me)
+    logInstance(instance,message)
+    instance
   }
 
   @throws(classOf[InvalidStatusTransitionException])
@@ -223,7 +229,12 @@ class TaskInstanceService @Autowired()(val taskInstanceRepository: TaskInstanceR
     setStats(instance)
     val supervisor = appInit.system.actorSelection("/user/supervisor")
     supervisor ! StopTask(instance.id)
+    val me = userService.findMe
+    val message = s"Issued ${Status.KILLED} request by user ${me.name}"
+    slackService.taskInstanceKilled(instance,me)
+    logInstance(instance,message)
     sendTaskInstanceMail(instance)
+    instance
   }
 
   @throws(classOf[InvalidStatusTransitionException])
@@ -238,8 +249,11 @@ class TaskInstanceService @Autowired()(val taskInstanceRepository: TaskInstanceR
     instance.status = Status.DONE
     update(instance)
     setStats(instance)
-    val message = s"Issued ${Status.DONE} request by user ${userService.findMe.name}"
+    val me = userService.findMe
+    val message = s"Issued ${Status.DONE} request by user ${me.name}"
+    slackService.taskInstanceDone(instance,me)
     logInstance(instance,message)
+    instance
   }
 
   def sendTaskInstanceMail(instance: TaskInstance) = {
