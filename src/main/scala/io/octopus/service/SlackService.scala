@@ -10,6 +10,11 @@ import io.octopus.model.{TaskInstance, Slack=>SlackOptions, User}
 import com.github.seratch.jslack._
 import com.github.seratch.jslack.api.webhook._
 
+import java.lang.InterruptedException
+import java.util.concurrent.Future
+import org.springframework.scheduling.annotation.Async
+import org.springframework.scheduling.annotation.AsyncResult
+
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.lang.invoke.MethodHandles
@@ -24,6 +29,8 @@ class SlackService {
 
   private val log:Logger  = LoggerFactory.getLogger(MethodHandles.lookup.lookupClass)
 
+  @Async
+  @throws(classOf[InterruptedException])
   def taskInstanceDone(instance: TaskInstance, user: User)= {
     val s = settingService.findSlackSettings
     def send(options: SlackOptions) = {      
@@ -47,6 +54,8 @@ class SlackService {
     }
   }
 
+  @Async
+  @throws(classOf[InterruptedException])
   def taskInstanceBlocked(instance: TaskInstance, user: User)= {
     val s = settingService.findSlackSettings
     def send(options: SlackOptions) = {      
@@ -70,6 +79,8 @@ class SlackService {
     }
   } 
 
+  @Async
+  @throws(classOf[InterruptedException])
   def taskInstanceKilled(instance: TaskInstance, user: User) = {
     val s = settingService.findSlackSettings
     def send(options: SlackOptions) = {      
@@ -94,6 +105,8 @@ class SlackService {
     }
   }
 
+  @Async
+  @throws(classOf[InterruptedException])
   def taskInstanceError(instance: TaskInstance, error: String) = {
     
     val s = settingService.findSlackSettings

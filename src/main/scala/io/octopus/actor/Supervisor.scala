@@ -31,7 +31,8 @@ class Supervisor extends Actor {
   private var statsActor: ActorRef = _
   private var sessionActor: ActorRef = _
   private var quartzActor:  ActorRef = _
-  private var mailActor:  ActorRef = _ 
+  private var mailActor:  ActorRef = _
+   
 
   override def preStart: Unit = {
     statsActor  = context.system.actorOf(springExtension.props("stats"),"stats")
