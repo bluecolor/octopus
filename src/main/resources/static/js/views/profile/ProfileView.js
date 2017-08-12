@@ -4,7 +4,8 @@ define([
   'constants/Route',
   'views/profile/Profile',
   'views/profile/ChangePassword',
-], function (_, Backbone, Route, Profile, ChangePassword ) {
+  'views/profile/Preferences',
+], function (_, Backbone, Route, Profile, ChangePassword, Preferences ) {
 	'use strict';
 
 	var ProfileView = Backbone.View.extend({
@@ -44,6 +45,13 @@ define([
       this.config.activeView = this.password;
     },
 
+    showPreferences: function(){
+      this.hideActiveView();
+      this.preferences = new Preferences();
+      this.$el.append(this.preferences.render().el);
+      this.config.activeView = this.preferences;
+    },
+
     show: function(o){
       switch(o.route){
         case Route.PROFILE: 
@@ -51,6 +59,9 @@ define([
           break;
         case Route.PROFILE_PASSWORD:
           this.changePassword(); 
+          break;
+        case Route.PROFILE_PREFERENCES:
+          this.showPreferences();
           break;
       }
       this.$el.show();

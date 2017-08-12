@@ -45,6 +45,7 @@ define([
             break;
           case Route.PROFILE:
           case Route.PROFILE_PASSWORD:
+          case Route.PROFILE_PREFERENCES:
             me.showProfileView(o);
             break;
           case Route.SETTINGS_NO_MAIL:  

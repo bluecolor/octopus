@@ -153,6 +153,10 @@ define([
         const route= RouteConstants.PROFILE_PASSWORD;
         Backbone.trigger("route", {route: route});
       },
+      "profile/preferences": ()=> {
+        const route= RouteConstants.PROFILE_PREFERENCES;
+        Backbone.trigger("route", {route: route});
+      },
       "reports": ()=> {
         const route= RouteConstants.REPORTS;
         Backbone.trigger("route", {route: route});
