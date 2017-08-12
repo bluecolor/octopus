@@ -16,7 +16,8 @@ define([
     events: {
       "click .js-save-btn": "onSave",
       "click .js-cancel-btn": "onCancel",
-      "input input": "validate"
+      "input input": "validate",
+      "change [name='radio-deno']": 'onDeNoEnable',
 		},
 
 		initialize: function() {
@@ -27,6 +28,13 @@ define([
       this.$el.html(this.template());
       this.setValues();
       return this;
+    },
+
+    onDeNoEnable: function(e){
+      if(e.target.value == 0)
+        this.$el.find('.js-deno').attr('disabled', 'disabled');
+      else 
+        this.$el.find('.js-deno').removeAttr('disabled');  
     },
 
     validate: function(){

@@ -10,14 +10,14 @@
               label Desktop Notifications
               fieldset
                 .radio.radio-inline.radio-danger(style="display:inline")
-                  input#radio-deno-1(type='radio', name='radio-protected', value='1', checked='1')
+                  input#radio-deno-1(type='radio', name='radio-deno', value='1', checked='1')
                   label(for='radio-deno-1')
                     | Enable
                 .radio.radio-inline.radio-danger(style="display:inline")
-                  input#radio-deno-2(type='radio', name='radio-protected', value='0')
+                  input#radio-deno-2(type='radio', name='radio-deno', value='0')
                   label(for='radio-deno-2')
                     | Disable
-              fieldset(style="padding-top:10px;")
+              fieldset.js-deno(style="padding-top:10px;")
                 .checkbox.checkbox-success
                   input#notification-sounds(type='checkbox', name='taskError', _value='yes', checked='1')
                   label(for='notification-sounds')
