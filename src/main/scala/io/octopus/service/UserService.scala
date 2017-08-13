@@ -106,6 +106,14 @@ class UserService @Autowired()(val userRepository: UserRepository) extends UserD
     userRepository.save(me)
   }
 
+  def updateOptions(options: String) = {
+    var me = findMe
+    me.options = options
+    userRepository.save(me)
+    me
+  }
+
+
   @throws(classOf[RuntimeException])
   def changePassword(oldp: String, newp: String) = {
     var me = findMe

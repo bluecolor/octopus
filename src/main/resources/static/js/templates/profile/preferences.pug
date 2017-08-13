@@ -44,7 +44,15 @@
                     label(for='task-done')
                       | Show notifications for 
                       strong tasks made done
-              
+            .form-group
+              label UI Options
+              fieldset
+                .checkbox.checkbox-info(style="padding-top:7px;")
+                  input#bell-swing(type='checkbox', name='bellSwing', _value='yes' , checked='1')
+                  label(for='bell-swing')
+                    | Swing alert bell 
+                    i.fa.fa-bell.fa-sm 
+                  
       .box-footer
         a.btn.btn-danger.js-cancel-btn Close
         a.ladda-button.btn.btn-primary.pull-right.js-save-btn(data-style="expand-left") Save

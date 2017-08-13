@@ -76,6 +76,10 @@ class User {
   @JsonIgnore
   var bookmarks: java.util.List[Task] = _
 
+  @BeanProperty
+  @Column(columnDefinition = "varchar(max)")
+  var options: String = _
+
   @PrePersist @PreUpdate private def prepare = {
     username = if (username == null)  null else username.toLowerCase
     email = if (email == null)  null else email.toLowerCase

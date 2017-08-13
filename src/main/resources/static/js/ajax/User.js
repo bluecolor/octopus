@@ -4,12 +4,22 @@ define([
 ], function (_, Message) {
 	'use strict';
 
-  let me = {};
+  let me = {
+    options: ''
+  };
+
+  me.opts = function() { if(me.options) return JSON.parse(me.options); };
+
+  me.setOptions = (o) => {
+    if(o){
+      me.options = JSON.stringify(o);
+    }
+  };
 
   const init = function(){
     const that = this;
     findMe().done(function(d){
-      that.me = d;
+      that.me = $.extend(that.me,d);
       $('.js-nav-username').text(d.username)
     });
   }
@@ -52,6 +62,27 @@ define([
     });
   };
 
+  const updateOptions = (o, cb) =>{
+    let error = function(e){
+      console.log(e);
+      Message.error('Unable to update preferences!');
+    };
+    return $.ajax({
+      url     : "api/v1/users/options",
+      data    : JSON.stringify(o),
+      dataType: 'json',
+      contentType: 'text/plain',
+      type    : 'put',
+      error   : error,
+      success : function(){
+        if(cb){cb();}
+        Message.success('Preferences saved');
+      }
+    });
+  };
+
+
+
   const changePassword = (p) =>{
     let error = function(){
       Message.error('Unable change password!');
@@ -74,6 +105,7 @@ define([
     findMe,
     findCurrentUser,
     updateProfile,
+    updateOptions,
     changePassword,
     me,
     init,
