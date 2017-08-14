@@ -139,7 +139,19 @@ define([
       }
 
       me.initAuth();
+      me.fixBell();  
+
       return me;  
+    },
+
+    fixBell: function(){
+      const me= this;
+      const o = User.me.opts();
+      if(o.ui.bellSwing){
+        me.$el.find('i.fa-bell').addClass('animated infinite swing');
+      }else{
+        me.$el.find('i.fa-bell').removeClass('animated infinite swing');
+      }
     },
 
     initPagination: function(){

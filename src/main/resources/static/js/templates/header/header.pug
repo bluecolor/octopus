@@ -1,0 +1,35 @@
+a.logo(href='#')
+  span.logo-mini
+    b O
+  span.logo-lg
+    b Octopus
+nav.navbar.navbar-static-top
+  a.sidebar-toggle(href='#', data-toggle='offcanvas', role='button')
+    i.fa.fa-bars(aria-hidden="true")
+    span.sr-only Toggle navigation
+  ul.nav.navbar-top-links.navbar-right
+    li(style="float:left")
+      a(href="#/search", aria-expanded='false')
+        i.fa.fa-search.fa-fw.fa-lg
+    li.hidden.js-alert-btn(style="float:left")
+      a(href='#/alerts', aria-expanded='false')
+        i.fa.fa-bell.fa-fw.fa-lg.animated.infinite.swing
+        span.label.label-danger
+    li.dropdown(style="float:left")
+      a.dropdown-toggle(data-toggle='dropdown', href='#', aria-expanded='false')
+        i.fa.fa-user-circle-o.fa-fw.fa-lg
+        span.js-nav-username(style="padding-left:5px;")
+      ul.dropdown-menu.dropdown-user
+        li
+          a(href='#/profile' style="padding:5px;")
+            i.fa.fa-user-o.fa-fw.fa-lg
+            | User Profile
+        li
+          a(href='#/profile/preferences' style="padding:5px;")
+            i.fa.fa-sliders.fa-fw.fa-lg
+            |  Preferences
+        li.divider
+        li
+          a(href='logout' style="padding:5px;")
+            i.fa.fa-sign-out.fa-fw.text-danger.fa-lg
+            |  Sign Out

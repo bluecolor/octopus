@@ -84,7 +84,9 @@ define([
       if(!o) return;
       if(o.deno == false){
         me.$el.find('#radio-deno-2').prop('checked', true);  
+        me.$el.find('.js-deno').attr('disabled', 'disabled');
       }else{
+        me.$el.find('.js-deno').removeAttr('disabled');
         me.$el.find('#radio-deno-1').prop('checked', true);
         me.$el.find('#notification-sounds').prop('checked', o.deno.sounds);
         me.$el.find('#task-error').prop('checked', o.deno.taskError);

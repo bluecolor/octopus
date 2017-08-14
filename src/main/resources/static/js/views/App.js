@@ -1,13 +1,14 @@
 define([
 	'underscore',
-	'backbone',
+  'backbone',
+  'views/Header',
   'views/Sidebar',
   'views/Footer',
   'views/Center',
   'collections/index',
   'ajax/Socket',
   'ajax/User',
-], function (_, Backbone, Sidebar, Footer, Center, Store,Socket,User) {
+], function (_, Backbone, Header, Sidebar, Footer, Center, Store,Socket,User) {
 	'use strict';
 
 	let App = Backbone.View.extend({
@@ -19,13 +20,17 @@ define([
 
     initialize: function () {
       let me = this; 
-      const sidebar = new Sidebar(),
+      const header  = new Header(),
+            sidebar = new Sidebar(),
             footer  = new Footer(),
             center  = new Center();
       
+
+      this.$header  = $('header');            
       this.$body    = $('body');
       this.$wrapper = $('.wrapper');
-            
+      
+      this.$header.append(header.render().el);
       this.$wrapper.append(sidebar.render().el); 
       this.$wrapper.append(footer.render().el);
       $('.content-wrapper').append(center.render().el);
