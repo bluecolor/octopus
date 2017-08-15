@@ -181,7 +181,7 @@ class TaskInstanceService @Autowired()(val taskInstanceRepository: TaskInstanceR
     setStats(instance)
     logInstance(instance,error)
     sendTaskInstanceMail(instance)
-    mt.convertAndSend("/topic/task-instance-error", instance);
+    mt.convertAndSend(s"/topic/${SocketTopic.TASK_INSTANCE_ERROR}", instance);
     slackService.taskInstanceError(instance, error)
     instance
   }
@@ -211,6 +211,7 @@ class TaskInstanceService @Autowired()(val taskInstanceRepository: TaskInstanceR
     update(instance)
     val me = userService.findMe
     val message = s"Issued ${Status.BLOCKED} request by user ${me.name}"
+    mt.convertAndSend(s"/topic/${SocketTopic.TASK_INSTANCE_BLOCKED}", (instance,me) );
     slackService.taskInstanceBlocked(instance,me)
     logInstance(instance,message)
     instance
@@ -231,6 +232,7 @@ class TaskInstanceService @Autowired()(val taskInstanceRepository: TaskInstanceR
     supervisor ! StopTask(instance.id)
     val me = userService.findMe
     val message = s"Issued ${Status.KILLED} request by user ${me.name}"
+    mt.convertAndSend(s"/topic/${SocketTopic.TASK_INSTANCE_KILLED}", (instance,me) );
     slackService.taskInstanceKilled(instance,me)
     logInstance(instance,message)
     sendTaskInstanceMail(instance)
@@ -239,6 +241,7 @@ class TaskInstanceService @Autowired()(val taskInstanceRepository: TaskInstanceR
 
   @throws(classOf[InvalidStatusTransitionException])
   def done(id: Long) = {
+    case class DoneMessage(instance: TaskInstance, user: User)
     var instance = findOne(id)
     if(!Status.isValid(instance.status,Status.DONE)){
       val msg = s"Status change from ${instance.status} to ${Status.DONE} is not allowed!"
@@ -251,6 +254,7 @@ class TaskInstanceService @Autowired()(val taskInstanceRepository: TaskInstanceR
     setStats(instance)
     val me = userService.findMe
     val message = s"Issued ${Status.DONE} request by user ${me.name}"
+    mt.convertAndSend(s"/topic/${SocketTopic.TASK_INSTANCE_DONE}", (instance,me) );
     slackService.taskInstanceDone(instance,me)
     logInstance(instance,message)
     instance

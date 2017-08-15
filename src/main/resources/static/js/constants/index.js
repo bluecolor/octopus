@@ -16,6 +16,13 @@ define([
     }
   };
 
+  const SocketTopic = {
+    TASK_INSTANCE_ERROR : "task-instance-error", 
+    TASK_INSTANCE_BLOCKED : "task-instance-blocked", 
+    TASK_INSTANCE_DONE : "task-instance-done",
+    TASK_INSTANCE_KILLED : "task-instance-killed"
+  }; 
+
   return {
     Route,
     Technology,
@@ -23,6 +30,7 @@ define([
     Color,
     Status,
     Settings,
-    Role
+    Role,
+    SocketTopic
   }
 });
