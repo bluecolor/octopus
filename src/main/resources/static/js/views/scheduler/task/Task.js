@@ -88,6 +88,7 @@ define([
 
       this.dependencies.on('validate', this.validate, this);
       this.groups.on('validate', this.validate, this);
+      this.owners.on('validate', this.validate, this);
 
       return this;
     },

@@ -72,6 +72,7 @@ define([
     },
 
     onRemoveItem: function(e){
+      this.trigger('validate');
       const me = this, id = $(e.target).parent().attr('model-id');
       this.removeItem(parseInt(id));
       const users = UserStore.where(function(u){
