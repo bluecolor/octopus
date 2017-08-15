@@ -95,6 +95,7 @@ define([
     },
 
     onRemoveItem: function(e){
+      this.trigger('validate');
       const me = this, id = $(e.target).parent().attr('model-id');
       this.removeItem(parseInt(id));
       const groups = GroupStore.where(function(g){
@@ -125,6 +126,7 @@ define([
     setValue: function(groups, primary){
       const me = this;
       this.$list.empty();
+      me.config.value = [];
       _.each(groups,g => me.addToTable(g));
       this.setPrimaryGroup(primary);
     },

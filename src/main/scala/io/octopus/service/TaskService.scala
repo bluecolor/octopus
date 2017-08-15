@@ -102,6 +102,8 @@ class TaskService @Autowired()(val taskRepository: TaskRepository) {
   }
 
   def update(task: Task): Task = {
+    var t = findOne(task.id);
+    task.stats = t.stats
     taskRepository.save(task);
   }
 

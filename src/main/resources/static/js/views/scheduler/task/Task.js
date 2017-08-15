@@ -26,7 +26,7 @@ define([
       "click .js-cancel-btn": "onCancel",
       "click .js-fav": "validate",
       "change select, input.form-control.slider, input[id^='radio-active']" :"validate",
-      "input input, .script-editor textarea": "validate"
+      "input input, .script-editor, textarea": "validate"
     },
 
 		initialize: function (o) {
@@ -85,6 +85,9 @@ define([
         this.modelId = null;
         this.model = new TaskModel();
       }
+
+      this.dependencies.on('validate', this.validate, this);
+      this.groups.on('validate', this.validate, this);
 
       return this;
     },

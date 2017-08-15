@@ -39,9 +39,11 @@ define([
     },
 
     onRemoveItem: function(e){
-      const id = $(e.target).parent().attr('model-id');
+      this.trigger('validate');
+      const me=this,id = $(e.target).parent().attr('model-id');
       this.removeItem(parseInt(id));
-      this.render();
+      const v = _.without(this.config.value,id);
+      me.setValue(v);
     },
 
     onChange: function(e){
@@ -92,17 +94,16 @@ define([
 
     setValue: function(dependencies){
       const me = this;
-      _.each(dependencies,function(d){
-        me.addToTable(d);
-      });
+      this.$list.empty();
+      this.config.value = [];
+      _.each(dependencies, (d) => me.addToTable(d) );
+      return this;
     },
 
 		render: function(){ 	
       const me = this;
       this.$list.empty();
-      _.each(this.config.value, (v)=>{
-        me.addToTable(v);
-      });
+      _.each(this.config.value, (v) => me.addToTable(v) );
       return this;
     },
 
