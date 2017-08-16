@@ -347,8 +347,6 @@ define([
       AjaxSession.start(id).done(function(){
         Message.success('Session started');
         me.onReload();
-      }).fail(function(){
-        Message.error('Unable to start session');
       });
     }
 

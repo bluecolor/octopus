@@ -5,8 +5,8 @@ define([
 	'use strict';
 
   const stop = (id) => {
-    let error = function(){
-      Message.notifyDanger('Unable to stop session');
+    let error = function(e){
+      Message.notifyDanger(e.responseJSON.message);
     };
     return $.ajax({
       url     : `/api/v1/scheduler/sessions/${id}/stop`,
@@ -18,8 +18,8 @@ define([
   };
 
   const start = (id) => {
-    let error = function(){
-      Message.notifyDanger('Unable to start session');
+    let error = function(e){
+      Message.notifyDanger(e.responseJSON.message);
     };
     return $.ajax({
       url     : `/api/v1/scheduler/sessions/${id}/start`,

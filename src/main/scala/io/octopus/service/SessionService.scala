@@ -1,5 +1,6 @@
 package io.octopus.service
 
+import java.lang.RuntimeException
 import java.text.SimpleDateFormat
 import java.util.{Date, HashMap}
 import scala.collection.JavaConverters._
@@ -287,6 +288,9 @@ class SessionService @Autowired()(val sessionRepository: SessionRepository) {
 
   def start(id: Long) = {
     var session = findOne(id)
+    if(Array(Status.RUNNING,Status.IDLE).contains(session.status)){
+      throw new RuntimeException("Session already running!")
+    }
     session.status = Status.IDLE
     session.endDate= null
     sessionRepository.save(session)
