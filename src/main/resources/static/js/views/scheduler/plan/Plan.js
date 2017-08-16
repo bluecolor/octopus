@@ -37,30 +37,31 @@ define([
       let cons = new ConnectionList(),$cons= cons.render().$el;
       $cons.attr('name', 'plan-connection');
       $cons.insertAfter(this.$el.find('.form-group.js-plan-name'));
-      this.initSlider();
       me.show(me.modelId);
       return this;
     },
 
-    initSlider: function(){
+    setSlider: function(v){
       const me = this;
       setTimeout(function(){
         me.$el.find("input.slider").slider({
           ticks: [1,2,3,4],
           ticks_labels: ["Low", "Medium", "High","Top"],
+          value: v || 2
         });
       },10);
     },
 
     setValues: function(){
       const p = this.model.attributes;
+      
       this.$el.find('input[name="name"]').val(p.name);
       this.$el.find('input[name="schedule"]').val(p.schedule);
       this.$el.find('#radio-protected-1').prop('checked', p.protect);
       this.$el.find('#radio-active-1').prop('checked', p.active);
       this.$el.find('[name="plan-connection"] select').val(p.connection?p.connection.id:-1);
       this.$el.find('input[name="parallel"]').val(p.parallel);
-      this.$el.find('input[name="priority"]').val(p.priority);
+      this.setSlider(p.priority);
       this.$el.find('[name="description"]').val(p.description);
       
       if(this.modelId){
