@@ -32,31 +32,37 @@ define([
 		render: function () { 	
       const me = this;
       me.$el.html(this.template());
-      me.initColorPicker()
+      me.initColorPicker();
       me.initAuth();  
       return me;
     },
 
-    initColorPicker: function(){
+    setPrioritySlider: function(v){
       const me = this;
       setTimeout(function(){
-        $('.js-group-color').colorpicker();
         me.$el.find("input.slider").slider({
           ticks: [1,2,3,4],
           ticks_labels: ["Low", "Medium", "High","Top"],
+          value: v || 2
         });
         if(User.hasAccess(Constants.Role.OPERATOR)){
           me.$el.find("input.slider").slider("enable");
         }else{
           me.$el.find("input.slider").slider("disable")
         }
+      },100);
+    },
+
+    initColorPicker: function(){
+      const me = this;
+      setTimeout(function(){
+        $('.js-group-color').colorpicker();
       },10);
       return me;
     },
 
     initAuth: function(){
       const me = this;
-      console.log(User.hasAccess(Constants.Role.OPERATOR));
       if(User.hasAccess(Constants.Role.OPERATOR)){
         this.$el.find('.js-save-btn').removeClass('hidden');
         this.$el.find('.js-item').removeAttr("disabled");
@@ -74,7 +80,7 @@ define([
       this.modelId = g.id
       this.$el.find('input[name="name"]').val(g.name);
       this.$el.find('input[name="parallel"]').val(g.parallel);
-      this.$el.find('input[name="priority"]').val(g.priority);
+      this.setPrioritySlider(g.priority);
       this.$el.find('input[name="color"]').val(g.color);
       this.$el.find('textarea[name="description"]').val(g.description);
       
