@@ -18,6 +18,19 @@ define([
     });
   };
 
+  const findByStatus = (status) => {
+    let error = function(){
+      Message.notifyDanger('Unable find task instances!');
+    };
+    return $.ajax({
+      url     : `/api/v1/scheduler/task-instances/status/${status}`,
+      dataType: 'json',
+      type    : 'get',
+      contentType: 'application/json',
+      error   : error
+    });
+  }
+
   const done = (id) => {
     let error = function(e){
       const m = e.responseJSON.message || 'Unable make task done';
@@ -76,6 +89,7 @@ define([
 
   return {
     findOne,
+    findByStatus,
     block,
     stop,
     done,

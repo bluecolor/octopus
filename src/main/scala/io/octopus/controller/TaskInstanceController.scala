@@ -27,7 +27,7 @@ class TaskInstanceController  @Autowired()(private val taskInstanceService: Task
     taskInstanceService.findOne(id)
 
   @RequestMapping(value = Array("/status/{status}"), method = Array(RequestMethod.GET))
-  def findOne(@PathVariable("status") status: String) = 
+  def findByStatus(@PathVariable("status") status: String) = 
     taskInstanceService.findByStatus(status.toUpperCase)
   
 

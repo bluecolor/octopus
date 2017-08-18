@@ -6,8 +6,9 @@ define([
   'collections/index',
   'ajax/User',
   'ajax/Task',
+  'ajax/TaskInstance',
   'ajax/Report',
-], function (_, Backbone, Constants, template, Store, User, AjaxTask, Report) {
+], function (_, Backbone, Constants, template, Store, User, AjaxTask, AjaxTaskInstance, Report) {
 	'use strict';
 
 	var ReportsHome = Backbone.View.extend({
@@ -150,127 +151,69 @@ define([
       });    
     },
 
-    drawDependencies: function(){
+    drawRunningTasks: function(){
 
-      const toNodesAndLinks = (tasks) => {
-        let data = {
-          nodes: [],
-          links: []
-        };
-
-        data.nodes = _.map(tasks,(t)=>{
-          return {
-            id: t.name,
-            group: t.primaryGroup ? t.primaryGroup.id: 0
-          }
-        });
-
-        data.links = _.chain(tasks).map((t) => {
-         return  _.map(t.dependencies,(d)=>{
-            return {
-              source: t.name ,
-              target: d.name,
-              value : t.primaryGroup ? t.primaryGroup.id: 0
-            }
-          });
-
-        }).flatten().value();
-
-      
-        return data;
-
+      let data = {
+        labels : [moment().format("hh:mm:ss")],
+        datasets : [
+          {
+            data : [0]
+          },
+        ]
       };
 
-
-      const draw = (data) => {
-        let svg = d3.select(".js-di-graph"),
-          width = +svg.attr("width"),
-          height= +svg.attr("height");
-      
-        let color = d3.scaleOrdinal(d3.schemeCategory20);
-        
-        var simulation = d3.forceSimulation()
-          .force("link", d3.forceLink().id(function(d) { return d.id; }))
-          .force("charge", d3.forceManyBody())
-          .force("center", d3.forceCenter(width / 2, height / 2));
-
-          const dragstarted = (d) => {
-            if (!d3.event.active) simulation.alphaTarget(0.3).restart();
-            d.fx = d.x;
-            d.fy = d.y;
+      const options = {
+        elements: {
+          line: {
+            tension: 0, // disables bezier curves
           }
-          
-          const dragged = (d) => {
-            d.fx = d3.event.x;
-            d.fy = d3.event.y;
-          }
-          
-          const dragended = (d) => {
-            if (!d3.event.active) simulation.alphaTarget(0);
-            d.fx = null;
-            d.fy = null;
-          }
-
-
-        let graph = toNodesAndLinks(data);
-
-          console.log(graph);
-          
-
-          var link = svg.append("g")
-          .attr("class", "links")
-        .selectAll("line")
-        .data(graph.links)
-        .enter().append("line")
-          .attr("stroke-width", function(d) { return Math.sqrt(d.value); });
-    
-      var node = svg.append("g")
-          .attr("class", "nodes")
-        .selectAll("circle")
-        .data(graph.nodes)
-        .enter().append("circle")
-          .attr("r", 5)
-          .attr("fill", function(d) { return color(d.group); })
-          .call(d3.drag()
-              .on("start", dragstarted)
-              .on("drag", dragged)
-              .on("end", dragended));
-    
-      node.append("title")
-          .text(function(d) { return d.id; });
-    
-      simulation
-          .nodes(graph.nodes)
-          .on("tick", ticked);
-    
-      simulation.force("link")
-          .links(graph.links);
-    
-      function ticked() {
-        link
-            .attr("x1", function(d) { return d.source.x; })
-            .attr("y1", function(d) { return d.source.y; })
-            .attr("x2", function(d) { return d.target.x; })
-            .attr("y2", function(d) { return d.target.y; });
-    
-        node
-            .attr("cx", function(d) { return d.x; })
-            .attr("cy", function(d) { return d.y; });
+        },
+        animation: false,
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          yAxes: [{
+            display: true,
+            ticks: {
+              beginAtZero: true 
+            }
+          }]
         }
+      };
 
+      const ctx = this.$el.find('.js-running-tasks'); 
+ 
+      let chart = undefined;
+      const update = () => {
+        AjaxTaskInstance.findByStatus('RUNNING').done(function(d){
+          const cnt = d.length;
+          data.labels.push(moment().format("hh:mm:ss"));
+          
+          if(data.labels.length > 10){
+            data.datasets[0].data.shift();
+            data.labels.shift();
+          }
+          data.datasets[0].data.push(100*Math.random());
 
+          if(!chart){
+            const chart = new Chart(ctx, {
+              type: 'line',
+              data: data,
+              options: options
+            });  
+          }else{
+            chart.update();
+          }
 
-
-      }
+          
+        });  
+        
+      };
       
-      const plan =  Store.PlanStore.at(0);      
-      if(!plan){
-        return;
-      } 
-
-      AjaxTask.findByPlan(plan.get('id')).done(function(d){
-        draw(d);
-      });    
+      setInterval(function(){
+        update();
+      }, 5000);
+      
     },
 
 		render: function () { 	
@@ -278,7 +221,7 @@ define([
       this.drawPlanStats();
       this.drawGroupStats();
       this.drawOwnerStats();
-      // this.drawDependencies();
+      this.drawRunningTasks();
       this.initAuth();
       return this;
     },
