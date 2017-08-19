@@ -221,7 +221,7 @@ define([
       this.drawPlanStats();
       this.drawGroupStats();
       this.drawOwnerStats();
-      this.drawRunningTasks();
+      // this.drawRunningTasks();
       this.initAuth();
       return this;
     },

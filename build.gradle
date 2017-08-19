@@ -15,6 +15,15 @@ apply plugin: 'eclipse'
 apply plugin: 'spring-boot'
 apply plugin: 'scala'
 
+sourceSets {
+    main {
+        scala {
+            srcDirs = ['src/main/scala']
+        }
+    }
+}
+
+
 def _versionCode=0
 def _major=0
 def _minor=0
@@ -68,6 +77,11 @@ repositories {
 bootRun {
     addResources = true
 }
+
+springBoot {
+    mainClass = 'io.octopus.OctopusApplication'
+}
+
 
 dependencies {
 
