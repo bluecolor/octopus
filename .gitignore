@@ -29,6 +29,6 @@ src/test/**
 .swp
 private-docs
 /application.properties
-!/src/main/resources/templates/**/*.html
+!src/main/resources/templates/**/*.html
 .jekyll-metadata
 .sass-cache
