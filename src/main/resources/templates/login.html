@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+        <title>Login - Octopus  </title>
+        <link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"></link>
+        <script src="/bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    
+    <style>
+              .form-signin
+        {
+            max-width: 330px;
+            padding: 15px;
+            margin: 0 auto;
+        }
+        .form-signin .form-signin-heading, .form-signin .checkbox
+        {
+            margin-bottom: 10px;
+        }
+        .form-signin .checkbox
+        {
+            font-weight: normal;
+        }
+        .form-signin .form-control
+        {
+            position: relative;
+            font-size: 16px;
+            height: auto;
+            padding: 10px;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+        .form-signin .form-control:focus
+        {
+            z-index: 2;
+        }
+        .form-signin input[type="text"]
+        {
+            margin-bottom: -1px;
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        .form-signin input[type="password"]
+        {
+            margin-bottom: 10px;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+        }
+        .account-wall
+        {
+            margin-top: 20px;
+            padding: 40px 0px 20px 0px;
+            /*background-color: #f7f7f7;*/
+            /*-moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);*/
+            /*-webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);*/
+            /*box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);*/
+        }
+        .login-title
+        {
+            color: #555;
+            font-size: 18px;
+            font-weight: 400;
+            display: block;
+        }
+        .profile-img
+        {
+            width: 96px;
+            height: 96px;
+            margin: 0 auto 10px;
+            display: block;
+            -moz-border-radius: 50%;
+            -webkit-border-radius: 50%;
+            border-radius: 50%;
+        }
+        .need-help
+        {
+            margin-top: 10px;
+        }
+        .new-account
+        {
+            display: block;
+            margin-top: 10px;
+        }
+    </style>
+    
+    </head>
+    <body>
+        <div th:if="${param.error}">
+            Invalid username and password.
+        </div>
+        <div th:if="${param.logout}">
+            You have been logged out.
+        </div>
+
+  <div class="container" id="container">
+    <div class="row" id="login-form-container">
+        <div class="col-sm-6 col-md-4 col-md-offset-4">
+            <h1 class="text-center login-title">Sign in to Octopus
+            </h1>
+            <div class="account-wall">
+                <!--<img class="profile-img" src="resources/img/photo.png" alt=""></img>-->
+                <form th:action="@{/login}" method="post" class="form-signin">
+                    <input name="username" type="text" class="form-control" placeholder="Username" required="true" autofocus="true"></input>
+                    <input name="password" type="password" class="form-control" placeholder="Password" required="true"></input>
+                    <input type="submit" style="color: transparent;text-shadow: 0 0 0 white;" class="btn btn-lg btn-primary btn-block"  name="submit" value="Sign In"/>
+                    <a href="/forgot-password" class="pull-right need-help">Forgot password </a><span class="clearfix"></span>
+                </form>
+                
+            </div>
+        </div>
+    </div>
+  </div>  
+
+        <!--<form th:action="@{/login}" method="post">
+            <div><label> User Name : <input type="text" name="username"/> </label></div>
+            <div><label> Password: <input type="password" name="password"/> </label></div>
+            <input style="color: transparent;text-shadow: 0 0 0 white;" class="btn btn-lg btn-primary"  name="submit" value="Sign In"/>
+        </form>-->
+    </body>
+</html>
