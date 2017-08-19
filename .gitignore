@@ -4,6 +4,7 @@ backup
 bin
 *.html
 !docs/**/*.html
+!templates/**/*.html
 playground
 build/**
 db
