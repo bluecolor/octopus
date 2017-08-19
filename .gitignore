@@ -4,7 +4,6 @@ backup
 bin
 *.html
 !docs/**/*.html
-!src/main/resources/static/templates/**/*.html
 playground
 build/**
 db
@@ -30,6 +29,6 @@ src/test/**
 .swp
 private-docs
 /application.properties
-
+!src/main/resources/static/templates/**/*.html
 .jekyll-metadata
 .sass-cache
