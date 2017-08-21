@@ -21,6 +21,7 @@ bower install
 ### Gulp
 ```
 cd octopus/src/main/resources/static
+npm install
 gulp
 ```
 
