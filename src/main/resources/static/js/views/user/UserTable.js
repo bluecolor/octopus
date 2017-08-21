@@ -128,13 +128,13 @@ define([
       me.initPagination();
       
       const m = Store.SettingStore.find(m => m.get('name')=='MAIL');
-      const v = JSON.parse(m.get('value'));
-      const active = v.active || '';  
+      
+      const v = m ? JSON.parse(m.get('value')): undefined;
+      const active = v ? v.active : '';  
 
       if(active.toLowerCase() != "yes"){
         me.$el.find('.js-warn-btn').removeClass('hidden');
       }else{
-        console.log('ww')
         me.$el.find('.js-warn-btn').addClass('hidden');
       }
 
@@ -147,7 +147,7 @@ define([
     fixBell: function(){
       const me= this;
       const o = User.me.opts();
-      if(o.ui.bellSwing){
+      if(o && o.ui.bellSwing){
         me.$el.find('i.fa-bell').addClass('animated infinite swing');
       }else{
         me.$el.find('i.fa-bell').removeClass('animated infinite swing');

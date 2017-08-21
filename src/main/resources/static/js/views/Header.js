@@ -20,7 +20,7 @@ define([
       const me = this;
       setTimeout(function(){
         const o = User.me.opts();
-        if(o.ui.bellSwing){
+        if(o && o.ui.bellSwing){
           me.$el.find('.js-alert-btn i.fa-bell').addClass('animated infinite swing');
         }else{
           me.$el.find('.js-alert-btn i.fa-bell').removeClass('animated infinite swing');
