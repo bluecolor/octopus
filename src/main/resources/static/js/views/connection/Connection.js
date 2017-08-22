@@ -82,6 +82,8 @@ define([
           this.$el.find('.js-ftp-props [name="username"]').val(con.username);
           this.$el.find('.js-ftp-props [name="password"]').val(con.password);
           break; 
+        case 'LOCAL': 
+          break;
       }      
 
       return this;
@@ -144,6 +146,8 @@ define([
           props.username= $('.js-ftp-props [name="username"]').val();
           props.password= $('.js-ftp-props [name="password"]').val();
           break;  
+        case 'LOCAL': 
+          break;
       }
       return props;
     },
@@ -151,21 +155,17 @@ define([
     validate : function(con){
       con = this.getProps();
       var isValid = true;
-
+      
       if(_.isEmpty(con.name)||_.isEmpty(con.connectionType)) {
-        console.log(1)
         isValid = false;
       }
       if(con.connectionType == 'JDBC' && _.isEmpty(con.jdbcUrl) ){
-        console.log(2)
         isValid = false;
       }
 
-      if(con.connectionType != 'JDBC' && _.isEmpty(con.host) ){
-        console.log(3)
+      if(['JDBC','LOCAL'].indexOf(con.connectionType) == -1 && _.isEmpty(con.host) ){
         isValid = false;
       }
-      
       
 
       this.enableActionButtons(isValid);

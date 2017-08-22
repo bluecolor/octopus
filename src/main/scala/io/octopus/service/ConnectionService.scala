@@ -52,6 +52,8 @@ class ConnectionService @Autowired()(val connectionRepository: ConnectionReposit
       } else if (connection.connectionType == ConnectionType.SSH){
         val con = new SshConnector(connection)
         result = con.test
+      } else if (connection.connectionType == ConnectionType.LOCAL) {
+        result = true
       }
     }catch {
         case e: Exception => 
