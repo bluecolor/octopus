@@ -49,7 +49,7 @@ class JdbcActor(private var instance:TaskInstance) extends TaskActor(instance) {
     }finally{
       if(connection!=null) connection.close
     }
-    onSuccess
+    onDone
     return new AsyncResult[TaskInstance](instance)
   }
 

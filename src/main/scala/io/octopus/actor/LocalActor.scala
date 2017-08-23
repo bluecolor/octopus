@@ -58,13 +58,15 @@ class LocalActor(private var instance: TaskInstance) extends TaskActor(instance)
 
       if(p.exitValue != 0){
         onError(buffer)
+      }else{
+        onSuccess
       }
 
     }catch {
       case e:Exception =>
         onError(ExceptionUtils.getStackTrace(e)) 
     }
-    onSuccess
+    onDone
     return new AsyncResult[TaskInstance](instance)
   }
 
