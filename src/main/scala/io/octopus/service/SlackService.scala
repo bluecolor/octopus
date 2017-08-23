@@ -127,7 +127,7 @@ class SlackService {
     }
 
     s match {
-      case None => throw new RuntimeException("Slack settings are not defined")
+      case None => log.info("Slack settings are not defined")
       case Some(options) => send(options)
     }
     
