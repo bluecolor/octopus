@@ -1191,6 +1191,11 @@ html {
 .table > thead > tr > th {
   border-bottom: 1px solid #F3F9FE !important; }
 
+.js-rm-item .fa-trash {
+  opacity: 0.6; }
+  .js-rm-item .fa-trash:hover {
+    opacity: 1; }
+
 span.twitter-typeahead .tt-menu,
 span.twitter-typeahead .tt-dropdown-menu {
   position: absolute;
