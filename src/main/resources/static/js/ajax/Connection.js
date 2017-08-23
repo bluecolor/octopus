@@ -8,7 +8,6 @@ define([
   const test = function(c, cb){
     
     waitingDialog.show('Testing Connection', {dialogSize: 'sm', progressType: 'info'});
-    waitingDialog.animate();
     
     let connection = c;
     if(!_.isObject(connection)){

@@ -29,10 +29,10 @@ import io.octopus.connector._
 
 object TaskActor {
   def props(instance: TaskInstance): Props = {
-    if(instance.getConnection.connectionType == Technology.Database){
-      Props(new JdbcActor(instance))
-    }else{
-      Props(new SshActor(instance))
+    instance.getConnection.connectionType match  {
+      case ConnectionType.JDBC => Props(new JdbcActor(instance))
+      case ConnectionType.SSH  => Props(new SshActor(instance))
+      case ConnectionType.LOCAL=> Props(new LocalActor(instance)) 
     } 
   }
 }
@@ -88,8 +88,6 @@ abstract class TaskActor(private var instance:TaskInstance) extends Actor {
 
 
   def onDone = {
-    if(instance.retryCount >= instance.task.retryCount)
-      terminate
   }
 
   @Async

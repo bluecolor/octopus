@@ -63,7 +63,7 @@ class SshActor(private var instance:TaskInstance) extends TaskActor(instance) {
         ssh.disconnect
       }
     }
-    onDone
+    onSuccess
     return new AsyncResult[TaskInstance](instance)
   }
 

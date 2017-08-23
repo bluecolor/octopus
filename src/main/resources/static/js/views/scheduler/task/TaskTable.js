@@ -516,6 +516,7 @@ define([
         totalPages  : me.config.collection.state.totalPages,
         visiblePages: 10,
         disableLoad : true,
+        startPage: 1,
         onPageClick: function (event, page) {
           if(this.disableLoad != null && !this.disableLoad){
             me.config.collection.getPage(page-1);

@@ -70,7 +70,9 @@ define([
         me.load();
       };
 
-      AjaxConnection.test(model.attributes, cb);
+      AjaxConnection.test(model.attributes, cb).always(function(){
+        me.$el.find('.js-trash-btn, .js-test-btn, .js-export-btn').addClass('hidden');
+      });
     },
 
     onSearchConnections: function(e){
