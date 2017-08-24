@@ -17,7 +17,7 @@ td(style="width:570px")
       a(href!='#/scheduler/task-instances?session=<%=id%>'  data-toggle="tooltip" title="See tasks") <%=`${stats.success+stats.done}/${stats.total}` %>
     <% if(stats.error > 0) { %>
     div.session-detail-label(data-toggle="tooltip" title="Errors")
-      span.text-danger error: 
+      span.text-danger(style="font-weight:bold;") error: 
     div.session-stat
       a(href!='#/scheduler/task-instances?session=<%=id%>'  data-toggle="tooltip" title="See tasks") <%=stats.error %>
     <% } %>

@@ -22,6 +22,10 @@ bower install
 ```
 cd octopus/src/main/resources/static
 npm install
+# generate html files
+gulp pug
+# generate style sheets
+gulp sass
 gulp
 ```
 
