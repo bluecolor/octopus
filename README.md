@@ -26,6 +26,7 @@ npm install
 gulp pug
 # generate style sheets
 gulp sass
+# listen for changes, development only
 gulp
 ```
 
