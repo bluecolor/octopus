@@ -49,7 +49,7 @@ class SlackService {
     }
 
     s match {
-      case None => throw new RuntimeException("Slack settings are not defined")
+      case None => 
       case Some(options) => send(options)
     }
   }
@@ -74,7 +74,7 @@ class SlackService {
     }
 
     s match {
-      case None => throw new RuntimeException("Slack settings are not defined")
+      case None => 
       case Some(options) => send(options)
     }
   } 
@@ -100,7 +100,7 @@ class SlackService {
     }
 
     s match {
-      case None => throw new RuntimeException("Slack settings are not defined")
+      case None => 
       case Some(options) => send(options)
     }
   }
@@ -127,7 +127,7 @@ class SlackService {
     }
 
     s match {
-      case None => log.info("Slack settings are not defined")
+      case None => 
       case Some(options) => send(options)
     }
     
