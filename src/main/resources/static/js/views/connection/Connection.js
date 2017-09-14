@@ -7,8 +7,9 @@ define([
   'models/ConnectionModel',
   'ajax/Connection',
   'ajax/User',
-  'constants/index'
-], function (_, Backbone, template,Message, ConnectionStore, ConnectionModel, AjaxConnection, User, Constants) {
+  'constants/index',
+  'views/shared/Combo'
+], function (_, Backbone, template,Message, ConnectionStore, ConnectionModel, AjaxConnection, User, Constants, Combo) {
 	'use strict';
 
 	let Connection = Backbone.View.extend({
@@ -23,15 +24,73 @@ define([
       "click  .js-save-btn": "onSave",
       "click  .js-test-btn": "onTest",
       "change .js-connection-type": "changeConnectionType",
-      "input form[name='connection-form'] input": "validate"
+      "input form[name='connection-form'] input": "validate",
+      "click #radio-remote": "onSelectOdiRemote",
+      "click #radio-local": "onSelectOdiLocal",
 		},
 
+    onSelectOdiRemote: function(){
+      this.$el.find('.js-odi-ssh').removeClass('hidden');
+    },
+
+    onSelectOdiLocal: function(){
+      this.$el.find('.js-odi-ssh').addClass('hidden');
+    },
+
 		initialize: function () {
+      return this;
 		},
 
 		render: function () { 	
       this.$el.html(this.template());
       this.initAuth();
+
+        
+
+      const masterRepo = new Combo({
+        label : 'Master Repository',
+        store : [],
+        name  : 'masterRepo',
+        button: {
+          ref : 'javascript:void(0);',
+          cls  : 'fa-refresh',
+          clear: false,
+          onb2 : function(){;}
+        }
+      });
+
+      masterRepo.$el.insertAfter(this.$el.find('.js-odi-props .form-group[name="masterRepo"]'));
+      
+
+
+      const workRepo = new Combo({
+        label : 'Work Repository',
+        store : [],
+        name  : 'workRepo',
+        button: {
+          ref : 'javascript:void(0);',
+          cls  : 'fa-refresh',
+          clear: false,
+          onb2 : function(){;}
+        }
+      });
+
+
+      workRepo.$el.insertAfter(this.$el.find('.js-odi-props .form-group[name="workRepo"]'));
+
+
+
+      const ssh = new Combo({
+        label : 'SSH Connection',
+        store : ConnectionStore.where({connectionType: 'SSH'}),
+        name  : 'odiSSH',
+        button: false
+      });
+
+      ssh.$el.insertAfter(this.$el.find('.js-odi-props .form-group[name="ssh"]'));
+
+
+
       return this;
     },
 
@@ -39,8 +98,9 @@ define([
         JDBC: '.js-jdbc-props',
         SSH : '.js-ssh-props',
         FTP : '.js-ftp-props',
+        ODI : '.js-odi-props',
         show: function(prop){
-          const props = ['JDBC','SSH','FTP'];
+          const props = ['JDBC','SSH','FTP','ODI'];
           for(let p of props){
             if(p==prop){
               $(this[p]).removeClass('hidden');
@@ -82,6 +142,11 @@ define([
           this.$el.find('.js-ftp-props [name="username"]').val(con.username);
           this.$el.find('.js-ftp-props [name="password"]').val(con.password);
           break; 
+        case 'ODI':
+          this.$el.find('.js-ftp-props [name="host"]').val(con.host); 
+          this.$el.find('.js-ftp-props [name="port"]').val(con.port);
+          this.$el.find('.js-ftp-props [name="username"]').val(con.username);
+          this.$el.find('.js-ftp-props [name="password"]').val(con.password);
         case 'LOCAL': 
           break;
       }      
@@ -146,6 +211,13 @@ define([
           props.username= $('.js-ftp-props [name="username"]').val();
           props.password= $('.js-ftp-props [name="password"]').val();
           break;  
+        case 'ODI' :
+          props.host = $('.js-odi-props [name="host"]').val(); 
+          props.port = $('.js-odi-props [name="port"]').val();
+          props.username= $('.js-odi-props [name="username"]').val();
+          props.password= $('.js-odi-props [name="password"]').val();
+          props.workRepo= $('.js-odi-props [name="workRepo"]').val();
+          break;
         case 'LOCAL': 
           break;
       }

@@ -35,6 +35,12 @@ class ConnectionService @Autowired()(val connectionRepository: ConnectionReposit
     connectionRepository.findByNameContainingIgnoreCase(q)
   }
 
+
+  def findOdiWorkRepos(connection: Connection) = {
+    val connector = new OdiConnector(connection)
+    // connector.findWorkRepos
+  }
+
   @throws(classOf[UnSupportedConnectionTypeException])
   @throws(classOf[Exception])
   def test(connection: Connection): Boolean = {

@@ -6,6 +6,9 @@ import javax.validation.constraints.{NotNull}
 import org.hibernate.annotations.Type
 import org.springframework.data.jpa.repository.Temporal
 import scala.beans.BeanProperty
+import org.hibernate.annotations.Fetch
+import org.hibernate.annotations.FetchMode
+
 
 @Entity(name="connections")
 class Connection {
@@ -48,6 +51,11 @@ class Connection {
 
   @BeanProperty
   var password: String = _
+  
+  @BeanProperty
+  @Fetch(value= FetchMode.JOIN)
+  @OneToOne(optional = true, fetch = FetchType.EAGER, cascade=Array(CascadeType.REMOVE))
+  var odiConnection: OdiConnection = _
   
   @BeanProperty
   var status: Int = _

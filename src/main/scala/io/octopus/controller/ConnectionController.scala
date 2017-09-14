@@ -66,4 +66,10 @@ class ConnectionController  @Autowired()(private val connectionService: Connecti
     response.getWriter().print(connectionService.export(id))
   }
 
+  // @RequestMapping(value = Array("/odi/work-repos/{id}"), method = Array(RequestMethod.POST))
+  // @Secured(Array("ROLE_OPERATOR","ROLE_MASTER"))
+  // def findOdiWorkRepos(@PathVariable("id") id: Long) = 
+  //   connectionService.findOdiWorkRepos(connection)
+
+
 }
