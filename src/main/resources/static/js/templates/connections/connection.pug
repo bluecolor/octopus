@@ -14,7 +14,6 @@
               option(value="SSH")   SSH
               option(value="JDBC")  JDBC - Database
               option(value="LOCAL") Local
-              //- option(value="ODI") Oracle Data Integrator
           section.js-jdbc-props.hidden
             .form-group
               label JDBC URL
@@ -41,48 +40,6 @@
             .form-group
               label Password
               input.js-item.form-control(name="password" type='password' placeholder='Password ...')          
-          section.js-odi-props.hidden
-            .form-group
-              label JDBC URL
-              input.js-item.form-control(name="jdbcUrl" type='text' placeholder='e.g. jdbc:postgresql://host:port/database')
-            .form-group
-              label Username
-              input.js-item.form-control(name="username" type='text' placeholder='Database username')
-            .form-group
-              label Password
-              input.js-item.form-control(name="password" type='password' placeholder='Database password')
-            .form-group(name="masterRepo")
-            .form-group(name="workRepo")
-            .form-group
-              label ODI Installation
-              fieldset
-                .radio.radio-inline.radio-danger(style="display:inline")
-                  input#radio-local(type='radio', name='radio-active', value='1', checked='1')
-                  label(for='radio-local')
-                    | Local
-                .radio.radio-inline.radio-danger(style="display:inline")
-                  input#radio-remote(type='radio', name='radio-active', value='0')
-                  label(for='radio-remote')
-                    | Remote
-            .section.hidden.js-odi-ssh
-              .row
-                div.col-xs-9
-                  .form-group
-                    label SSH Host
-                    input.js-item.form-control(name="host" type='text' placeholder='Host or IP Address')
-                div.col-xs-3
-                  .form-group
-                    label SSH Port
-                    input.js-item.form-control(name="port" type='number' value="22" min="1" max="65535")
-              .form-group
-                label SSH Username
-                input.js-item.form-control(name="username" type='text' placeholder='Username ...')
-              .form-group
-                label SSH Password
-                input.js-item.form-control(name="password" type='password' placeholder='Password ...')  
-            .form-group
-              label ODI Home
-              input.js-item.form-control(name="username" type='text' placeholder='/path/to/odi_home')
         .box-footer
           a.btn.btn-danger.js-cancel-btn Close
           a.js-item.disabled.ladda-button.btn.btn-primary.pull-right.js-save-btn(data-style="expand-left") Save

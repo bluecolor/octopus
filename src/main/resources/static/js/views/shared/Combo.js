@@ -36,7 +36,6 @@ define([
     },
 
     render: function() { 	
-      console.log(this.config)
       this.$el.html(this.template(this.config));
       this.loadOptions();
       return this;
