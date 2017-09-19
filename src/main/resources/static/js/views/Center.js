@@ -48,6 +48,7 @@ define([
           case Route.PROFILE_PREFERENCES:
             me.showProfileView(o);
             break;
+          case Route.SETTINGS_GENERAL:  
           case Route.SETTINGS_NO_MAIL:  
           case Route.SETTINGS_MAIL:
           case Route.SETTINGS_SLACK:  

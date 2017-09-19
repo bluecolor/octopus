@@ -133,6 +133,10 @@ define([
         const route= RouteConstants.SCHEDULER_PARAMETERS_EDIT;
         Backbone.trigger("route", {route: route, id: id});
       },
+      "settings/general" : ()=>{
+        const route= RouteConstants.SETTINGS_GENERAL;
+        Backbone.trigger("route", {route: route});
+      },
       "settings/mail" : ()=>{
         const route= RouteConstants.SETTINGS_MAIL;
         Backbone.trigger("route", {route: route});
