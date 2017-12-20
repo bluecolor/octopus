@@ -42,9 +42,18 @@ define([
     });
   };
 
+  const testMail = function (o) {
+    return $.ajax({
+      url     : '/api/v1/mail/test',
+      dataType: 'json',
+      type    : 'post',
+      contentType: 'application/json',
+      data    : JSON.stringify(o)
+    });
+  }
+
   return {
     test,
+    testMail
   } 
-
-
 });

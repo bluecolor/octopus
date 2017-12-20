@@ -5,8 +5,9 @@ define([
   'plugins/Message',
   'collections/SettingStore',
   'models/SettingModel',
-  'constants/index'
-], function (_, Backbone, template, Message, SettingStore, SettingModel, Constants) {
+  'constants/index',
+  'ajax/Settings'
+], function (_, Backbone, template, Message, SettingStore, SettingModel, Constants, Settings) {
   'use strict';
 
   let Mail = Backbone.View.extend({
@@ -18,12 +19,32 @@ define([
     events: {
       "click .js-cancel-btn": "onCancel",
       "click .js-save-btn": "onSave",
+      "click .js-test-btn": 'onTest',
       "input input": "validate",
       "change input[id^='radio']" :"validate"
     },
 
     onCancel: function () {
       window.history.back();
+    },
+
+    onTest: function () {
+      const me = this, loading = Ladda.create(document.querySelector('.js-mail .js-test-btn'));
+      loading.start();
+      const props = me.getProps();
+      const onSuccess = function () {
+        Message.notifySuccess(`A test mail sent to ${props.sendTo}`);
+      },
+      onError = function (err, response) {
+        Message.notifyDanger(`Service not working!`);
+      },
+      onComplete = function () {
+        loading.stop();
+        loading.remove();
+      };
+      
+      Settings
+        .testMail(props).success(onSuccess).fail(onError).done(onComplete);
     },
 
     onSave: function () {
@@ -42,13 +63,13 @@ define([
         }
         Message.notifySuccess('Mail settings saved');
       },
-        onError = function (err, response) {
-          Message.notifyDanger(response.responseJSON.message);
-        },
-        onComplete = function () {
-          loading.stop();
-          loading.remove();
-        };
+      onError = function (err, response) {
+        Message.notifyDanger(response.responseJSON.message);
+      },
+      onComplete = function () {
+        loading.stop();
+        loading.remove();
+      };
 
       this.model.save(param, {
         success: onSuccess,
@@ -111,9 +132,9 @@ define([
 
     enableActionButtons: function (enable) {
       if (enable) {
-        this.$el.find('.js-save-btn').removeClass('disabled');
+        this.$el.find('.js-save-btn, .js-test-btn').removeClass('disabled');
       } else {
-        this.$el.find('.js-save-btn').addClass('disabled');
+        this.$el.find('.js-save-btn, .js-test-btn').addClass('disabled');
       }
     },
 

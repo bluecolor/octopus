@@ -17,13 +17,11 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import javax.mail.Session
 import javax.mail.{Address,Message,MessagingException,PasswordAuthentication,Transport}
 import javax.mail.internet.{InternetAddress,MimeMessage}
-
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.lang.invoke.MethodHandles
 
 import org.apache.commons.lang3.exception.ExceptionUtils
-
 
 @Service
 class MailService {
@@ -33,20 +31,17 @@ class MailService {
   @(Autowired @setter)
   private var settingService: SettingService = _
 
-  def test = {
-    var mail = new Mail
-    val s = settingService.findMailSettings
-    if(s != None && s.get.isActive){
-      mail.to = s.get.sendFrom 
-      mail.from = s.get.sendFrom
-      mail.subject= "Test mail from octopus"    
-      mail.body = "If you see this then the mail service works."
-      log.debug(s"""
-        mail.to: ${mail.to}
-        mail.from: ${mail.from}
-      """)
-      sendMail(mail)
-    }
+  @(Autowired @setter)
+  private var userService: UserService = _
+
+
+  def test(s: MailSetting) = {
+    var m = new Mail
+    m.to = userService.findMe.email 
+    m.from = s.sendFrom
+    m.subject= "Test mail from octopus"    
+    m.body = "If you see this then the mail service works."
+    sendMail(m, s)
   }
 
 
@@ -94,44 +89,44 @@ class MailService {
     }
   }
 
-
-  def sendMail(mail: Mail) {
-    val settings = settingService.findMailSettings
-    if(settings != None){
-      val s = settings.get
-      var p = new Properties
-      p.put("mail.smtp.auth", "true")
-      p.put("mail.smtp.host", s"${s.host}")
-      p.put("mail.smtp.port", s"${s.port}")
+  def sendMail(m: Mail, s: MailSetting) {
+    var p = new Properties
+    p.put("mail.smtp.auth", "true")
+    p.put("mail.smtp.host", s"${s.host}")
+    p.put("mail.smtp.port", s"${s.port}")
+    s.connectionSecurity.toLowerCase match {
+      case "ssl" => p.put("mail.smtp.ssl.enable", "true")
+      case "tls" => p.put("mail.smtp.starttls.enable", "true")
+      case _ => 
+    } 
+    val session = Session.getInstance(p,
+      new javax.mail.Authenticator() {
+        override protected def getPasswordAuthentication : PasswordAuthentication =
+          new PasswordAuthentication(s.username, s.password)
+      }
+    )
+    log.debug("Auth. mail server OK")
+    try{
+      val message = new MimeMessage(session)
+      message.setFrom(new InternetAddress(if(m.from!=null) m.from else s.sendFrom))        
       
-      s.connectionSecurity.toLowerCase match {
-        case "ssl" => p.put("mail.smtp.ssl.enable", "true")
-        case "tls" => p.put("mail.smtp.starttls.enable", "true")
-        case _ => 
+      m.to.split(",").foreach{m =>
+        message.addRecipient(Message.RecipientType.TO,new InternetAddress(m))
       }
+      message.setSubject(m.subject)
+      message.setText(m.body)
+      Transport.send(message)
+    }catch {
+      case e:Exception => 
+        val msg = ExceptionUtils.getStackTrace(e)
+        log.error(s"Unable to send mail! \n ${msg}")
+    }
+  }
 
-      val session = Session.getInstance(p,
-        new javax.mail.Authenticator() {
-          override protected def getPasswordAuthentication : PasswordAuthentication =
-            new PasswordAuthentication(s.username, s.password)
-        }
-      )
-      log.debug("Auth. mail server OK")
-      try{
-        val message = new MimeMessage(session)
-        message.setFrom(new InternetAddress(if(mail.from!=null) mail.from else s.sendFrom))        
-        
-        mail.to.split(",").foreach{m =>
-          message.addRecipient(Message.RecipientType.TO,new InternetAddress(m))
-        }
-        message.setSubject(mail.subject)
-        message.setText(mail.body)
-        Transport.send(message)
-      }catch {
-        case e:Exception => 
-          val msg = ExceptionUtils.getStackTrace(e)
-          log.error(s"Unable to send mail! \n ${msg}")
-      }
+  def sendMail(m: Mail) {
+    settingService.findMailSettings match {
+      case Some(s) => sendMail(m, s)
+      case _ => 
     }
   }
 
