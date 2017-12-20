@@ -45,7 +45,7 @@ define([
       if(_.isEmpty(this.config.store) || this.config.store == null){ return; }
       
       let me = this,
-          options = this.config.store.models,
+          options = _.isArray(this.config.store) ? this.config.store: this.config.store.models,
           select  = this.$el.find('select');
       _.each(options, function(option){
         let o = option;

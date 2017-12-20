@@ -30,6 +30,4 @@ class SchedulerController @Autowired()(private val schedulerService: SchedulerSe
   @RequestMapping(value = Array("/version"), method = Array(RequestMethod.GET) )
   def planStats = schedulerService.version
 
-
-
 }

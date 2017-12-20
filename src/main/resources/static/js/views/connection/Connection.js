@@ -7,8 +7,9 @@ define([
   'models/ConnectionModel',
   'ajax/Connection',
   'ajax/User',
-  'constants/index'
-], function (_, Backbone, template,Message, ConnectionStore, ConnectionModel, AjaxConnection, User, Constants) {
+  'constants/index',
+  'views/shared/Combo'
+], function (_, Backbone, template,Message, ConnectionStore, ConnectionModel, AjaxConnection, User, Constants, Combo) {
 	'use strict';
 
 	let Connection = Backbone.View.extend({
@@ -23,15 +24,19 @@ define([
       "click  .js-save-btn": "onSave",
       "click  .js-test-btn": "onTest",
       "change .js-connection-type": "changeConnectionType",
-      "input form[name='connection-form'] input": "validate"
+      "input form[name='connection-form'] input": "validate",
 		},
 
+
+
 		initialize: function () {
+      return this;
 		},
 
 		render: function () { 	
       this.$el.html(this.template());
       this.initAuth();
+
       return this;
     },
 
@@ -39,6 +44,7 @@ define([
         JDBC: '.js-jdbc-props',
         SSH : '.js-ssh-props',
         FTP : '.js-ftp-props',
+        ODI : '.js-odi-props',
         show: function(prop){
           const props = ['JDBC','SSH','FTP'];
           for(let p of props){
