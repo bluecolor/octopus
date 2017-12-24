@@ -6,6 +6,7 @@ import store from './store'
 import 'element-ui/lib/theme-chalk/index.css'
 import VeeValidate from 'vee-validate'
 import router from './router'
+import pagination from 'vuejs-uib-pagination'
 
 import 'pnotify/dist/pnotify.css'
 import 'pnotify/dist/pnotify.buttons.css'
@@ -24,6 +25,7 @@ Vue.filter('pluralize', pluralize)
 
 Vue.use(VueRouter)
 Vue.use(VeeValidate)
+Vue.use(pagination)
 Vue.config.productionTip = false
 
 // Start out app!

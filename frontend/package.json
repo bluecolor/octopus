@@ -33,6 +33,7 @@
     "monaco-editor": "^0.10.1",
     "pace": "github:hubspot/pace#v1.0.2",
     "pnotify": "^3.2.1",
+    "popper.js": "^1.12.9",
     "sockjs-client": "^1.1.4",
     "vee-validate": "^2.0.0-rc.19",
     "vue": "^2.5.3",
@@ -43,6 +44,7 @@
     "vue-resource": "^1.0.3",
     "vue-router": "^2.2.0",
     "vue-template-compiler": "^2.5.3",
+    "vuejs-uib-pagination": "^1.0.4",
     "vuex": "^2.0.0",
     "vuex-router-sync": "^4.1.2",
     "webstomp-client": "^1.2.0"

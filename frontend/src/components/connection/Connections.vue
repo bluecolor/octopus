@@ -41,7 +41,14 @@
                 span(:class="m.isDefault === 1 ? 'default-text' : 'hidden'") Default
     .box-footer.clearfix
       ul.pagination.pagination-sm.no-margin.pull-right  
-        el-pagination(@current-change="pageChange" layout='prev, pager, next', :total="total", :page-size="pageSize")  
+        uib-pagination(
+          :total-items="total" 
+          v-model="pagination" 
+          :max-size="maxPaginationSize" 
+          class="pagination-sm" 
+          :boundary-links="true" 
+          :rotate="false"
+        )  
 .align-center(v-else)
   div.no-connection(style="width:330px; display: table-cell;vertical-align: middle;text-align: center;")
     div(style="width:100%; display: inline-block;")
@@ -64,7 +71,8 @@ export default {
       title: 'Connections',
       selected: [],
       pageSize: 10,
-      currentPage: 1,
+      pagination: {currentPage: 1},
+      maxPaginationSize: 7,
       filter: ''
     }
   },
@@ -88,7 +96,7 @@ export default {
           return connection.name.toLowerCase().indexOf(this.filter.toLowerCase()) !== -1
         })
       }
-      const i = (this.currentPage - 1) * this.pageSize
+      const i = (this.pagination.currentPage - 1) * this.pageSize
       return _.slice(connections, i, i + this.pageSize)
     }
   },
@@ -103,11 +111,11 @@ export default {
     }
   },
   methods: {
-    ...mapActions('connections', [
-      'deleteConnection',
-      'findConnections',
-      'testConnection'
-    ]),
+    ...mapActions('connections', {
+      deleteConnection: 'remove',
+      findConnections: 'find',
+      testConnection: 'test'
+    }),
     pageChange (p) {
       this.currentPage = p
     },
@@ -115,7 +123,7 @@ export default {
     },
     test () {
       const id = this.selected[0]
-      const connection = _.find(this.connections, {id: id})
+      const connection = _.find(this.connections, {id: id}) 
       this.testConnection(connection)
     },
     exportConnection () {
