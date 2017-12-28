@@ -1,5 +1,6 @@
 package io.octopus.service
 
+import java.lang.Integer
 import java.lang.RuntimeException
 import java.text.SimpleDateFormat
 import java.util.{Date, HashMap}
@@ -59,8 +60,8 @@ class SessionService @Autowired()(val sessionRepository: SessionRepository) {
   private val log:Logger  = LoggerFactory.getLogger(MethodHandles.lookup.lookupClass)
 
 
-  def findAll(search: String,sortBy: String,order : String, pageNo: Int, pageSize: Int) = {
-    sessionQuery.findAll(pageNo,pageSize,search,sortBy,order)
+  def findAll(search: String, sortBy: String, order : String, pageNo: Int, pageSize: Int) = {
+    sessionQuery.findAll(pageNo, pageSize, search, sortBy, order)
   }
 
   def findOne(id: Long): Session = 

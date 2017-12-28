@@ -1,5 +1,6 @@
 package io.octopus.query
 
+import java.lang.Integer
 import java.util.regex.{Pattern,Matcher}
 import org.springframework.stereotype.Component
 import org.hibernate.{Session=>HibernateSession,_}

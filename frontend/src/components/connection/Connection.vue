@@ -78,10 +78,10 @@ export default {
     close: function () {
       window.history.back()
     },
-    ...mapActions('connections', [
-      'save',
-      'test'
-    ]),
+    ...mapActions('connections', {
+      saveConnection: 'save',
+      testConnection: 'test'
+    }),
     setValues () {
       if (!_.isEmpty(this.id)) {
         const id = parseInt(this.id)

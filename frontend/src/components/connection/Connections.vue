@@ -123,7 +123,7 @@ export default {
     },
     test () {
       const id = this.selected[0]
-      const connection = _.find(this.connections, {id: id}) 
+      const connection = _.find(this.connections, {id})
       this.testConnection(connection)
     },
     exportConnection () {

@@ -2,7 +2,7 @@
 .table-controls .btn {
   opacity: 0.7;
   background-color: transparent !important;
-  color: transparent !important;
+  /* color: transparent !important; */
   border: none;
 }
 .table-controls .btn:focus,

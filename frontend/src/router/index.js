@@ -4,6 +4,7 @@ import Connection from '@/components/connection/Connection'
 import Connections from '@/components/connection/Connections'
 import DashView from '@/components/Dash.vue'
 import Dashboard from '@/components/Dashboard.vue'
+import Sessions from '@/components/session/Sessions.vue'
 
 Vue.use(Router)
 
@@ -35,6 +36,10 @@ export default new Router({
       path: 'connections',
       component: Connections,
       name: 'Connections'
+    }, {
+      path: 'sessions',
+      component: Sessions,
+      name: 'Sessions'
     }]
   }]
 })

@@ -5,6 +5,7 @@ import actions from './actions'
 import mutations from './mutations'
 
 import connections from './modules/connections'
+import sessions from './modules/sessions'
 
 Vue.use(Vuex)
 
@@ -16,6 +17,7 @@ export default new Vuex.Store({
     loading: state => state.loading
   },
   modules: {
-    connections
+    connections,
+    sessions
   }
 })

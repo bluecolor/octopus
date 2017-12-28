@@ -1,5 +1,6 @@
 package io.octopus.controller 
 
+import java.util.Optional
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation._
@@ -9,19 +10,25 @@ import io.octopus.model.Session
 import io.octopus.service.SessionService
 
 @RestController
-@RequestMapping(Array("/api/v1/scheduler/sessions"))
+@RequestMapping(Array("/api/v1/sessions"))
 class SessionController  @Autowired()(private val sessionService: SessionService) {
 
   @RequestMapping(method = Array(RequestMethod.GET) )
   def findAll(
-    @RequestParam(value="search",required=false) search: String,
-    @RequestParam(value="sortBy",required=false) sortBy: String,
-    @RequestParam(value="order", required=false) order : String,
-    @RequestParam("page") page: Int, 
-    @RequestParam("pageSize") pageSize: Int
-  ) = 
-    sessionService.findAll(search, sortBy, order, page, pageSize)
-
+    @RequestParam(value="search",required=false) search: Optional[String] ,
+    @RequestParam(value="sortBy",required=false) sortBy: Optional[String],
+    @RequestParam(value="order", required=false) order : Optional[String],
+    @RequestParam(value="page",  required=false) page: Optional[Int], 
+    @RequestParam(value="pageSize", required=false) pageSize: Optional[Int]
+  ) = {
+    sessionService.findAll(
+      search.orElse(""), 
+      sortBy.orElse("name"), 
+      order.orElse("asc"), 
+      page.orElse(1), 
+      pageSize.orElse(15))
+  }
+  
   @RequestMapping(value = Array("/{id}/runnable"), method = Array(RequestMethod.GET))
   def findRunnable(@PathVariable("id") id: Long) =
     sessionService.findRunnable(id)

@@ -962,7 +962,8 @@ div[data-notify="container"].alert-warning {
 .session-name {
   float: left;
   margin-left: 10px;
-  font-weight: bold; }
+  font-weight: bold; 
+}
 
 .session-detail .session-detail-label:not(:first-child) {
   margin-left: 10px; }

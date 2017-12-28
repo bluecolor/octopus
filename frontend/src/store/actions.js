@@ -4,5 +4,6 @@
 export default {
   init () {
     this.dispatch('connections/findAll')
+    this.dispatch('sessions/findAll')
   }
 }
