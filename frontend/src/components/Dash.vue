@@ -1,9 +1,11 @@
 <template lang="pug">
 div(:class="['wrapper', classes]")
   header.main-header
-    span.logo-mini
-      a(href='/')
-        img.img-responsive.center-block.logo(src='http://localhost:8080/static/img/copilot-logo-white.svg', alt='Logo')
+    a.logo(href='#')
+      span.logo-mini
+        b O
+      span.logo-lg
+        b Octopus
     nav.navbar.navbar-static-top(role='navigation')
       a.sidebar-toggle(href='javascript:;', data-toggle='offcanvas', role='button')
         span.sr-only Toggle navigation
@@ -201,19 +203,10 @@ export default {
 
 .logo-mini,
 .logo-lg {
-  text-align: left;
-
-  img {
-    padding: .4em !important;
-  }
+  text-align: center;
+  display: inline;
 }
 
-.logo-lg {
-  img {
-    display: -webkit-inline-box;
-    width: 25%;
-  }
-}
 
 .user-panel {
   height: 4em;

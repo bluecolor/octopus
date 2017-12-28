@@ -32,6 +32,45 @@
               li
                 a(href='javascript:void(0);') Delete
 
+          .dropdown.pull-right(style="display:inline;")
+            a.btn.btn-default.btn-sm.dropdown-toggle.text-green(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
+              | Sort By
+              span.caret
+            ul.dropdown-menu(aria-labelledby='dropdownMenu1')
+              li
+                a(href='javascript:void(0);') Status ascending
+              li
+                a(href='javascript:void(0);') Status descending
+              li.divider(role='separator')
+              li
+                a(href='javascript:void(0);') Name ascending
+              li
+                a(href='javascript:void(0);') Name descending
+              li.divider(role='separator')
+              li
+                a(href='javascript:void(0);') Schedule date ascending
+              li
+                a(href='javascript:void(0);') Schedule date descending
+              li.divider(role='separator')
+              li
+                a(href='javascript:void(0);') Start date ascending
+              li
+                a(href='javascript:void(0);') Start date descending              
+          
+          .dropdown.pull-right(style="display:inline;")
+            a.btn.btn-default.btn-sm.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
+              | Status
+              span.caret
+            ul.dropdown-menu(aria-labelledby='dropdownMenu2')
+              li
+                a(href='javascript:void(0);') RUNNING
+              li
+                a(href='javascript:void(0);') IDLE
+              li
+                a(href='javascript:void(0);') ERROR
+              li
+                a(href='javascript:void(0);') SUCCESS
+
         .table-responsive.connection-items
           table.table.table-hover
             tbody
