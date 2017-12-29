@@ -18,12 +18,12 @@ class TaskInstanceController  @Autowired()(private val taskInstanceService: Task
     @RequestParam(value="sortBy",required=false) sortBy: Optional[String],
     @RequestParam(value="order", required=false) order : Optional[String],
     @RequestParam(value= "session") session: Int,
-    @RequestParam("page") page: Optional[Int], 
-    @RequestParam("pageSize") pageSize: Optional[Int]
+    @RequestParam(value="page", required=false) page: Optional[Int], 
+    @RequestParam(value="pageSize", required=false) pageSize: Optional[Int]
   ) = 
     taskInstanceService.findBySession(
       session,
-      page.orElse(1), 
+      page.orElse(0), 
       pageSize.orElse(15),
       search.orElse(""),
       sortBy.orElse("name"), 

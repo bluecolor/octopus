@@ -53,18 +53,18 @@ class TaskInstanceQuery extends Query {
         ${filter} 
       ${sort}
     """
-    log.debug(q)
     var query = session.createQuery(q)
     p.count = query.list.length
+    log.debug(q)
     if(page == 0) {
       p.totalPages = 
-      if(p.count % pageSize == 0) 
-        p.count / pageSize 
-      else 
-        p.count / pageSize +1
+        if(p.count % pageSize == 0) 
+          p.count / pageSize 
+        else 
+          p.count / pageSize +1
     }
     p.page = page
-    p.pageSize = page
+    p.pageSize = pageSize
 
     val instances = query.setFirstResult(page*pageSize).setMaxResults(pageSize).list.map(_.asInstanceOf[TaskInstance])
     p.content = instances

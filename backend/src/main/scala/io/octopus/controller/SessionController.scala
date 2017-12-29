@@ -25,7 +25,7 @@ class SessionController  @Autowired()(private val sessionService: SessionService
       search.orElse(""), 
       sortBy.orElse("name"), 
       order.orElse("asc"), 
-      page.orElse(1), 
+      page.orElse(0), 
       pageSize.orElse(15))
   
   @RequestMapping(value = Array("/{id}/runnable"), method = Array(RequestMethod.GET))

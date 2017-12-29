@@ -1,5 +1,5 @@
 <template lang="pug">
-.col-md-8.col-md-offset-2(v-if="taskInstances.length > 0")
+.col-md-8.col-md-offset-2(v-if="collection.length > 0")
   .box.box-primary(style="border-top=0px")
     .box-header.with-border
       h3.box-title {{title}}
@@ -8,20 +8,14 @@
           input.form-control.input-sm.search-box(autofocus=true, v-model="filter" type='text', placeholder='Search')
     .box-body.no-padding
       .table-controls
-        a.btn.btn-default.btn-sm(@click='findConnections' type='button', data-toggle="tooltip" title="Reload",)
+        a.btn.btn-default.btn-sm(@click='' type='button', data-toggle="tooltip" title="Reload",)
           i.fa.fa-refresh.text-blue.fa-lg
         router-link.btn.btn-default.btn-sm(to='/connection',data-toggle="tooltip" title="New",)
           i.fa.fa-plus.text-green.fa-lg
         router-link.btn.btn-default.btn-sm(to='/connections/import' data-toggle="tooltip" title="Import")
           i.fa.fa-upload.text-yellow.fa-lg
-        a.btn.btn-default.btn-sm(@click="deleteConnection(selected[0])", data-toggle="tooltip" title="Delete", :class="selected.length > 0 ? '':'hidden'")
+        a.btn.btn-default.btn-sm(@click="", data-toggle="tooltip" title="Delete", :class="selected.length > 0 ? '':'hidden'")
           i.fa.fa-trash-o.text-danger.fa-lg
-        a.btn.btn-default.btn-sm(@click="test", data-toggle="tooltip" title="Test", :class="selected.length > 0 ? '':'hidden'")
-          i.fa.fa-flask.text-yellow.fa-lg
-        a.btn.btn-default.btn-sm(@click="exportConnection", data-toggle="tooltip" title="Export", :class="selected.length > 0 ? '':'hidden'")
-          i.fa.fa-download.text-green.fa-lg
-        router-link.btn.btn-default.btn-sm(:to="'connection/' + selected[0] + '/clone'", data-toggle="tooltip" title="Clone", :class="selected.length == 1 ? '':'hidden'")
-          i.fa.fa-clone.text-primary.fa-lg
 
       .table-responsive.connection-items
         table.table.table-hover
@@ -76,16 +70,17 @@ export default {
       'taskInstances'
     ]),
     total () {
+      let taskInstances = this.taskInstances.all
       if (_.isEmpty(this.filter)) {
-        return this.taskInstances.length
+        return taskInstances.length
       }
-      const taskInstances = _.filter(this.taskInstances, t => {
+      taskInstances = _.filter(taskInstances, t => {
         return t.name.toLowerCase().indexOf(this.filter.toLowerCase()) !== -1
       })
       return taskInstances.length
     },
     collection () {
-      let taskInstances = this.taskInstances
+      let taskInstances = this.taskInstances.all
       if (!_.isEmpty(this.filter)) {
         taskInstances = _.filter(this.taskInstances, t => {
           return t.name.toLowerCase().indexOf(this.filter.toLowerCase()) !== -1
@@ -114,7 +109,6 @@ export default {
     }
   },
   mounted () {
-    console.log(this.session)
     this.$store.dispatch('taskInstances/findAll', {
       session: parseInt(this.session)
     })
