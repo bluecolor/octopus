@@ -5,6 +5,7 @@ import Connections from '@/components/connection/Connections'
 import DashView from '@/components/Dash.vue'
 import Dashboard from '@/components/Dashboard.vue'
 import Sessions from '@/components/session/Sessions.vue'
+import TaskInstances from '@/components/task-instance/TaskInstances.vue'
 
 Vue.use(Router)
 
@@ -40,6 +41,11 @@ export default new Router({
       path: 'sessions',
       component: Sessions,
       name: 'Sessions'
+    }, {
+      path: 'task-instances',
+      props: true,
+      component: TaskInstances,
+      name: 'TaskInstances'
     }]
   }]
 })

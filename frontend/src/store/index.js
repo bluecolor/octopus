@@ -6,6 +6,7 @@ import mutations from './mutations'
 
 import connections from './modules/connections'
 import sessions from './modules/sessions'
+import taskInstances from './modules/task-instances'
 
 Vue.use(Vuex)
 
@@ -18,6 +19,7 @@ export default new Vuex.Store({
   },
   modules: {
     connections,
-    sessions
+    sessions,
+    taskInstances
   }
 })

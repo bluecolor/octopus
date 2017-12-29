@@ -18,6 +18,15 @@ const getLabelByStatus = (s) => {
   return 'label-default'
 }
 
+const toUrlString = (payload) => {
+  return _.chain(payload)
+    .keys()
+    .map(k => `${encodeURIComponent(k)}=${encodeURIComponent(payload[k])}`)
+    .value()
+    .join('&')
+}
+
 export {
-  getLabelByStatus
+  getLabelByStatus,
+  toUrlString
 }

@@ -1,5 +1,6 @@
 package io.octopus.controller 
 
+import java.util.Optional
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation._
 import org.springframework.dao.DataIntegrityViolationException
@@ -8,19 +9,26 @@ import io.octopus.model.TaskInstance
 import io.octopus.service.TaskInstanceService
 
 @RestController
-@RequestMapping(Array("/api/v1/scheduler/task-instances"))
+@RequestMapping(Array("/api/v1/task-instances"))
 class TaskInstanceController  @Autowired()(private val taskInstanceService: TaskInstanceService) {
 
   @RequestMapping(method = Array(RequestMethod.GET) )
   def findAll(
-    @RequestParam(value="search",required=false) search: String,
-    @RequestParam(value="sortBy",required=false) sortBy: String,
-    @RequestParam(value="order", required=false) order : String,
+    @RequestParam(value="search",required=false) search: Optional[String],
+    @RequestParam(value="sortBy",required=false) sortBy: Optional[String],
+    @RequestParam(value="order", required=false) order : Optional[String],
     @RequestParam(value= "session") session: Int,
-    @RequestParam("page") page: Int, 
-    @RequestParam("pageSize") pageSize: Int
+    @RequestParam("page") page: Optional[Int], 
+    @RequestParam("pageSize") pageSize: Optional[Int]
   ) = 
-    taskInstanceService.findBySession(session,page, pageSize,search,sortBy, order)
+    taskInstanceService.findBySession(
+      session,
+      page.orElse(1), 
+      pageSize.orElse(15),
+      search.orElse(""),
+      sortBy.orElse("name"), 
+      order.orElse("asc")
+    )
   
   @RequestMapping(value = Array("/{id}"), method = Array(RequestMethod.GET))
   def findOne(@PathVariable("id") id: Long) =

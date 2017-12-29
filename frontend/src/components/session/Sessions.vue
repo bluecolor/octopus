@@ -85,7 +85,7 @@
                     div.session-status
                       span.label(style="border-radius:0px;" :class="statusLabel(m.status)"  data-toggle="tooltip" title="Status") {{m.status}} 
                     div.session-name
-                      router-link(:to="'task-instances/?session=' + m.id" data-toggle="tooltip" title="Name") {{m.name}}
+                      router-link(:to="'task-instances?session=' + m.id" data-toggle="tooltip" title="Name") {{m.name}}
                   div.session-detail(style="height:100%; width:100%; overflow: hidden;")
                     div.session-stat(style="padding-right:2px;")
                       router-link(:to="'sessions/' + m.id" data-toggle="tooltip" title="See tasks") details
@@ -135,7 +135,7 @@
 
 import moment from 'moment'
 import {mapGetters, mapActions} from 'vuex'
-import {getLabelByStatus} from '../../util/Util'
+import {getLabelByStatus} from '../../util'
 
 export default {
   data () {
