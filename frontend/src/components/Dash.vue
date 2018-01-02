@@ -12,7 +12,6 @@ div(:class="['wrapper', classes]")
       .navbar-custom-menu
         ul.nav.navbar-nav
           li.navbar-text {{connectionName}}
-          connections-menu
           // Messages
           li.dropdown.messages-menu
             a.dropdown-toggle(href='javascript:;', data-toggle='dropdown')
@@ -123,13 +122,11 @@ import { mapState, mapGetters } from 'vuex'
 import config from '../config'
 import Sidebar from './Sidebar'
 import 'hideseek'
-import ConnectionsMenu from './views/header/menu/ConnectionsMenu'
 
 export default {
   name: 'Dash',
   components: {
-    Sidebar,
-    ConnectionsMenu
+    Sidebar
   },
   data: function () {
     return {

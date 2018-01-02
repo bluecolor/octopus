@@ -15,7 +15,7 @@ import io.octopus.exception.UniqueConstraintViolationException
 import org.springframework.dao.DataIntegrityViolationException
 
 @RestController
-@RequestMapping(Array("/api/v1/scheduler/parameters"))
+@RequestMapping(Array("/api/v1/parameters"))
 class ParameterController  @Autowired()(private val parameterService: ParameterService) {
 
   @RequestMapping(method = Array(RequestMethod.GET) )

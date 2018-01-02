@@ -3,7 +3,10 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 import store from './store'
+// import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+// import locale from 'element-ui/lib/locale/lang/en'
+import i18n from 'vue-i18n'
 import VeeValidate from 'vee-validate'
 import router from './router'
 import pagination from 'vuejs-uib-pagination'
@@ -23,10 +26,13 @@ Vue.filter('domain', domain)
 Vue.filter('prettyDate', prettyDate)
 Vue.filter('pluralize', pluralize)
 
+Vue.use(i18n)
 Vue.use(VueRouter)
 Vue.use(VeeValidate)
 Vue.use(pagination)
+// Vue.use(ElementUI, {locale})
 Vue.config.productionTip = false
+Vue.config.lang = 'en'
 
 // Start out app!
 // eslint-disable-next-line no-new

@@ -112,7 +112,6 @@
                       .progress-bar.progress-bar-info(role='progressbar' :style="'width:' + progress(m.stats) +'%;'")
                         | {{progress(m.stats)}}%
 
-
       .box-footer.clearfix
         ul.pagination.pagination-sm.no-margin.pull-right  
           uib-pagination(

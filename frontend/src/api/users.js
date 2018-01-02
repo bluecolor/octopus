@@ -2,13 +2,13 @@ import axios from 'axios'
 import { API_BASE } from './constants'
 
 export default {
-  findUsers () {
+  findAll () {
     return axios.get(`${API_BASE}/users`)
   },
-  saveUser (user) {
+  save (user) {
     return axios.post(`${API_BASE}/users`, user)
   },
-  deleteUser (id) {
+  remove (id) {
     return axios.delete(`${API_BASE}/users/${id}`)
   }
 }

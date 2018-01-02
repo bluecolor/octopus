@@ -1,7 +1,6 @@
 
 import api from '../../api/connections'
 import _ from 'lodash'
-
 import {success as notifySuccess, error as notifyError} from '../../lib/notify'
 
 const LOAD = 'LOAD'

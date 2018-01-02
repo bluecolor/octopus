@@ -1,56 +1,138 @@
 <template lang="pug">
-.col-md-8.col-md-offset-2(v-if="collection.length > 0")
-  .box.box-primary(style="border-top=0px")
-    .box-header.with-border
-      h3.box-title {{title}}
-      .box-tools.pull-right
-        .has-feedback.table-search
-          input.form-control.input-sm.search-box(autofocus=true, v-model="filter" type='text', placeholder='Search')
-    .box-body.no-padding
-      .table-controls
-        a.btn.btn-default.btn-sm(@click='' type='button', data-toggle="tooltip" title="Reload",)
-          i.fa.fa-refresh.text-blue.fa-lg
-        router-link.btn.btn-default.btn-sm(to='/connection',data-toggle="tooltip" title="New",)
-          i.fa.fa-plus.text-green.fa-lg
-        router-link.btn.btn-default.btn-sm(to='/connections/import' data-toggle="tooltip" title="Import")
-          i.fa.fa-upload.text-yellow.fa-lg
-        a.btn.btn-default.btn-sm(@click="", data-toggle="tooltip" title="Delete", :class="selected.length > 0 ? '':'hidden'")
-          i.fa.fa-trash-o.text-danger.fa-lg
+.row
+  .col-md-10.col-md-offset-1(v-if="collection.length > 0")
+    .box.box-primary(style="border-top=0px")
+      .box-header.with-border
+        h3.box-title {{title}}
+        .box-tools.pull-right
+          .has-feedback.table-search
+            input.form-control.input-sm.search-box(autofocus=true, v-model="filter" type='text', placeholder='Search')
+      .box-body.no-padding
+        .table-controls
+          a.btn.btn-default.btn-sm(@click='' type='button', data-toggle="tooltip" title="Reload",)
+            i.fa.fa-refresh.text-blue.fa-lg
+          a.btn.btn-default.btn-sm(@click="", data-toggle="tooltip" title="Delete", :class="selected.length > 0 ? '':'hidden'")
+            i.fa.fa-trash-o.text-danger.fa-lg
+          .dropdown(style="display:inline;" :class="selected.length > 0 ? '':'hidden'")
+            button.btn.btn-default.btn-sm.dropdown-toggle(
+              type='button', 
+              data-toggle='dropdown', 
+              aria-haspopup='true', 
+              aria-expanded='true'
+              style="color:#212121;"
+            )
+              | More
+              span.caret
+            ul.dropdown-menu(aria-labelledby='dm1')
+              li  
+                a(href='javascript:void(0);') Done
+              li  
+                a(href='javascript:void(0);') Stop
+              li  
+                a(href='javascript:void(0);') Start
+              li  
+                a(href='javascript:void(0);') Block
+              li.divider(role='separator')
+              li
+                a(href='javascript:void(0);') Delete
 
-      .table-responsive.connection-items
-        table.table.table-hover
-          tbody
-            tr(v-for="m in collection")
-              td(style="width:20px")
-                label.el-checkbox
-                  span.el-checkbox__input(:class="selected.indexOf(m.id)>-1 ? 'is-checked':''")
-                    span.el-checkbox__inner
-                    input.el-checkbox__original(type='checkbox', v-model="selected" :value ='m.id')
-              td 
-                router-link(:to="'connection/' + m.id" ) {{m.name}}
-              
-    .box-footer.clearfix
-      ul.pagination.pagination-sm.no-margin.pull-right  
-        uib-pagination(
-          :total-items="total" 
-          v-model="pagination" 
-          :max-size="maxPaginationSize" 
-          class="pagination-sm" 
-          :boundary-links="true" 
-          :rotate="false"
-        )  
-.align-center(v-else)
-  div.no-connection(style="width:330px; display: table-cell;vertical-align: middle;text-align: center;")
-    div(style="width:100%; display: inline-block;")
-      i.fa.big-icon.text-gray-harbor.fa-tasks(style="text-align: center;")
-    div(style="width:100%; margin-top: 20px;display: inline-block;")
-      span.text-gray-harbor(style="font-size:20px;") No task instance for this session!
+          .dropdown.pull-right(style="display:inline;")
+            a.btn.btn-default.btn-sm.dropdown-toggle.text-green(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
+              | Sort By
+              span.caret
+            ul.dropdown-menu(aria-labelledby='dropdownMenu1')
+              li
+                a(href='javascript:void(0);') Status ascending
+              li
+                a(href='javascript:void(0);') Status descending
+              li.divider(role='separator')
+              li
+                a(href='javascript:void(0);') Name ascending
+              li
+                a(href='javascript:void(0);') Name descending
+              li.divider(role='separator')
+              li
+                a(href='javascript:void(0);') Duration ascending
+              li
+                a(href='javascript:void(0);') Duration descending
 
+          .dropdown.pull-right(style="display:inline;")
+            a.btn.btn-default.btn-sm.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
+              | Status
+              span.caret
+            ul.dropdown-menu(aria-labelledby='dropdownMenu2')
+              li
+                a(href='javascript:void(0);') RUNNING
+              li
+                a(href='javascript:void(0);') IDLE
+              li
+                a(href='javascript:void(0);') ERROR
+              li
+                a(href='javascript:void(0);') SUCCESS
+
+        .table-responsive.connection-items
+          table.table.table-hover
+            tbody
+              tr(v-for="m in collection")
+                td(style="width:20px")
+                  label.el-checkbox
+                    span.el-checkbox__input(:class="selected.indexOf(m.id)>-1 ? 'is-checked':''")
+                      span.el-checkbox__inner
+                      input.el-checkbox__original(type='checkbox', v-model="selected" :value ='m.id')
+                td(style="width:100px")
+                  span.label(style="border-radius:0px;", :class = 'labelByStatus(m.status)'  data-toggle="tooltip" title="Status") {{m.status}} 
+                td 
+                  router-link(:to="'task-instance/' + m.id" ) {{m.name}}
+                td 
+                  span.label(
+                    :style="'border-radius:0px; background-color:'+ m.task.primaryGroup.color+';'", 
+                    data-toggle="tooltip" title="Status"
+                  ) {{m.task.primaryGroup.name}}
+                td 
+                  popper(trigger='click', :options="{placement: 'left'}")
+                    .popper(v-show="m.dependencies.length > 0")
+                      div(slot="content")
+                        ul.pop-menu
+                          li(v-for="d in m.dependencies")
+                            router-link(:to="'task-instance/' + d.id") {{d.name}}
+                          
+                    a.top(href='javascript:void(0)', slot='reference')
+                      | {{m.dependencies.length}}
+                td 
+                  span(data-toggle="tooltip" title="Start date") {{dateString(m.startDate)}}
+                td 
+                  span(data-toggle="tooltip" title="End date") {{dateString(m.endDate)}}
+                td(style="width:200px;")
+                  .progress.progress-striped(style="margin-bottom:0px;" data-toggle="tooltip" title="Progress")
+                    .progress-bar.progress-bar-info(role='progressbar', :style ="'width:'+ progress(m) + '%;'")
+                      |  {{progress(m)}}%                
+
+      .box-footer.clearfix
+        ul.pagination.pagination-sm.no-margin.pull-right  
+          uib-pagination(
+            :total-items="total" 
+            v-model="pagination" 
+            :max-size="maxPaginationSize" 
+            class="pagination-sm" 
+            :boundary-links="true" 
+            :rotate="false"
+          )  
+  .align-center(v-else)
+    div.no-connection(style="width:330px; display: table-cell;vertical-align: middle;text-align: center;")
+      div(style="width:100%; display: inline-block;")
+        i.fa.big-icon.text-gray-harbor.fa-tasks(style="text-align: center;")
+      div(style="width:100%; margin-top: 20px;display: inline-block;")
+        span.text-gray-harbor(style="font-size:20px;") No task instance for this session!
+      
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import _ from 'lodash'
+import moment from 'moment'
+import { getLabelByStatus } from '../../util'
+import Popper from 'vue-popperjs'
+import 'vue-popperjs/dist/css/vue-popper.css'
 
 export default {
   name: 'TaskInstances',
@@ -106,7 +188,38 @@ export default {
     ]),
     pageChange (p) {
       this.currentPage = p
+    },
+    labelByStatus (s) {
+      return getLabelByStatus(s)
+    },
+    dateString (x) {
+      return moment.unix(x / 1000).format('YYYY-MM-DD HH:mm')
+    },
+    progress (m) {
+      if (['SUCCESS', 'DONE'].indexOf(m.status) !== -1) {
+        return 100
+      }
+      if (['ERROR', 'IDLE', 'KILLED', 'BLOCKED'].indexOf(m.status) !== -1) {
+        return 0
+      }
+      if (m.task.stats === null || m.task.stats.avgDuration === null || m.task.stats.avgDuration === 0) {
+        return Math.floor(Math.random() * 100)
+      }
+      if (m.task.stats === null) {
+        return 0
+      }
+
+      return Math.floor(100 * moment
+        .duration(moment(new Date())
+        .diff(moment(m.startDate)))
+        .asSeconds() / m.task.stats.avgDuration)
+    },
+    onDependenciesClick (e, m) {
+      console.log(e)
     }
+  },
+  components: {
+    'popper': Popper
   },
   mounted () {
     this.$store.dispatch('taskInstances/findAll', {
@@ -116,7 +229,8 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+
   .no-connection {
     margin: 100px auto !important;
     text-align: center !important;
@@ -152,6 +266,19 @@ export default {
     color: #F44336;
     font-weight: bolder;
     opacity: 0.6;
+  }
+
+  .pop-menu {
+    list-style: none;
+    margin: 0;
+    padding: 5px 0;
+    a {
+      display: block;
+      padding: 8px 10px;
+    }
+    li:hover {
+      background-color:antiquewhite; color:#fff;
+    }
   }
 
 </style>

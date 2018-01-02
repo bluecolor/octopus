@@ -3,9 +3,9 @@ import api from '../../api/users'
 import _ from 'lodash'
 import {success as notifySuccess, error as notifyError} from '../../lib/notify'
 
-const LOAD_USERS = 'LOAD_USERS'
-const SAVE_USER = 'SAVE_USER'
-const REMOVE_USER = 'REMOVE_USER'
+const LOAD = 'LOAD'
+const SAVE = 'SAVE'
+const REMOVE = 'REMOVE'
 
 const state = {
   all: []
@@ -17,23 +17,23 @@ const getters = {
 
 // actions
 const actions = {
-  findUsers ({ commit }) {
-    api.findUsers().then(response => {
-      commit(LOAD_USERS, response.data)
+  findAll ({ commit }) {
+    api.findAll().then(response => {
+      commit(LOAD, response.data)
     })
   },
   saveUser ({ commit }, payload) {
-    api.saveUser(payload).then(response => {
-      commit(SAVE_USER, response.data)
+    api.save(payload).then(response => {
+      commit(SAVE, response.data)
       notifySuccess('User saved')
     },
     error => {
       notifyError(`Unable to save user. ${error.response.data.message}`)
     })
   },
-  deleteUser ({ commit }, id) {
-    api.deleteUser(id).then(response => {
-      commit(REMOVE_USER, response.data.id)
+  remove ({ commit }, id) {
+    api.remove(id).then(response => {
+      commit(REMOVE, response.data.id)
       notifySuccess('User deleted')
     },
     error => {
@@ -44,10 +44,10 @@ const actions = {
 
 // mutations
 const mutations = {
-  [LOAD_USERS] (state, records) {
+  [LOAD] (state, records) {
     state.all = records
   },
-  [SAVE_USER] (state, record) {
+  [SAVE] (state, record) {
     const c = _.find(state.all, {id: record.id})
     if (c) {
       _.remove(state.all, r => r.id === record.id)
@@ -55,7 +55,7 @@ const mutations = {
     state.all.push(record)
     window.history.back()
   },
-  [REMOVE_USER] (state, id) {
+  [REMOVE] (state, id) {
     const i = _.findIndex(state.all, r => r.id === id)
     state.all.splice(i, 1)
   }

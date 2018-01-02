@@ -1,5 +1,6 @@
 
 import _ from 'lodash'
+import moment from 'moment'
 
 const getLabelByStatus = (s) => {
   if (_.isEmpty(s)) {
@@ -26,7 +27,12 @@ const toUrlString = (payload) => {
     .join('&')
 }
 
+const dateString = (x) => {
+  return moment.unix(x / 1000).format('YYYY-MM-DD HH:mm')
+}
+
 export {
   getLabelByStatus,
-  toUrlString
+  toUrlString,
+  dateString
 }

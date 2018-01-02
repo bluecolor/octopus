@@ -14,7 +14,7 @@ import io.octopus.service.PlanService
 import io.octopus.exception.UniqueConstraintViolationException
 
 @RestController
-@RequestMapping(Array("/api/v1/scheduler/plans"))
+@RequestMapping(Array("/api/v1/plans"))
 class PlanController  @Autowired()(private val planService: PlanService) {
 
   @RequestMapping(method = Array(RequestMethod.GET) )

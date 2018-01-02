@@ -14,7 +14,7 @@ import io.octopus.exception.UniqueConstraintViolationException
 import org.springframework.dao.DataIntegrityViolationException
 
 @RestController
-@RequestMapping(Array("/api/v1/scheduler/groups"))
+@RequestMapping(Array("/api/v1/groups"))
 class GroupController  @Autowired()(private val groupService: GroupService) {
 
   @RequestMapping(method = Array(RequestMethod.GET) )
