@@ -12,6 +12,8 @@ import technology from './modules/technology'
 import plans from './modules/plans'
 import groups from './modules/groups'
 import parameters from './modules/parameters'
+import app from './modules/app'
+import tasks from './modules/tasks'
 
 Vue.use(Vuex)
 
@@ -30,6 +32,8 @@ export default new Vuex.Store({
     technology,
     plans,
     groups,
-    parameters
+    parameters,
+    app,
+    tasks
   }
 })

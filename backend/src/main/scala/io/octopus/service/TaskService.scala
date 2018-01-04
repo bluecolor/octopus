@@ -1,5 +1,6 @@
 package io.octopus.service
 
+import java.util.Optional
 import org.springframework.data.domain.Sort.Direction
 import org.springframework.data.domain.Sort.Order
 import org.springframework.data.domain.{Sort, Page,Pageable,PageRequest}
@@ -49,13 +50,19 @@ class TaskService @Autowired()(val taskRepository: TaskRepository) {
 
   def findAll = taskRepository.findAll
 
-  def findAll(search:String, sortBy:String, order:String, page: Int, pageSize: Int) = {    
+  def findAll(plan: Long, search:String, sortBy:String, order:String, page: Int, pageSize: Int) = {    
     val me = userService.findMe
     val p = taskQuery.findAll(page,pageSize,search,sortBy,order)
     p.content = p.content.map(t=>{
       t.bookmarked = t.bookmarkers.map(_.id).contains(me.id)
       t
-    })
+    }).filter{t =>
+      if ( plan == null || (plan != null && t.plan != null && t.plan.id == plan) ) {
+        true
+      } else {
+        false
+      }
+    }
     p
   }
 

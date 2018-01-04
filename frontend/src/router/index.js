@@ -18,6 +18,7 @@ import MailSettings from '@/components/settings/Mail.vue'
 import SlackSettings from '@/components/settings/Slack.vue'
 import Parameters from '@/components/parameter/Parameters.vue'
 import Parameter from '@/components/parameter/Parameter.vue'
+import Tasks from '@/components/task/Tasks.vue'
 
 Vue.use(Router)
 
@@ -114,6 +115,11 @@ export default new Router({
       path: 'settings/slack',
       component: SlackSettings,
       name: 'SlackSettings'
+    }, {
+      path: 'tasks',
+      props: true,
+      component: Tasks,
+      name: 'Tasks'
     }]
   }]
 })

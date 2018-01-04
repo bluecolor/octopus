@@ -13,7 +13,7 @@ import io.octopus.model._
 
 @Service
 @Transactional
-class SchedulerService {
+class AppService {
 
   @(Autowired @setter)
   private var parameterService: ParameterService = _

@@ -1,7 +1,6 @@
 package io.octopus.controller 
 
-
-import java.util.Date
+import java.util.{Date, Optional}
 import java.text.SimpleDateFormat
 import javax.servlet.http.HttpServletResponse
 import org.springframework.beans.factory.annotation.Autowired
@@ -14,18 +13,26 @@ import org.springframework.dao.DataIntegrityViolationException
 
 
 @RestController
-@RequestMapping(Array("/api/v1/scheduler/tasks"))
+@RequestMapping(Array("/api/v1/tasks"))
 class TaskController  @Autowired()(private val taskService: TaskService) {
 
   @RequestMapping(method = Array(RequestMethod.GET) )
   def findAll(
-    @RequestParam(value="search",required=false) search: String,
-    @RequestParam(value="sortBy",required=false) sortBy: String,
-    @RequestParam(value="order", required=false) order : String,
-    @RequestParam("page") page: Int, 
-    @RequestParam("pageSize") pageSize: Int
+    @RequestParam(value="plan",required=false) plan: Long,
+    @RequestParam(value="search",required=false) search: Optional[String],
+    @RequestParam(value="sortBy",required=false) sortBy: Optional[String],
+    @RequestParam(value="order", required=false) order : Optional[String],
+    @RequestParam("page") page: Optional[Int], 
+    @RequestParam("pageSize") pageSize: Optional[Int]
   ) = {
-    taskService.findAll(search,sortBy, order, page, pageSize)
+    taskService.findAll(
+      plan,
+      search.orElse(""),
+      sortBy.orElse("name"),
+      order.orElse("asc"),
+      page.orElse(0), 
+      pageSize.orElse(15)
+    )
   }
 
   @RequestMapping(value = Array("/plan/{id}"), method = Array(RequestMethod.GET))
