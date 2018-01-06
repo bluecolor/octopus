@@ -133,7 +133,6 @@ class TaskService @Autowired()(val taskRepository: TaskRepository) {
       user.bookmarks.add(task)
       userService.update(user)
     }
-
     task
   }
 

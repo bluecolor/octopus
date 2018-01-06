@@ -10,7 +10,7 @@ export default {
   bookmark (id) {
     return axios.put(`${API_BASE}/tasks/bookmark/${id}`)
   },
-  unBookmark (id) {
+  removeBookmark (id) {
     return axios.put(`${API_BASE}/tasks/un-bookmark/${id}`)
   }
 }
