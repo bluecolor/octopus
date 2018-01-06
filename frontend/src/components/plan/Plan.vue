@@ -94,3 +94,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.input-group-addon {
+  line-height: 1.28;
+}
+</style>

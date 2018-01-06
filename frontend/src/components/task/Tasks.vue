@@ -28,7 +28,7 @@
                 a.pull-left(href='javascript:void(0)' style='margin-right:20px' )
                   i.fa.fa-lg(:class="`${m.bookmarked ? 'fa-bookmark text-yellow': 'fa-bookmark-o text-gray'}`")
               td 
-                router-link(:to="'plan/' + m.id" ) {{m.name}}
+                router-link(:to="'task/' + m.id" ) {{m.name}}
               td 
                 popper(trigger='click', :options="{placement: 'left'}")
                   .popper(v-show="m.dependencies.length > 0")

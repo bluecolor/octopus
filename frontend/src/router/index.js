@@ -19,6 +19,7 @@ import SlackSettings from '@/components/settings/Slack.vue'
 import Parameters from '@/components/parameter/Parameters.vue'
 import Parameter from '@/components/parameter/Parameter.vue'
 import Tasks from '@/components/task/Tasks.vue'
+import Task from '@/components/task/Task.vue'
 
 Vue.use(Router)
 
@@ -120,6 +121,15 @@ export default new Router({
       props: true,
       component: Tasks,
       name: 'Tasks'
+    }, {
+      path: 'task',
+      component: Task,
+      name: 'Task'
+    }, {
+      path: 'task/:id',
+      props: true,
+      component: Task,
+      name: 'TaskProps'
     }]
   }]
 })
