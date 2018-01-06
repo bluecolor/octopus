@@ -106,7 +106,7 @@ div(:class="['wrapper', classes]")
       span {{version.date}}
     strong
       | Copyright © {{year}} &nbsp;
-      a(href='javascript:;') bluecolor
+      a(href='javascript:;') blue
       | .
     |  All rights reserved.
 // ./wrapper

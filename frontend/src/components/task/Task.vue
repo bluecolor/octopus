@@ -64,27 +64,113 @@
                 label Description
                 textarea.form-control(rows='3')
           #task-script.tab-pane(style="margin:10px")
+            .box-body
+                .form-group
+                  label Technology
+                  select.form-control(v-model="task.technology")
+                    option(v-for="m in technologies" :value="m.id")  {{m.name}}
+                section
+                  codemirror(
+                    ref="script" 
+                    :code="task.script" 
+                    :options="editorOptions") 
           #task-dependencies.tab-pane(style="margin:10px")
+            .form-group
+              select.form-control()
+                option(v-for="m in tasks" :value="m.id")  {{m.name}}
+            .table-responsive.connection-items
+              table.table.table-hover
+                tbody
+                  tr(v-for="m in task.dependencies")
+                    td(style="width:100px")
+                      span.label(style="border-radius:0px;", :class = 'labelByStatus(m.status)'  data-toggle="tooltip" title="Status") {{m.status}} 
+                    td 
+                      router-link(:to="'task-instance/' + m.id" ) {{m.name}}
           #task-groups.tab-pane(style="margin:10px")
+            .form-group
+              select.form-control()
+                option(v-for="m in groups" :value="m.id")  {{m.name}}
+            .table-responsive.connection-items
+              table.table.table-hover
+                tbody
+                  tr(v-for="m in task.groups")
+                    td 
+                      router-link(:to="'group/' + m.id" ) {{m.name}}  
           #task-owners.tab-pane(style="margin:10px")
+            .form-group
+              select.form-control()
+                option(v-for="m in users" :value="m.id")  {{m.name}}
+            .table-responsive.connection-items
+              table.table.table-hover
+                tbody
+                  tr(v-for="m in task.owners")
+                    td 
+                      router-link(:to="'user/' + m.id" ) {{m.name}}
       .box-footer
-        a.btn.btn-danger Close
+        a.btn.btn-danger(@click="close") Close
         a.disabled.ladda-button.btn.btn-primary.pull-right(data-style="expand-left") Save
 </template>
 
 <script>
 import {mapGetters} from 'vuex'
 import vueSlider from 'vue-slider-component'
+import { codemirror } from 'vue-codemirror'
+
+require('codemirror/addon/display/autorefresh.js')
+require('codemirror/addon/selection/active-line.js')
+// styleSelectedText
+require('codemirror/addon/selection/mark-selection.js')
+require('codemirror/addon/search/searchcursor.js')
+// highlightSelectionMatches
+require('codemirror/addon/scroll/annotatescrollbar.js')
+require('codemirror/addon/search/matchesonscrollbar.js')
+require('codemirror/addon/search/searchcursor.js')
+require('codemirror/addon/search/match-highlighter.js')
+// keyMap
+require('codemirror/mode/clike/clike.js')
+require('codemirror/addon/edit/matchbrackets.js')
+require('codemirror/addon/comment/comment.js')
+require('codemirror/addon/dialog/dialog.js')
+require('codemirror/addon/dialog/dialog.css')
+require('codemirror/addon/search/searchcursor.js')
+require('codemirror/addon/search/search.js')
+require('codemirror/keymap/sublime.js')
+// foldGutter
+require('codemirror/addon/fold/foldgutter.css')
+require('codemirror/addon/fold/brace-fold.js')
+require('codemirror/addon/fold/comment-fold.js')
+require('codemirror/addon/fold/foldcode.js')
+require('codemirror/addon/fold/foldgutter.js')
+require('codemirror/addon/fold/indent-fold.js')
+require('codemirror/addon/fold/markdown-fold.js')
+require('codemirror/addon/fold/xml-fold.js')
 
 export default {
   props: ['id'],
   data () {
     return {
       title: 'Task',
+      editorOptions: {
+        readOnly: true,
+        autoRefresh: {delay: 250},
+        tabSize: 4,
+        mode: 'text/x-sql',
+        lineNumbers: true,
+        line: true,
+        keyMap: 'sublime',
+        extraKeys: { 'Ctrl': 'autocomplete' },
+        foldGutter: true,
+        gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
+        styleSelectedText: true,
+        highlightSelectionMatches: { showToken: /\w/, annotateScrollbar: true }
+      },
       task: {
         priority: 0,
         connection: null,
-        plan: null
+        plan: null,
+        technology: null,
+        script: '',
+        dependencies: []
       }
     }
   },
@@ -94,10 +180,28 @@ export default {
     ]),
     ...mapGetters('plans', [
       'plans'
+    ]),
+    ...mapGetters('technology', [
+      'technologies'
+    ]),
+    ...mapGetters('tasks', [
+      'tasks'
+    ]),
+    ...mapGetters('groups', [
+      'groups'
+    ]),
+    ...mapGetters('users', [
+      'users'
     ])
   },
+  methods: {
+    close () {
+      window.history.back()
+    }
+  },
   components: {
-    vueSlider
+    vueSlider,
+    codemirror
   }
 }
 </script>

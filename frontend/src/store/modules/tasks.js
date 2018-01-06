@@ -1,11 +1,12 @@
 
 import api from '../../api/tasks'
 // import store from '../'
-// import _ from 'lodash'
-// import {success as notifySuccess, error as notifyError} from '../../lib/notify'
+import _ from 'lodash'
+import {success as notifySuccess, error as notifyError} from '../../lib/notify'
 
 const LOAD = 'LOAD'
 const CLEAR = 'CLEAR'
+const BOOKMARK = 'BOOKMARK'
 
 const state = {
   all: [],
@@ -22,6 +23,15 @@ const actions = {
     commit(CLEAR)
     api.findAll(payload).then(response => {
       commit(LOAD, response.data)
+    })
+  },
+  bookmark ({commit}, payload) {
+    api.bookmark(payload.id).then(response => {
+      commit(BOOKMARK, response.data.id)
+      notifySuccess('Success.')
+    },
+    error => {
+      notifyError(`Error! ${error.response.data.message}`)
     })
   }
 }
@@ -40,6 +50,12 @@ const mutations = {
   },
   [CLEAR] (state, records) {
     state.all = []
+  },
+  [BOOKMARK] (state, id) {
+    const t = _.find(state.all, {id})
+    if (t) {
+      t.bookmarked = true
+    }
   }
 }
 

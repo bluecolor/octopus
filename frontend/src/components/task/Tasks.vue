@@ -25,7 +25,7 @@
                     span.el-checkbox__inner
                     input.el-checkbox__original(type='checkbox', v-model="selected" :value ='m.id')
               td 
-                a.pull-left(href='javascript:void(0)' style='margin-right:20px' )
+                a.pull-left(@click="bookmark(m)" href='javascript:void(0)' style='margin-right:20px' )
                   i.fa.fa-lg(:class="`${m.bookmarked ? 'fa-bookmark text-yellow': 'fa-bookmark-o text-gray'}`")
               td 
                 router-link(:to="'task/' + m.id" ) {{m.name}}
@@ -123,7 +123,8 @@ export default {
   },
   methods: {
     ...mapActions('tasks', [
-      'findAll'
+      'findAll',
+      'bookmark'
     ]),
     pageChange (p) {
       this.currentPage = p
