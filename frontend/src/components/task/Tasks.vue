@@ -45,7 +45,7 @@
                   data-toggle="tooltip" title="Group"
                 ) {{m.primaryGroup.name}}
               td 
-                router-link(v-show="m.plan" :to="'plan/' + m.plan.id" ) {{m.plan.name}}  
+                router-link(v-show="m.plan" :to="'plan/' + m.plan.id" data-toggle="tooltip" title="Plan") {{m.plan.name}}  
 
     .box-footer.clearfix
       ul.pagination.pagination-sm.no-margin.pull-right  

@@ -47,8 +47,8 @@ class TaskController  @Autowired()(private val taskService: TaskService) {
   @RequestMapping(value = Array("/{id}"), method = Array(RequestMethod.GET))
   def findOne(@PathVariable("id") id: Long) = taskService.findOne(id)
 
-  @RequestMapping(value = Array("/search/{q}"), method = Array(RequestMethod.GET))
-  def search(@PathVariable("q") q: String) = taskService.search(q)
+  @RequestMapping(value = Array("/search"), method = Array(RequestMethod.GET))
+  def search(@RequestParam("q") q: String) = taskService.search(q)
 
   @RequestMapping(value = Array("/my-tasks"), method = Array(RequestMethod.GET))
   def myTasks = taskService.myTasks
