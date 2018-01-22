@@ -76,41 +76,67 @@
                     :options='editorOptions') 
           #task-dependencies.tab-pane(style='margin:10px')
             .form-group
-              v-select(label='name', :filterable='false', :options='dependencies.options', @search='onSearch')
+              v-select(label='name', 
+                :filterable='false', 
+                :options='dependencies.options', 
+                @search='onSearchDep',
+                @input='onSelectDep')
                 template(slot='no-options')
                   | type to search tasks..
                 template(slot='option', slot-scope='option')
                   .d-center
-                    img(:src='option.owner.avatar_url')
-                    |         {{ option.full_name }}
+                    |         {{ option.name }}
                 template(slot='selected-option', scope='option')
                   .selected.d-center
-                    img(:src='option.owner.avatar_url')
-                    |         {{ option.full_name }}
+                    |         {{ option.name }}
 
-          
             .table-responsive.connection-items
               table.table.table-hover
                 tbody
                   tr(v-for="m in task.dependencies")
-                    td(style="width:100px")
-                      span.label(style="border-radius:0px;", :class = 'labelByStatus(m.status)'  data-toggle='tooltip' title='Status') {{m.status}} 
                     td 
                       router-link(:to="'task-instance/' + m.id" ) {{m.name}}
           #task-groups.tab-pane(style="margin:10px")
             .form-group
-              select.form-control()
-                option(v-for='m in groups' :value='m.id')  {{m.name}}
+              v-select(label='name', 
+                :filterable='false', 
+                :options='groups', 
+                @input='onSelectGroup')
+                template(slot='no-options')
+                  | type to search tasks..
+                template(slot='option', slot-scope='option')
+                  .d-center
+                    div(:style="`border-radius:0px;width:14px;height:14px;background-color:${option.color}`")
+                    |&nbsp;&nbsp;&nbsp;         {{ option.name }}
+                template(slot='selected-option', scope='option')
+                  .selected.d-center
+                    div(:style="`border-radius:0px;width:14px;height:14px;background-color:${option.color}`")
+                    |&nbsp;&nbsp;&nbsp;         {{ option.name }}
             .table-responsive.connection-items
               table.table.table-hover
                 tbody
                   tr(v-for="m in task.groups")
+                    td(style="width:20px")
+                      div(:style="`border-radius:0px;width:14px;height:14px;background-color:${m.color}`")
                     td 
                       router-link(:to="'group/' + m.id" ) {{m.name}}  
           #task-owners.tab-pane(style="margin:10px")
             .form-group
-              select.form-control()
-                option(v-for='m in users' :value='m.id')  {{m.name}}
+              v-select(label='name', 
+                :filterable='false', 
+                :options='users', 
+                @input='onSelectUser')
+                template(slot='no-options')
+                  | type to search tasks..
+                template(slot='option', slot-scope='option')
+                  .d-center
+                    div(:style="`border-radius:0px;width:14px;height:14px;background-color:${option.color}`")
+                    |         {{ option.name }}
+                template(slot='selected-option', scope='option')
+                  .selected.d-center
+                    div(:style="`border-radius:0px;width:14px;height:14px;background-color:${option.color}`")
+                    |         {{ option.name }}
+            
             .table-responsive.connection-items
               table.table.table-hover
                 tbody
@@ -189,7 +215,9 @@ export default {
         plan: null,
         technology: 1,
         script: '',
-        dependencies: []
+        dependencies: [],
+        groups: [],
+        owners: []
       }
     }
   },
@@ -217,17 +245,43 @@ export default {
     close () {
       window.history.back()
     },
-    onSearch (search, loading) {
+    onSearchDep (search, loading) {
       loading(true)
-      this.search(loading, search, this)
+      this.searchDep(loading, search, this)
     },
-    search: _.debounce((loading, search, vm) => {
+    searchDep: _.debounce((loading, search, vm) => {
       axios.get(`api/v1/tasks/search?q=${escape(search)}`).then(response => {
-        console.log(response.data)
-        // vm.options = json.items
+        vm.dependencies.options = response.data
         loading(false)
       })
-    }, 350)
+    }, 120),
+    onSelectDep (task) {
+      if (!task) {
+        return
+      }
+      const t = _.find(this.task.dependencies, {id: task.id})
+      if (!t) {
+        this.task.dependencies.push(task)
+      }
+    },
+    onSelectGroup (group) {
+      if (!group) {
+        return
+      }
+      const g = _.find(this.task.groups, {id: group.id})
+      if (!g) {
+        this.task.groups.push(group)
+      }
+    },
+    onSelectUser (user) {
+      if (!user) {
+        return
+      }
+      const u = _.find(this.task.owners, {id: user.id})
+      if (!u) {
+        this.task.owners.push(user)
+      }
+    }
   },
   components: {
     vueSlider,
