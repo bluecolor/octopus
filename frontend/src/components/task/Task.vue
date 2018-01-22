@@ -96,6 +96,9 @@
                   tr(v-for="m in task.dependencies")
                     td 
                       router-link(:to="'task-instance/' + m.id" ) {{m.name}}
+                    td
+                      a.pull-right(href='javascript:void(0);' @click="onRemoveDep(m)")
+                        i.fa.fa-times.text-danger.fa-lg.hover-active
           #task-groups.tab-pane(style="margin:10px")
             .form-group
               v-select(label='name', 
@@ -119,7 +122,10 @@
                     td(style="width:20px")
                       div(:style="`border-radius:0px;width:14px;height:14px;background-color:${m.color}`")
                     td 
-                      router-link(:to="'group/' + m.id" ) {{m.name}}  
+                      router-link(:to="'group/' + m.id" ) {{m.name}}
+                    td
+                      a.pull-right(href='javascript:void(0);' @click="onRemoveGroup(m)")
+                        i.fa.fa-times.text-danger.fa-lg.hover-active   
           #task-owners.tab-pane(style="margin:10px")
             .form-group
               v-select(label='name', 
@@ -134,7 +140,7 @@
                     |         {{ option.name }}
                 template(slot='selected-option', scope='option')
                   .selected.d-center
-                    div(:style="`border-radius:0px;width:14px;height:14px;background-color:${option.color}`")
+                    div(:style="`border-radius:op0px;width:14px;height:14px;background-color:${option.color}`")
                     |         {{ option.name }}
             
             .table-responsive.connection-items
@@ -142,7 +148,12 @@
                 tbody
                   tr(v-for='m in task.owners')
                     td 
+                      router-link(:to="'user/' + m.id" ) {{m.username}}
+                    td 
                       router-link(:to="'user/' + m.id" ) {{m.name}}
+                    td
+                      a.pull-right(href='javascript:void(0);' @click="onRemoveOwner(m)")
+                        i.fa.fa-times.text-danger.fa-lg.hover-active
       .box-footer
         a.btn.btn-danger(@click='close') Close
         a.disabled.ladda-button.btn.btn-primary.pull-right(data-style='expand-left') Save
@@ -273,6 +284,18 @@ export default {
         this.task.groups.push(group)
       }
     },
+    onRemoveGroup (group) {
+      const i = _.findIndex(this.task.groups, {id: group.id})
+      this.task.groups.splice(i, 1)
+    },
+    onRemoveOwner (owner) {
+      const i = _.findIndex(this.task.owners, {id: owner.id})
+      this.task.owners.splice(i, 1)
+    },
+    onRemoveDep (task) {
+      const i = _.findIndex(this.task.dependencies, {id: task.id})
+      this.task.dependencies.splice(i, 1)
+    },
     onSelectUser (user) {
       if (!user) {
         return
@@ -341,5 +364,18 @@ img {
 .v-select .dropdown-menu .active > a {
   color: #fff;
 }
+
+.hover-active {
+  opacity: 0.3;
+}
+.hover-active:hover {
+  opacity: 1;
+}
+
+.input-group-addon {
+  border-bottom-right-radius: 3px;
+  border-top-right-radius: 3px;
+}
+
 
 </style>
