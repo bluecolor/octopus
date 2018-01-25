@@ -21,24 +21,24 @@
             .box-body
               .form-group
                 label Name
-                input.form-control(placeholder='Task name ...', required=true, autofocus=true)
+                input.form-control(v-model="task.name" placeholder='Task name ...', required=true, autofocus=true)
               .form-group
                 label Connection
                 .input-group
-                  select.form-control(v-model='task.connection')
+                  select.form-control(v-model='task.connection.id')
                     option(v-for='m in connections' :value='m.id')  {{m.name}}
                   router-link.btn.btn-default.input-group-addon(to='/connection')
                     span.fa.text-success.fa-plus    
               .form-group
                 label Plan
                 .input-group
-                  select.form-control(v-model='task.plan')
+                  select.form-control(v-model='task.plan.id')
                     option(v-for='m in plans' :value='m.id')  {{m.name}}
                   router-link.btn.btn-default.input-group-addon(to='/plan')
                     span.fa.text-success.fa-plus    
               .form-group
                 label Retry Count
-                input.form-control(value=0 type='number' required=false, min='0')
+                input.form-control(v-model="task.retry" value=0 type='number' required=false, min='0')
               .form-group
                 label Priority
                 div(style='min-width:400px')
@@ -53,21 +53,21 @@
                   label Active
                   fieldset
                     .radio.radio-inline.radio-danger(style='display:inline')
-                      input#radio-active-1(type='radio', name='radio-active', value='1',checked='1')
+                      input#radio-active-1(v-model="task.active", type='radio', name='radio-active', value=1, checked='1')
                       label(for='radio1')
                         | Yes
                     .radio.radio-inline.radio-danger(style='display:inline')
-                      input#radio-active-2(type='radio', name='radio-active', value='0')
+                      input#radio-active-2(v-model="task.active", type='radio', name='radio-active', value=0)
                       label(for='radio2')
                         | No
               .form-group
                 label Description
-                textarea.form-control(rows='3')
+                textarea.form-control(v-model="task.description")
           #task-script.tab-pane(style='margin:10px')
             .box-body
                 .form-group
                   label Technology
-                  select.form-control(v-model='task.technology')
+                  select.form-control(v-model='task.technology.id')
                     option(v-for='m in technologies' :value='m.id')  {{m.name}}
                 section
                   codemirror(
@@ -221,10 +221,14 @@ export default {
         options: []
       },
       task: {
+        name: '',
+        connection: {},
+        plan: {},
+        retry: 1,
         priority: 0,
-        connection: null,
-        plan: null,
-        technology: 1,
+        active: 1,
+        description: null,
+        technology: {},
         script: '',
         dependencies: [],
         groups: [],
@@ -304,6 +308,16 @@ export default {
       if (!u) {
         this.task.owners.push(user)
       }
+    },
+    init (id) {
+      let task = _.chain(this.tasks.all).find({id: id}).cloneDeep().value()
+      if (task) {
+        task.technology = task.technology || {}
+        task.connection = task.connection || {}
+        task.plan = task.plan || {}
+        task.active = task.active ? 1 : 0
+        this.task = task
+      }
     }
   },
   components: {
@@ -312,6 +326,9 @@ export default {
     vSelect
   },
   mounted () {
+    if (this.id) {
+      this.init(parseInt(this.id))
+    }
   }
 }
 </script>

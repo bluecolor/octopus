@@ -63,7 +63,7 @@ class TaskInstance {
   var disabled: Boolean = false
 
   @BeanProperty
-  var retryCount: Int = 1
+  var retry: Int = 1
 
   @BeanProperty
   var startDate: Date = _
