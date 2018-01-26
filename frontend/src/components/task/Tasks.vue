@@ -58,13 +58,15 @@
           :rotate="false"
         )  
 .align-center(v-else)
-  div.no-connection(style="width:330px; display: table-cell;vertical-align: middle;text-align: center;")
+  div.no-connection.hidden(style="width:330px; display: table-cell;vertical-align: middle;text-align: center;")
     div(style="width:100%; display: inline-block;")
       i.fa.big-icon.text-gray-harbor.fa-cog(style="text-align: center;")
     div(style="width:100%; margin-top: 20px;display: inline-block;")
       span.text-gray-harbor(style="font-size:20px;") You don't have any task!  
     div(style="width:70%; margin-top: 20px;display: inline-block;")
       router-link.btn.btn-block.btn-primary.btn-lg(to='parameter') Create Task
+  div.no-connection(style="width:330px; display: table-cell;vertical-align: middle;text-align: center;")
+    pulse-loader(:loading="loading" color="#d2d6de")
 
 </template>
 
@@ -72,12 +74,14 @@
 import { mapActions, mapGetters } from 'vuex'
 import _ from 'lodash'
 import Popper from 'vue-popperjs'
+import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
 
 export default {
   name: 'Tasks',
   data () {
     return {
       title: 'Tasks',
+      loading: true,
       selected: [],
       pageSize: 10,
       pagination: {currentPage: 1},
@@ -146,7 +150,8 @@ export default {
     this.$store.dispatch('tasks/findAll', this.q)
   },
   components: {
-    'popper': Popper
+    'popper': Popper,
+    'pulse-loader': PulseLoader
   }
 }
 </script>
