@@ -109,16 +109,28 @@ class TaskService @Autowired()(val taskRepository: TaskRepository) {
   }
 
   def update(id: Long, task: Task): Task = {
-    var t = findOne(task.id);
-    t.name= task.name
+    var t = findOne(id)
+    t.name = task.name
+    t.retry = task.retry
     t.priority = task.priority
-    taskRepository.save(t);
+    t.connection = task.connection
+    t.plan = task.plan
+    t.active = task.active
+    t.description = task.description
+    t.script = task.script
+    t.technology = task.technology
+    t.dependencies = task.dependencies
+    t.owners = task.owners
+    t.primaryOwner = task.primaryOwner
+    t.groups = task.groups
+    t.primaryGroup = task.primaryGroup
+    taskRepository.save(t)
   }
 
   def delete(id: Long): Task = {
-    val task = taskRepository.findOne(id);
-    taskRepository.delete(id);
-    task;
+    val task = taskRepository.findOne(id)
+    taskRepository.delete(id)
+    task
   }
 
   def bookmark(id: Long): Task = {

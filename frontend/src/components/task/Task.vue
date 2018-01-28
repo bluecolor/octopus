@@ -322,7 +322,6 @@ export default {
         task.plan = task.plan.id ? task.plan.id : undefined
         task.active = task.active ? 1 : 0
         task.priority = this.priority[Math.max(task.priority, 1) - 1]
-        console.log(task.priority)
         this.task = task
       }
     },
