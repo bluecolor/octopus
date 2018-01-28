@@ -46,6 +46,7 @@ const actions = {
   },
   create ({commit}, payload) {
     api.create(payload).then(response => {
+      window.history.back()
       notifySuccess('Created task')
     },
     error => {

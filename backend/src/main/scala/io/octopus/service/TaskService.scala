@@ -108,10 +108,11 @@ class TaskService @Autowired()(val taskRepository: TaskRepository) {
     taskRepository.save(task)
   }
 
-  def update(task: Task): Task = {
+  def update(id: Long, task: Task): Task = {
     var t = findOne(task.id);
-    task.stats = t.stats
-    taskRepository.save(task);
+    t.name= task.name
+    t.priority = task.priority
+    taskRepository.save(t);
   }
 
   def delete(id: Long): Task = {

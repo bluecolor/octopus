@@ -45,7 +45,7 @@
                   vue-slider(
                     ref='slider' 
                     v-model='task.priority' 
-                    :data=['Low', 'Medium', 'High', 'Top']
+                    :data="priority"
                     piecewise=true 
                     tooltip='hover' 
                     :speed=0.2)
@@ -216,6 +216,7 @@ export default {
         styleSelectedText: true,
         highlightSelectionMatches: { showToken: /\w/, annotateScrollbar: true }
       },
+      priority: ['Low', 'Medium', 'High', 'Top'],
       dependencies: {
         query: '',
         options: []
@@ -316,10 +317,12 @@ export default {
     init (id) {
       let task = _.chain(this.tasks.all).find({id: id}).cloneDeep().value()
       if (task) {
-        task.technology = task.technology.id
-        task.connection = task.connection.id
-        task.plan = task.plan.id
+        task.technology = task.technology ? task.technology.id : undefined
+        task.connection = task.connection ? task.connection.id : undefined
+        task.plan = task.plan.id ? task.plan.id : undefined
         task.active = task.active ? 1 : 0
+        task.priority = this.priority[Math.max(task.priority, 1) - 1]
+        console.log(task.priority)
         this.task = task
       }
     },

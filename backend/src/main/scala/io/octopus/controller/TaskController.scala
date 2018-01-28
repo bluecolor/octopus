@@ -76,7 +76,7 @@ class TaskController  @Autowired()(private val taskService: TaskService) {
 
   @RequestMapping(value = Array("/{id}"), method = Array(RequestMethod.PUT))
   def update(@PathVariable("id") id: Long, @RequestBody task: Task) = {
-    taskService.update(task)
+    taskService.update(id, task)
   }
 
   @RequestMapping(value = Array("/{id}"), method = Array(RequestMethod.DELETE))
