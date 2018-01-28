@@ -14,7 +14,7 @@
           i.fa.fa-plus.text-green.fa-lg
         router-link.btn.btn-default.btn-sm(to='/import' data-toggle="tooltip" title="Import")
           i.fa.fa-upload.text-yellow.fa-lg
-        a.btn.btn-default.btn-sm(@click="", data-toggle="tooltip" title="Delete", :class="selected.length > 0 ? '':'hidden'")
+        a.btn.btn-default.btn-sm(@click="onRemove", data-toggle="tooltip" title="Delete", :class="selected.length > 0 ? '':'hidden'")
           i.fa.fa-trash-o.text-danger.fa-lg
         
         .dropdown(v-show="selected.length > 0" style="display:inline;")
@@ -78,7 +78,7 @@
               span.caret
             ul.dropdown-menu
               li(v-for="m in plans")
-                a(href='javascript:void(0);') {{m.name}}
+                a(href='javascript:void(0);' @click="") {{m.name}}
 
       .table-responsive.connection-items
         table.table.table-hover
@@ -203,7 +203,8 @@ export default {
     ...mapActions('tasks', [
       'findAll',
       'bookmark',
-      'removeBookmark'
+      'removeBookmark',
+      'remove'
     ]),
     pageChange (p) {
       this.currentPage = p
@@ -219,6 +220,10 @@ export default {
     },
     reload () {
       this.$store.dispatch('tasks/findAll', this.q)
+    },
+    onRemove () {
+      const id = this.selected[0]
+      this.remove(id).finally(() => (this.selected = []))
     }
   },
   mounted () {
@@ -278,5 +283,11 @@ export default {
   .text-red-plum {
     color: #E57373
   }
+
+  .popper {
+    box-shadow: rgb(255, 251, 251) 0 0 6px 0;
+    background-color: #fff;	
+  }
+
 
 </style>

@@ -8,6 +8,7 @@ const LOAD = 'LOAD'
 const CLEAR = 'CLEAR'
 const BOOKMARK = 'BOOKMARK'
 const REMOVE_BOOKMARK = 'REMOVE_BOOKMARK'
+const REMOVE = 'REMOVE'
 
 const state = {
   all: [],
@@ -62,8 +63,9 @@ const actions = {
     })
   },
   remove ({commit}, id) {
-    api.delete(id).then(response => {
+    return api.remove(id).then(response => {
       notifySuccess('Deleted task')
+      commit(REMOVE, id)
     },
     error => {
       notifyError(`Error! ${error.response.data.message}`)
@@ -100,6 +102,12 @@ const mutations = {
       t.bookmarked = false
       const i = _.findIndex(state.all, {id})
       state.all.splice(i, 1, t)
+    }
+  },
+  [REMOVE] (state, id) {
+    const i = _.findIndex(state.all, {id})
+    if (i !== -1) {
+      state.all.splice(i, 1)
     }
   }
 }
