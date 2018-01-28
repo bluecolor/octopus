@@ -57,16 +57,7 @@ class TaskController  @Autowired()(private val taskService: TaskService) {
   def findBookmarked = taskService.findBookmarked
 
   @RequestMapping(method = Array(RequestMethod.POST))
-  def create(@RequestBody task: Task) = {
-    var t:Task = null; 
-    try{
-      t = taskService.create(task)
-    }catch{
-      case integrityViolation:DataIntegrityViolationException => 
-        throw new UniqueConstraintViolationException("Task name already exists!")  
-    }
-    t
-  }
+  def create(@RequestBody task: Task) = taskService.create(task)
 
   @RequestMapping(value = Array("/run/{ids}"), method = Array(RequestMethod.GET))
   def run(@PathVariable("ids") ids: java.util.List[java.lang.Long]) =

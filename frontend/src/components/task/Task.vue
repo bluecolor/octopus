@@ -25,14 +25,14 @@
               .form-group
                 label Connection
                 .input-group
-                  select.form-control(v-model='task.connection.id')
+                  select.form-control(v-model='task.connection')
                     option(v-for='m in connections' :value='m.id')  {{m.name}}
                   router-link.btn.btn-default.input-group-addon(to='/connection')
                     span.fa.text-success.fa-plus    
               .form-group
                 label Plan
                 .input-group
-                  select.form-control(v-model='task.plan.id')
+                  select.form-control(v-model='task.plan')
                     option(v-for='m in plans' :value='m.id')  {{m.name}}
                   router-link.btn.btn-default.input-group-addon(to='/plan')
                     span.fa.text-success.fa-plus    
@@ -67,7 +67,7 @@
             .box-body
                 .form-group
                   label Technology
-                  select.form-control(v-model='task.technology.id')
+                  select.form-control(v-model='task.technology')
                     option(v-for='m in technologies' :value='m.id')  {{m.name}}
                 section
                   codemirror(
@@ -222,13 +222,13 @@ export default {
       },
       task: {
         name: '',
-        connection: {},
-        plan: {},
+        connection: null,
+        plan: null,
         retry: 1,
         priority: 0,
         active: 1,
         description: null,
-        technology: {},
+        technology: null,
         script: '',
         dependencies: [],
         groups: [],
@@ -316,9 +316,9 @@ export default {
     init (id) {
       let task = _.chain(this.tasks.all).find({id: id}).cloneDeep().value()
       if (task) {
-        task.technology = task.technology || {}
-        task.connection = task.connection || {}
-        task.plan = task.plan || {}
+        task.technology = task.technology.id
+        task.connection = task.connection.id
+        task.plan = task.plan.id
         task.active = task.active ? 1 : 0
         this.task = task
       }
@@ -328,6 +328,7 @@ export default {
       // console.log(this.$refs.slider.getIndex())
 
       this.task.priority = this.$refs.slider.getIndex() + 1
+      this.task.active = (this.task.active === 1)
       if (this.$route.query.dup === 'true') {
         this.task.id = undefined
         this.create(this.task)
