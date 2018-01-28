@@ -12,5 +12,14 @@ export default {
   },
   removeBookmark (id) {
     return axios.put(`${API_BASE}/tasks/un-bookmark/${id}`)
+  },
+  create (payload) {
+    return axios.post(`${API_BASE}/tasks`, payload)
+  },
+  update (id, payload) {
+    return axios.put(`${API_BASE}/tasks/${id}`, payload)
+  },
+  remove (id) {
+    return axios.delete(`${API_BASE}/tasks/${id}`)
   }
 }

@@ -53,12 +53,12 @@
                   label Active
                   fieldset
                     .radio.radio-inline.radio-danger(style='display:inline')
-                      input#radio-active-1(v-model="task.active", type='radio', name='radio-active', value=1, checked='1')
-                      label(for='radio1')
+                      input#radio-active-yes(v-model="task.active", type='radio', name='radio-active', value=1, checked='1')
+                      label(for='radio-active-yes')
                         | Yes
                     .radio.radio-inline.radio-danger(style='display:inline')
-                      input#radio-active-2(v-model="task.active", type='radio', name='radio-active', value=0)
-                      label(for='radio2')
+                      input#radio-active-no(v-model="task.active", type='radio', name='radio-active', value=0)
+                      label(for='radio-active-no')
                         | No
               .form-group
                 label Description
@@ -156,14 +156,14 @@
                         i.fa.fa-times.text-danger.fa-lg.hover-active
       .box-footer
         a.btn.btn-danger(@click='close') Close
-        a.disabled.ladda-button.btn.btn-primary.pull-right(data-style='expand-left') Save
+        a.ladda-button.btn.btn-primary.pull-right(@click="onSave" data-style='expand-left') Save
 </template>
 
 <script>
 
 import _ from 'lodash'
 import axios from 'axios'
-import {mapGetters} from 'vuex'
+import {mapGetters, mapActions} from 'vuex'
 import vueSlider from 'vue-slider-component'
 import { codemirror } from 'vue-codemirror'
 import vSelect from 'vue-select'
@@ -203,7 +203,7 @@ export default {
     return {
       title: 'Task',
       editorOptions: {
-        readOnly: true,
+        readOnly: false,
         autoRefresh: {delay: 250},
         tabSize: 4,
         mode: 'text/x-sql',
@@ -257,6 +257,10 @@ export default {
     ])
   },
   methods: {
+    ...mapActions('tasks', [
+      'create',
+      'update'
+    ]),
     close () {
       window.history.back()
     },
@@ -317,6 +321,20 @@ export default {
         task.plan = task.plan || {}
         task.active = task.active ? 1 : 0
         this.task = task
+      }
+    },
+    onSave () {
+      // console.log(this.$route.query.dup)
+      // console.log(this.$refs.slider.getIndex())
+
+      this.task.priority = this.$refs.slider.getIndex() + 1
+      if (this.$route.query.dup === 'true') {
+        this.task.id = undefined
+        this.create(this.task)
+      } else if (this.task.id) {
+        this.update(this.task)
+      } else {
+        this.create(this.task)
       }
     }
   },

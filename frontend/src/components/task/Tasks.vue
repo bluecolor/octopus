@@ -8,13 +8,78 @@
           input.form-control.input-sm.search-box(autofocus=true, v-model="filter" type='text', placeholder='Search')
     .box-body.no-padding
       .table-controls
-        a.btn.btn-default.btn-sm(@click='findAll' type='button', data-toggle="tooltip" title="Reload",)
+        a.btn.btn-default.btn-sm(@click='reload' type='button', data-toggle="tooltip" title="Reload",)
           i.fa.fa-refresh.text-blue.fa-lg
         router-link.btn.btn-default.btn-sm(to='/task',data-toggle="tooltip" title="New",)
           i.fa.fa-plus.text-green.fa-lg
         router-link.btn.btn-default.btn-sm(to='/import' data-toggle="tooltip" title="Import")
           i.fa.fa-upload.text-yellow.fa-lg
-                
+        a.btn.btn-default.btn-sm(@click="", data-toggle="tooltip" title="Delete", :class="selected.length > 0 ? '':'hidden'")
+          i.fa.fa-trash-o.text-danger.fa-lg
+        
+        .dropdown(v-show="selected.length > 0" style="display:inline;")
+            button.btn.btn-default.btn-sm.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
+              | More
+              span.caret
+            ul.dropdown-menu(aria-labelledby='dropdownMenu1')
+              li  
+                a(href='javascript:void(0);') Run
+              li.divider(role='separator')
+              li
+                router-link(:to="'/task/'+selected[0]+'?dup=true'") Duplicate
+              li
+                a(href='javascript:void(0);') Dependencies
+              li  
+                a(href='javascript:void(0);') Export
+              li.divider(role='separator')
+              li
+                a(href='javascript:void(0);') Enable
+              li
+                a(href='javascript:void(0);') Disable
+              li.divider(role='separator')
+              li
+                a(href='javascript:void(0);') Delete
+        .dropdown.pull-right(style="display:inline;")
+            a.btn.btn-default.btn-sm.dropdown-toggle.text-green(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
+              | Sort By
+              span.caret
+            ul.dropdown-menu(aria-labelledby='dropdownMenu1')
+              li
+                a(href='javascript:void(0);') Name ascending
+              li
+                a(href='javascript:void(0);') Name descending
+              li.divider(role='separator')
+              li
+                a(href='javascript:void(0);') Avg. duration ascending
+              li
+                a(href='javascript:void(0);') Avg. duration descending
+              li.divider(role='separator')                
+              li
+                a(href='javascript:void(0);') Most crashing              
+              li
+                a(href='javascript:void(0);') Least crashing
+        .dropdown.pull-right(style="display:inline;")
+            button.btn.btn-default.btn-sm.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
+              | Owners
+              span.caret
+            ul.dropdown-menu
+              li(v-for="m in users")
+                router-link(to="'/users/' + m.id") {{m.name}}
+        .dropdown.pull-right(style="display:inline;")
+            button.btn.btn-default.btn-sm.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
+              | Groups
+              span.caret
+            ul.dropdown-menu
+              li(v-for="m in groups")
+                a(href='javascript:void(0);') {{m.name}}
+        .dropdown.pull-right(style="display:inline;")
+            button.btn.btn-default.btn-sm.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
+              | Plans
+              span.caret
+            ul.dropdown-menu
+              li(v-for="m in plans")
+                a(href='javascript:void(0);') {{m.name}}
+
       .table-responsive.connection-items
         table.table.table-hover
           tbody
@@ -37,7 +102,7 @@
                         li(v-for="d in m.dependencies")
                           router-link(:to="'task/' + d.id") {{d.name}}
                         
-                  a.top(href='javascript:void(0)', slot='reference')
+                  a.top(href='javascript:void(0)', slot='reference' data-toggle="tooltip" title="Dependencies")
                     | {{m.dependencies.length}}
               td 
                 span.label(
@@ -94,6 +159,15 @@ export default {
     ...mapGetters('tasks', [
       'tasks'
     ]),
+    ...mapGetters('users', [
+      'users'
+    ]),
+    ...mapGetters('groups', [
+      'groups'
+    ]),
+    ...mapGetters('plans', [
+      'plans'
+    ]),
     total () {
       let tasks = this.tasks.all
       if (_.isEmpty(this.filter)) {
@@ -142,11 +216,13 @@ export default {
       } else {
         this.removeBookmark(task.id)
       }
+    },
+    reload () {
+      this.$store.dispatch('tasks/findAll', this.q)
     }
   },
   mounted () {
     this.q.plan = this.$route.query.plan ? parseInt(this.$route.query.plan) : null
-
     this.$store.dispatch('tasks/findAll', this.q)
   },
   components: {

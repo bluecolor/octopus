@@ -50,7 +50,7 @@ class TaskService @Autowired()(val taskRepository: TaskRepository) {
 
   def findAll = taskRepository.findAll
 
-  def findAll(plan: Long, search:String, sortBy:String, order:String, page: Int, pageSize: Int) = {    
+  def findAll(plan: java.lang.Long, search:String, sortBy:String, order:String, page: Int, pageSize: Int) = {    
     val me = userService.findMe
     val p = taskQuery.findAll(page,pageSize,search,sortBy,order)
     p.content = p.content.map(t=>{

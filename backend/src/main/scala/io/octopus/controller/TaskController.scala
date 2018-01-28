@@ -18,7 +18,7 @@ class TaskController  @Autowired()(private val taskService: TaskService) {
 
   @RequestMapping(method = Array(RequestMethod.GET) )
   def findAll(
-    @RequestParam(value="plan",required=false) plan: Long,
+    @RequestParam(value="plan",required=false) plan: java.lang.Long,
     @RequestParam(value="search",required=false) search: Optional[String],
     @RequestParam(value="sortBy",required=false) sortBy: Optional[String],
     @RequestParam(value="order", required=false) order : Optional[String],

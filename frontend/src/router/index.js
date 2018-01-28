@@ -130,6 +130,11 @@ export default new Router({
       props: true,
       component: Task,
       name: 'TaskProps'
+    }, {
+      path: 'task/:id?dup=true',
+      props: true,
+      component: Task,
+      name: 'DuplicateTask'
     }]
   }]
 })

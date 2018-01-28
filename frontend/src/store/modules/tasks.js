@@ -43,6 +43,30 @@ const actions = {
     error => {
       notifyError(`Error! ${error.response.data.message}`)
     })
+  },
+  create ({commit}, payload) {
+    api.create(payload).then(response => {
+      notifySuccess('Created task')
+    },
+    error => {
+      notifyError(`Error! ${error.response.data.message}`)
+    })
+  },
+  update ({commit}, payload) {
+    api.update(payload.id, payload).then(response => {
+      notifySuccess('Updated task')
+    },
+    error => {
+      notifyError(`Error! ${error.response.data.message}`)
+    })
+  },
+  remove ({commit}, id) {
+    api.delete(id).then(response => {
+      notifySuccess('Deleted task')
+    },
+    error => {
+      notifyError(`Error! ${error.response.data.message}`)
+    })
   }
 }
 

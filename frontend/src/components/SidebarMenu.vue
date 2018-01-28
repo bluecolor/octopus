@@ -13,6 +13,10 @@ ul.sidebar-menu
       i.fa.fa-calendar-check-o
       span Run Plans
   li.pageLink(v-on:click='toggleMenu')
+    router-link(to='/tasks')
+      i.fa.fa-cog
+      span Tasks
+  li.pageLink(v-on:click='toggleMenu')
     router-link(to='/groups')
       i.fa.fa-cubes
       span Groups
