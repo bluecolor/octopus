@@ -88,6 +88,10 @@ export default new Router({
       component: Group,
       name: 'Group'
     }, {
+      path: 'group',
+      component: Group,
+      name: 'NewGroup'
+    }, {
       path: 'users',
       component: Users,
       name: 'Users'

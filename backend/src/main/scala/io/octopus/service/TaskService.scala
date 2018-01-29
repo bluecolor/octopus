@@ -113,10 +113,14 @@ class TaskService @Autowired()(val taskRepository: TaskRepository) {
       new DefaultDirectedGraph(classOf[DefaultEdge])
 
     def addDependecies(task: Task) {
-      directedGraph.addVertex(task.id)
+      if(!directedGraph.containsVertex(task.id)) {
+        directedGraph.addVertex(task.id)
+      }
       task.dependencies.foreach{ d =>
-        directedGraph.addEdge(task.id, d.id)
         addDependecies(d)
+        if(!directedGraph.containsEdge(task.id, d.id)){
+          directedGraph.addEdge(task.id, d.id)
+        }
       }
     }
     tasks.foreach(addDependecies(_))

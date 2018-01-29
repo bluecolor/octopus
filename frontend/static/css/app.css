@@ -68,3 +68,7 @@ tr .radio {
 .form-control {
   border-radius: 3px;
 }
+
+.el-color-picker__trigger {
+  border: none !important;
+}

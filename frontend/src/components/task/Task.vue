@@ -120,6 +120,11 @@
                 tbody
                   tr(v-for="m in task.groups")
                     td(style="width:20px")
+                      a(@click="setPrimaryGroup(m.id)" v-show="task.primaryGroup !== m.id" href="javascript:void();")
+                        span.fa.fa-star-o.text-gray
+                      a(v-show="task.primaryGroup === m.id" href="javascript:void();")
+                        span.fa.fa-star.text-yellow
+                    td(style="width:20px")
                       div(:style="`border-radius:0px;width:14px;height:14px;background-color:${m.color}`")
                     td 
                       router-link(:to="'group/' + m.id" ) {{m.name}}
@@ -230,6 +235,7 @@ export default {
         active: 1,
         description: null,
         technology: null,
+        primaryGroup: null,
         script: '',
         dependencies: [],
         groups: [],
@@ -262,6 +268,13 @@ export default {
       'create',
       'update'
     ]),
+    setPrimaryGroup (id) {
+      if (!id && this.task.groups[0]) {
+        this.task.primaryGroup = this.task.groups[0].id
+      } else {
+        this.task.primaryGroup = id
+      }
+    },
     close () {
       window.history.back()
     },
@@ -292,10 +305,16 @@ export default {
       if (!g) {
         this.task.groups.push(group)
       }
+      if (this.task.groups.length === 1) {
+        this.task.primaryGroup = this.task.groups[0]
+      }
     },
     onRemoveGroup (group) {
       const i = _.findIndex(this.task.groups, {id: group.id})
       this.task.groups.splice(i, 1)
+      if (group.id === this.task.primaryGroup && this.task.groups.length > 0) {
+        this.task.primaryGroup = this.task.groups[0]
+      }
     },
     onRemoveOwner (owner) {
       const i = _.findIndex(this.task.owners, {id: owner.id})
@@ -317,6 +336,7 @@ export default {
     init (id) {
       let task = _.chain(this.tasks.all).find({id: id}).cloneDeep().value()
       if (task) {
+        task.primaryGroup = task.primaryGroup ? task.primaryGroup.id : undefined
         task.technology = task.technology ? task.technology.id : undefined
         task.connection = task.connection ? task.connection.id : undefined
         task.plan = task.plan.id ? task.plan.id : undefined
@@ -326,9 +346,6 @@ export default {
       }
     },
     onSave () {
-      // console.log(this.$route.query.dup)
-      // console.log(this.$refs.slider.getIndex())
-
       this.task.priority = this.$refs.slider.getIndex() + 1
       this.task.active = (this.task.active === 1)
       if (this.$route.query.dup === 'true') {

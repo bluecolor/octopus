@@ -8,7 +8,7 @@
         .box-body
           .form-group
             label Name
-            input.form-control(placeholder='Group name ...', required=true, autofocus=true)
+            input.form-control(v-model="group.name" placeholder='Group name ...', required=true, autofocus=true)
           .form-group
             label Parallel
             input.form-control(v-model="group.parallel", type='number', required=false, min='1')
@@ -18,14 +18,14 @@
               vue-slider(
                 ref="slider" 
                 v-model="group.priority" 
-                :data=['Low', 'Medium', 'High', 'Top']
+                :data="priority"
                 piecewise=true 
                 tooltip="hover" 
                 :speed=0.2)
           .form-group
             label Color
             .input-group.colorpicker-component
-              input.form-control(type='text', name='color',v-model="group.color")
+              input.form-control(v-model="group.color")
               span.input-group-addon
                 el-color-picker(size='mini' v-model="group.color")
           .form-group
@@ -33,10 +33,13 @@
             textarea.form-control(name="description" rows="3")
         .box-footer
           a.btn.btn-danger(@click="close") Close
-          a.disabled.ladda-button.btn.btn-primary.pull-right(data-style="expand-left") Save  
+          a.ladda-button.btn.btn-primary.pull-right(@click="onSave" data-style="expand-left") Save  
 </template>
 
 <script>
+
+import _ from 'lodash'
+import {mapActions, mapGetters} from 'vuex'
 import vueSlider from 'vue-slider-component'
 import {ColorPicker} from 'element-ui'
 import lang from 'element-ui/lib/locale/lang/en'
@@ -44,20 +47,50 @@ import locale from 'element-ui/lib/locale'
 locale.use(lang)
 
 export default {
+  props: ['id'],
   data () {
     return {
       title: 'Group',
+      priority: ['Low', 'Medium', 'High', 'Top'],
       group: {
         parallel: 20,
-        priority: 1,
+        priority: 'Medium',
         color: '#69A4D4'
       }
     }
   },
+  computed: {
+    ...mapGetters('groups', [
+      'groups'
+    ])
+  },
   methods: {
+    ...mapActions('groups', [
+      'create',
+      'update'
+    ]),
     close () {
       window.history.back()
+    },
+    init () {
+      if (_.isEmpty(this.id)) {
+        return
+      }
+      const id = parseInt(this.id)
+      this.group = _.chain(this.groups).find({id}).cloneDeep().value()
+      this.group.priority = this.priority[Math.max(this.group.priority, 1) - 1]
+    },
+    onSave () {
+      this.group.priority = this.$refs.slider.getIndex() + 1
+      if (_.isEmpty(this.id)) {
+        this.create(this.group)
+      } else {
+        this.update(this.group)
+      }
     }
+  },
+  mounted () {
+    this.init()
   },
   components: {
     vueSlider,
@@ -66,13 +99,10 @@ export default {
 }
 </script>
 
-<style lang="scss"  scoped>
+<style lang="css" scoped>
 
 .input-group-addon{
   padding: 0;
-}
-.el-color-picker__trigger {
-  border: none !important;
 }
 
 .input-group-addon {
