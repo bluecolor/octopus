@@ -26,12 +26,12 @@
               label Locked
               fieldset
                 .radio.radio-inline.radio-danger(style="display:inline")
-                  input#user-locked-1(v-model="user.locked", type='radio', name='locked', value='1')
-                  label(for='radio1')
+                  input#user-locked-yes(v-model="user.locked", type='radio', name='locked', value='1')
+                  label(for='#user-locked-yes')
                     | Yes
                 .radio.radio-inline.radio-danger(style="display:inline")
-                  input#user-locked-2(v-model="user.locked" type='radio', name='locked', value='0', checked='1')
-                  label(for='radio4')
+                  input#user-locked-no(v-model="user.locked" type='radio', name='locked', value='0', checked='1')
+                  label(for='user-locked-no')
                     | No    
       .box-footer
         a.btn.btn-danger(@click="close") Close

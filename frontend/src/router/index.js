@@ -43,10 +43,10 @@ export default new Router({
       component: Connection,
       name: 'NewConnection'
     }, {
-      path: 'connection/:id',
+      path: 'connection/:id?clone=true',
       props: true,
       component: Connection,
-      name: 'EditConnection'
+      name: 'CloneConnection'
     }, {
       path: 'connections',
       component: Connections,
@@ -113,6 +113,11 @@ export default new Router({
       component: Parameter,
       name: 'Parameter'
     }, {
+      path: 'parameter/:id',
+      props: true,
+      component: Parameter,
+      name: 'ParameterProps'
+    }, {
       path: 'settings/general',
       component: GeneralSettings,
       name: 'GeneralSettings'
@@ -139,10 +144,10 @@ export default new Router({
       component: Task,
       name: 'TaskProps'
     }, {
-      path: 'task/:id?dup=true',
+      path: 'task/:id?clone=true',
       props: true,
       component: Task,
-      name: 'DuplicateTask'
+      name: 'CloneTask'
     }]
   }]
 })

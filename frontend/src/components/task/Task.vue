@@ -152,6 +152,11 @@
               table.table.table-hover
                 tbody
                   tr(v-for='m in task.owners')
+                    td(style="width:20px")
+                      a(@click="setPrimaryOwner(m.id)" v-show="task.primaryOwner !== m.id" href="javascript:void();")
+                        span.fa.fa-star-o.text-gray
+                      a(v-show="task.primaryOwner === m.id" href="javascript:void();")
+                        span.fa.fa-star.text-yellow
                     td 
                       router-link(:to="'user/' + m.id" ) {{m.username}}
                     td 
@@ -275,6 +280,13 @@ export default {
         this.task.primaryGroup = id
       }
     },
+    setPrimaryOwner (id) {
+      if (!id && this.task.owners[0]) {
+        this.task.primaryOwner = this.task.owners[0].id
+      } else {
+        this.task.primaryOwner = id
+      }
+    },
     close () {
       window.history.back()
     },
@@ -337,6 +349,7 @@ export default {
       let task = _.chain(this.tasks.all).find({id: id}).cloneDeep().value()
       if (task) {
         task.primaryGroup = task.primaryGroup ? task.primaryGroup.id : undefined
+        task.primaryOwner = task.primaryOwner ? task.primaryOwner.id : undefined
         task.technology = task.technology ? task.technology.id : undefined
         task.connection = task.connection ? task.connection.id : undefined
         task.plan = task.plan.id ? task.plan.id : undefined
@@ -348,7 +361,7 @@ export default {
     onSave () {
       this.task.priority = this.$refs.slider.getIndex() + 1
       this.task.active = (this.task.active === 1)
-      if (this.$route.query.dup === 'true') {
+      if (this.$route.query.clone === 'true') {
         this.task.id = undefined
         this.create(this.task)
       } else if (this.task.id) {

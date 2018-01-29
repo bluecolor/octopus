@@ -26,7 +26,7 @@
                 a(href='javascript:void(0);') Run
               li.divider(role='separator')
               li
-                router-link(:to="'/task/'+selected[0]+'?dup=true'") Duplicate
+                router-link(:to="'/task/'+selected[0]+'?clone=true'") Clone
               li
                 a(href='javascript:void(0);') Dependencies
               li  

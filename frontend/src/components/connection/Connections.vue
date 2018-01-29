@@ -20,7 +20,7 @@
           i.fa.fa-flask.text-yellow.fa-lg
         a.btn.btn-default.btn-sm(@click="exportConnection", data-toggle="tooltip" title="Export", :class="selected.length > 0 ? '':'hidden'")
           i.fa.fa-download.text-green.fa-lg
-        router-link.btn.btn-default.btn-sm(:to="'connection/' + selected[0] + '/clone'", data-toggle="tooltip" title="Clone", :class="selected.length == 1 ? '':'hidden'")
+        router-link.btn.btn-default.btn-sm(:to="'connection/' + selected[0] + '?clone=true'", data-toggle="tooltip" title="Clone", :class="selected.length == 1 ? '':'hidden'")
           i.fa.fa-clone.text-primary.fa-lg
 
       .table-responsive.connection-items
@@ -113,7 +113,7 @@ export default {
   methods: {
     ...mapActions('connections', {
       deleteConnection: 'remove',
-      findConnections: 'find',
+      findConnections: 'findAll',
       testConnection: 'test'
     }),
     pageChange (p) {

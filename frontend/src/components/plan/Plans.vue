@@ -32,6 +32,9 @@
                 a(href='javascript:void(0);') Run
               li.divider(role='separator')
               li  
+                a(href='javascript:void(0);') Clone
+              li.divider(role='separator')
+              li  
                 a(href='javascript:void(0);') Export Plan
               li  
                 a(href='javascript:void(0);') Export Tasks  
