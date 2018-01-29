@@ -28,7 +28,8 @@
                       span.el-checkbox__inner
                       input.el-checkbox__original(type='checkbox', v-model="selected" :value ='m.id')
                 td(style="width:20px")
-                  span.fa.fa-lg.fa-shield.text-danger(v-show="m.system" data-toggle="tooltip" title="System user")
+                  span.fa.fa-lg.fa-shield.text-orange(v-show="m.system" data-toggle="tooltip" title="System user")
+                  span.fa.fa-lg.fa-lock.text-danger(v-show="!m.system && m.locked" data-toggle="tooltip" title="Locked")
                 td 
                   router-link(:to="'user/' + m.id" ) {{m.username}}
                 td

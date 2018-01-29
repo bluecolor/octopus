@@ -96,6 +96,15 @@ export default new Router({
       component: Users,
       name: 'Users'
     }, {
+      path: 'user/:id',
+      props: true,
+      component: User,
+      name: 'UserProps'
+    }, {
+      path: 'user',
+      component: User,
+      name: 'User'
+    }, {
       path: 'parameters',
       component: Parameters,
       name: 'Parameters'
@@ -103,11 +112,6 @@ export default new Router({
       path: 'parameter',
       component: Parameter,
       name: 'Parameter'
-    }, {
-      path: 'user',
-      props: true,
-      component: User,
-      name: 'User'
     }, {
       path: 'settings/general',
       component: GeneralSettings,

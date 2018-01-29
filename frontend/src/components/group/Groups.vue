@@ -100,7 +100,8 @@ export default {
   },
   methods: {
     ...mapActions('groups', [
-      'findAll'
+      'findAll',
+      'remove'
     ]),
     priority (p) {
       switch (p) {
