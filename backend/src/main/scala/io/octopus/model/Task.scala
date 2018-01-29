@@ -82,7 +82,7 @@ class Task{
   var script: String = _
 
   @BeanProperty
-  var retryCount: Int = 1
+  var retry: Int = 1
 
   @BeanProperty
   @Column(nullable=true)

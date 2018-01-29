@@ -11,23 +11,21 @@ import org.apache.commons.io.IOUtils
 import com.fasterxml.jackson.databind.ObjectMapper
 
 import io.octopus.model.Scheduler
-import io.octopus.service.SchedulerService
+import io.octopus.service.AppService
 
 @RestController
-@RequestMapping(Array("/api/v1/scheduler"))
-class SchedulerController @Autowired()(private val schedulerService: SchedulerService) {
+@RequestMapping(Array("/api/v1/app"))
+class SchedulerController @Autowired()(private val appService: AppService) {
 
   @RequestMapping(value = Array("/import"), method = Array(RequestMethod.POST))
   def importScheduler(@RequestParam("file") file: MultipartFile) = {
-    
     val stream: ByteArrayInputStream = new   ByteArrayInputStream(file.getBytes())
     val json : String = IOUtils.toString(stream, "UTF-8")
     val scheduler = new ObjectMapper().readValue(json, classOf[Scheduler])
-
-    schedulerService.importScheduler(scheduler)
+    appService.importScheduler(scheduler)
   }
 
   @RequestMapping(value = Array("/version"), method = Array(RequestMethod.GET) )
-  def planStats = schedulerService.version
+  def version = appService.version
 
 }

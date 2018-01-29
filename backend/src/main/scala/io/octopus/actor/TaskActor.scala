@@ -67,7 +67,7 @@ abstract class TaskActor(private var instance:TaskInstance) extends Actor {
   protected def stop
 
   def run = {
-    instance.retryCount += 1 
+    instance.retry += 1 
     context.parent ! StartedTask(instance.id)
     result = asyncExec
   }
@@ -76,7 +76,7 @@ abstract class TaskActor(private var instance:TaskInstance) extends Actor {
     log.error(s"TaskInstance(${instance.id}) failed")
     log.error(error)
     
-    if(instance.retryCount < instance.task.retryCount)
+    if(instance.retry < instance.task.retry)
       self ! StartTask
     else
       context.parent ! TaskError(instance, error)

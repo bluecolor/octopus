@@ -1,6 +1,6 @@
 <template lang="pug">
 .row
-  .col-md-8.col-md-offset-2(v-if="collection.length > 0")
+  .col-md-8.col-md-offset-2(v-if="collection.length > 0 || filter.length > 0")
     .box.box-primary(style="border-top=0px")
       .box-header.with-border
         h3.box-title {{title}}
@@ -15,7 +15,7 @@
             i.fa.fa-plus.text-green.fa-lg
           a.btn.btn-default.btn-sm(@click="remove(selected[0])", data-toggle="tooltip" title="Delete", :class="selected.length > 0 ? '':'hidden'")
             i.fa.fa-trash-o.text-danger.fa-lg
-          router-link.btn.btn-default.btn-sm.btn-2.pull-right(to='/settings/no-mail' data-toggle="tooltip" title="No mail settings",)
+          router-link.btn.btn-default.btn-sm.btn-2.pull-right(to='/settings/mail' data-toggle="tooltip" title="No mail settings",)
             i.fa.fa-bell.text-danger.fa-lg  
 
         .table-responsive.connection-items
@@ -28,7 +28,8 @@
                       span.el-checkbox__inner
                       input.el-checkbox__original(type='checkbox', v-model="selected" :value ='m.id')
                 td(style="width:20px")
-                  span.fa.fa-lg.fa-shield.text-danger(v-show="m.system" data-toggle="tooltip" title="System user")
+                  span.fa.fa-lg.fa-shield.text-orange(v-show="m.system" data-toggle="tooltip" title="System user")
+                  span.fa.fa-lg.fa-lock.text-danger(v-show="!m.system && m.locked" data-toggle="tooltip" title="Locked")
                 td 
                   router-link(:to="'user/' + m.id" ) {{m.username}}
                 td
@@ -46,7 +47,7 @@
             :boundary-links="true" 
             :rotate="false"
           )  
-  .align-center(v-else)
+  .align-center(v-show="collection.length === 0 && filter.length === 0")
     div.no-connection(style="width:330px; display: table-cell;vertical-align: middle;text-align: center;")
       div(style="width:100%; display: inline-block;")
         i.fa.big-icon.text-gray-harbor.fa-user(style="text-align: center;")

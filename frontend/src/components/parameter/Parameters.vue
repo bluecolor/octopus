@@ -27,7 +27,7 @@
                     span.el-checkbox__inner
                     input.el-checkbox__original(type='checkbox', v-model="selected" :value ='m.id')
               td 
-                router-link(:to="'plan/' + m.id" ) {{m.name}}
+                router-link(:to="'parameter/' + m.id" ) {{m.name}}
 
     .box-footer.clearfix
       ul.pagination.pagination-sm.no-margin.pull-right  

@@ -1,5 +1,6 @@
 package io.octopus.service
 
+import java.util.Optional
 import org.springframework.data.domain.Sort.Direction
 import org.springframework.data.domain.Sort.Order
 import org.springframework.data.domain.{Sort, Page,Pageable,PageRequest}
@@ -17,6 +18,10 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.lang.invoke.MethodHandles
+
+import org.jgrapht.{Graph}
+import org.jgrapht.graph.{DefaultEdge, DefaultDirectedGraph}
+import org.jgrapht.alg.CycleDetector
 
 import io.octopus.repository.TaskRepository
 import io.octopus.model.Task
@@ -49,13 +54,19 @@ class TaskService @Autowired()(val taskRepository: TaskRepository) {
 
   def findAll = taskRepository.findAll
 
-  def findAll(search:String, sortBy:String, order:String, page: Int, pageSize: Int) = {    
+  def findAll(plan: java.lang.Long, search:String, sortBy:String, order:String, page: Int, pageSize: Int) = {    
     val me = userService.findMe
     val p = taskQuery.findAll(page,pageSize,search,sortBy,order)
     p.content = p.content.map(t=>{
       t.bookmarked = t.bookmarkers.map(_.id).contains(me.id)
       t
-    })
+    }).filter{t =>
+      if ( plan == null || (plan != null && t.plan != null && t.plan.id == plan) ) {
+        true
+      } else {
+        false
+      }
+    }
     p
   }
 
@@ -97,20 +108,61 @@ class TaskService @Autowired()(val taskRepository: TaskRepository) {
     taskRepository.findByPrimaryOwnerId(user.id)
   }
 
+  def hasCycle(tasks: List[Task]) = {
+    var directedGraph: Graph[Long, DefaultEdge] = 
+      new DefaultDirectedGraph(classOf[DefaultEdge])
+
+    def addDependecies(task: Task) {
+      if(!directedGraph.containsVertex(task.id)) {
+        directedGraph.addVertex(task.id)
+      }
+      task.dependencies.foreach{ d =>
+        addDependecies(d)
+        if(!directedGraph.containsEdge(task.id, d.id)){
+          directedGraph.addEdge(task.id, d.id)
+        }
+      }
+    }
+    tasks.foreach(addDependecies(_))
+    
+    val cycleDetector = new CycleDetector[Long, DefaultEdge](directedGraph)
+    cycleDetector.detectCycles
+  } 
+
   def create(task: Task): Task = {
     taskRepository.save(task)
   }
 
-  def update(task: Task): Task = {
-    var t = findOne(task.id);
-    task.stats = t.stats
-    taskRepository.save(task);
+  def update(id: Long, task: Task): Task = {
+    var t = findOne(id)
+    t.name = task.name
+    t.retry = task.retry
+    t.priority = task.priority
+    t.connection = task.connection
+    t.plan = task.plan
+    t.active = task.active
+    t.description = task.description
+    t.script = task.script
+    t.technology = task.technology
+    t.dependencies = task.dependencies
+    t.owners = task.owners
+    t.primaryOwner = task.primaryOwner
+    t.groups = task.groups
+    t.primaryGroup = task.primaryGroup
+
+    var tasks = findAll.filter(_.id != id)
+    tasks += t
+    if(hasCycle(tasks.toList)) {
+      throw new RuntimeException("Update creates cycle.")
+    }
+    
+    taskRepository.save(t)
   }
 
   def delete(id: Long): Task = {
-    val task = taskRepository.findOne(id);
-    taskRepository.delete(id);
-    task;
+    val task = taskRepository.findOne(id)
+    taskRepository.delete(id)
+    task
   }
 
   def bookmark(id: Long): Task = {
@@ -126,7 +178,6 @@ class TaskService @Autowired()(val taskRepository: TaskRepository) {
       user.bookmarks.add(task)
       userService.update(user)
     }
-
     task
   }
 

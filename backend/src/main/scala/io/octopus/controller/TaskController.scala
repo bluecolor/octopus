@@ -1,7 +1,6 @@
 package io.octopus.controller 
 
-
-import java.util.Date
+import java.util.{Date, Optional}
 import java.text.SimpleDateFormat
 import javax.servlet.http.HttpServletResponse
 import org.springframework.beans.factory.annotation.Autowired
@@ -14,18 +13,26 @@ import org.springframework.dao.DataIntegrityViolationException
 
 
 @RestController
-@RequestMapping(Array("/api/v1/scheduler/tasks"))
+@RequestMapping(Array("/api/v1/tasks"))
 class TaskController  @Autowired()(private val taskService: TaskService) {
 
   @RequestMapping(method = Array(RequestMethod.GET) )
   def findAll(
-    @RequestParam(value="search",required=false) search: String,
-    @RequestParam(value="sortBy",required=false) sortBy: String,
-    @RequestParam(value="order", required=false) order : String,
-    @RequestParam("page") page: Int, 
-    @RequestParam("pageSize") pageSize: Int
+    @RequestParam(value="plan",required=false) plan: java.lang.Long,
+    @RequestParam(value="search",required=false) search: Optional[String],
+    @RequestParam(value="sortBy",required=false) sortBy: Optional[String],
+    @RequestParam(value="order", required=false) order : Optional[String],
+    @RequestParam("page") page: Optional[Int], 
+    @RequestParam("pageSize") pageSize: Optional[Int]
   ) = {
-    taskService.findAll(search,sortBy, order, page, pageSize)
+    taskService.findAll(
+      plan,
+      search.orElse(""),
+      sortBy.orElse("name"),
+      order.orElse("asc"),
+      page.orElse(0), 
+      pageSize.orElse(15)
+    )
   }
 
   @RequestMapping(value = Array("/plan/{id}"), method = Array(RequestMethod.GET))
@@ -40,8 +47,8 @@ class TaskController  @Autowired()(private val taskService: TaskService) {
   @RequestMapping(value = Array("/{id}"), method = Array(RequestMethod.GET))
   def findOne(@PathVariable("id") id: Long) = taskService.findOne(id)
 
-  @RequestMapping(value = Array("/search/{q}"), method = Array(RequestMethod.GET))
-  def search(@PathVariable("q") q: String) = taskService.search(q)
+  @RequestMapping(value = Array("/search"), method = Array(RequestMethod.GET))
+  def search(@RequestParam("q") q: String) = taskService.search(q)
 
   @RequestMapping(value = Array("/my-tasks"), method = Array(RequestMethod.GET))
   def myTasks = taskService.myTasks
@@ -50,16 +57,7 @@ class TaskController  @Autowired()(private val taskService: TaskService) {
   def findBookmarked = taskService.findBookmarked
 
   @RequestMapping(method = Array(RequestMethod.POST))
-  def create(@RequestBody task: Task) = {
-    var t:Task = null; 
-    try{
-      t = taskService.create(task)
-    }catch{
-      case integrityViolation:DataIntegrityViolationException => 
-        throw new UniqueConstraintViolationException("Task name already exists!")  
-    }
-    t
-  }
+  def create(@RequestBody task: Task) = taskService.create(task)
 
   @RequestMapping(value = Array("/run/{ids}"), method = Array(RequestMethod.GET))
   def run(@PathVariable("ids") ids: java.util.List[java.lang.Long]) =
@@ -78,7 +76,7 @@ class TaskController  @Autowired()(private val taskService: TaskService) {
 
   @RequestMapping(value = Array("/{id}"), method = Array(RequestMethod.PUT))
   def update(@PathVariable("id") id: Long, @RequestBody task: Task) = {
-    taskService.update(task)
+    taskService.update(id, task)
   }
 
   @RequestMapping(value = Array("/{id}"), method = Array(RequestMethod.DELETE))

@@ -1,6 +1,6 @@
 <template lang="pug">
 .row
-  .col-md-8.col-md-offset-2(v-if="collection.length > 0")
+  .col-md-8.col-md-offset-2(v-if="filter.length > 0 || collection.length > 0")
     .box.box-primary(style="border-top=0px")
       .box-header.with-border
         h3.box-title {{title}}
@@ -49,7 +49,7 @@
             :boundary-links="true" 
             :rotate="false"
           )  
-  .align-center(v-else)
+  .align-center(v-if="collection.length === 0 && filter.length === 0")
     div.no-connection(style="width:330px; display: table-cell;vertical-align: middle;text-align: center;")
       div(style="width:100%; display: inline-block;")
         i.fa.big-icon.text-gray-harbor.fa-cubes(style="text-align: center;")
@@ -59,6 +59,7 @@
 
 <script>
 
+import _ from 'lodash'
 import {mapGetters, mapActions} from 'vuex'
 
 export default {
@@ -80,7 +81,11 @@ export default {
       return this.groups.length
     },
     collection () {
-      return this.groups
+      if (_.isEmpty(this.filter)) {
+        return this.groups
+      }
+      return _.filter(this.groups, (g) =>
+        g.name.toLowerCase().indexOf(this.filter.toLowerCase()) !== -1)
     }
   },
   watch: {
@@ -95,7 +100,8 @@ export default {
   },
   methods: {
     ...mapActions('groups', [
-      'findAll'
+      'findAll',
+      'remove'
     ]),
     priority (p) {
       switch (p) {

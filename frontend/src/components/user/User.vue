@@ -9,16 +9,16 @@
           .box-body
             .form-group
               label Username
-              input.form-control(name="username", type='text', required=true, autofocus=true)
+              input.form-control(v-model="user.username" required=true, autofocus=true)
             .form-group
               label Name
-              input.form-control(name="name", type='text',  required=true)
+              input.form-control(v-model="user.name",  required=true)
             .form-group
               label Email
-              input.form-control(name="email", type='text', required=true)
+              input.form-control(v-model="user.email", required=true)
             .form-group
               label Role
-              select.form-control(name="role")
+              select.form-control(v-model="user.role")
                 option(value="GUEST")     GUEST
                 option(value="OPERATOR")  OPERATOR
                 option(value="MASTER")    MASTER
@@ -26,30 +26,60 @@
               label Locked
               fieldset
                 .radio.radio-inline.radio-danger(style="display:inline")
-                  input#user-locked-1(type='radio', name='locked', value='1')
-                  label(for='radio1')
+                  input#user-locked-yes(v-model="user.locked", type='radio', name='locked', value='1')
+                  label(for='#user-locked-yes')
                     | Yes
                 .radio.radio-inline.radio-danger(style="display:inline")
-                  input#user-locked-2(type='radio', name='locked', value='0', checked='1')
-                  label(for='radio4')
+                  input#user-locked-no(v-model="user.locked" type='radio', name='locked', value='0', checked='1')
+                  label(for='user-locked-no')
                     | No    
       .box-footer
         a.btn.btn-danger(@click="close") Close
-        a.disabled.ladda-button.btn.btn-primary.pull-right(data-style="expand-left") Save  
+        a.ladda-button.btn.btn-primary.pull-right(@click="onSave" data-style="expand-left") Save  
 </template>
 
 <script>
-export default {
+import _ from 'lodash'
+import { mapActions, mapGetters } from 'vuex'
 
+export default {
   name: 'User',
   props: ['id'],
-  date () {
-    return {}
+  data () {
+    return {
+      user: {
+        locked: 0,
+        role: 'GUEST'
+      }
+    }
   },
   methods: {
+    ...mapActions('users', [
+      'saveUser'
+    ]),
     close () {
       window.history.back()
+    },
+    onSave () {
+      this.user.locked = this.user.locked === '1'
+      this.saveUser(this.user)
+    },
+    init () {
+      if (_.isEmpty(this.id)) {
+        return
+      }
+      const id = parseInt(this.id)
+      this.user = _.find(this.users, {id})
+      this.user.locked = this.user.locked ? 1 : 0
     }
+  },
+  computed: {
+    ...mapGetters('users', [
+      'users'
+    ])
+  },
+  mounted () {
+    this.init()
   }
 
 }

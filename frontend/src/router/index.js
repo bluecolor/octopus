@@ -18,6 +18,8 @@ import MailSettings from '@/components/settings/Mail.vue'
 import SlackSettings from '@/components/settings/Slack.vue'
 import Parameters from '@/components/parameter/Parameters.vue'
 import Parameter from '@/components/parameter/Parameter.vue'
+import Tasks from '@/components/task/Tasks.vue'
+import Task from '@/components/task/Task.vue'
 
 Vue.use(Router)
 
@@ -41,10 +43,10 @@ export default new Router({
       component: Connection,
       name: 'NewConnection'
     }, {
-      path: 'connection/:id',
+      path: 'connection/:id?clone=true',
       props: true,
       component: Connection,
-      name: 'EditConnection'
+      name: 'CloneConnection'
     }, {
       path: 'connections',
       component: Connections,
@@ -86,9 +88,22 @@ export default new Router({
       component: Group,
       name: 'Group'
     }, {
+      path: 'group',
+      component: Group,
+      name: 'NewGroup'
+    }, {
       path: 'users',
       component: Users,
       name: 'Users'
+    }, {
+      path: 'user/:id',
+      props: true,
+      component: User,
+      name: 'UserProps'
+    }, {
+      path: 'user',
+      component: User,
+      name: 'User'
     }, {
       path: 'parameters',
       component: Parameters,
@@ -98,10 +113,10 @@ export default new Router({
       component: Parameter,
       name: 'Parameter'
     }, {
-      path: 'user',
+      path: 'parameter/:id',
       props: true,
-      component: User,
-      name: 'User'
+      component: Parameter,
+      name: 'ParameterProps'
     }, {
       path: 'settings/general',
       component: GeneralSettings,
@@ -114,6 +129,25 @@ export default new Router({
       path: 'settings/slack',
       component: SlackSettings,
       name: 'SlackSettings'
+    }, {
+      path: 'tasks',
+      props: true,
+      component: Tasks,
+      name: 'Tasks'
+    }, {
+      path: 'task',
+      component: Task,
+      name: 'Task'
+    }, {
+      path: 'task/:id',
+      props: true,
+      component: Task,
+      name: 'TaskProps'
+    }, {
+      path: 'task/:id?clone=true',
+      props: true,
+      component: Task,
+      name: 'CloneTask'
     }]
   }]
 })

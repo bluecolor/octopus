@@ -68,7 +68,7 @@
                 tbody
                   tr(v-for="m in taskInstance.task.groups")
                     td 
-                      router-link(:to="'task-instance/' + m.id" ) {{m.name}}  
+                      router-link(:to="'group/' + m.id" ) {{m.name}}  
           #task-instance-owners.tab-pane(style="margin:10px")
             .table-responsive.connection-items
               table.table.table-hover

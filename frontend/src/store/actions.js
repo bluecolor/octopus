@@ -10,5 +10,6 @@ export default {
     this.dispatch('groups/findAll')
     this.dispatch('users/findAll')
     this.dispatch('parameters/findAll')
+    this.dispatch('app/findVersion')
   }
 }

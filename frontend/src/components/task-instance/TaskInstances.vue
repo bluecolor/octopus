@@ -86,7 +86,7 @@
                 td 
                   span.label(
                     :style="'border-radius:0px; background-color:'+ m.task.primaryGroup.color+';'", 
-                    data-toggle="tooltip" title="Status"
+                    data-toggle="tooltip" title="Group"
                   ) {{m.task.primaryGroup.name}}
                 td 
                   popper(trigger='click', :options="{placement: 'left'}")

@@ -44,8 +44,8 @@
                   input.form-control(v-model="connection.password" type='password' placeholder='Password ...')          
           .box-footer
             a.btn.btn-danger.js-cancel-btn(v-on:click="close") Close
-            a.ladda-button.btn.btn-primary.pull-right(:disabled="!isValid" @click="save" data-style="expand-left") Save
-            a.ladda-button.btn.btn-warning.pull-right(:disabled="!isValid" data-style="expand-left" style="margin-right:10px;" @click="testConnection(connection)") Test
+            a.ladda-button.btn.btn-primary.pull-right(@click="save" data-style="expand-left") Save
+            a.ladda-button.btn.btn-warning.pull-right.disabled(data-style="expand-left" style="margin-right:10px;" @click="testConnection(connection)") Test
 </template>
 
 <script>

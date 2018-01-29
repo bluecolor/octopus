@@ -22,6 +22,7 @@ const getLabelByStatus = (s) => {
 const toUrlString = (payload) => {
   return _.chain(payload)
     .keys()
+    .filter(k => payload[k])
     .map(k => `${encodeURIComponent(k)}=${encodeURIComponent(payload[k])}`)
     .value()
     .join('&')

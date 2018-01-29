@@ -16,10 +16,10 @@ div(:class="['wrapper', classes]")
           li.dropdown.messages-menu
             a.dropdown-toggle(href='javascript:;', data-toggle='dropdown')
               i.fa.fa-envelope-o
-              span.label.label-success {{ userInfo.messages | count }}
+              span.label.label-success {{  }}
             ul.dropdown-menu
-              li.header You have {{ userInfo.messages | count }} message(s)
-              li(v-if='userInfo.messages.length > 0')
+              li.header You have {{  }} message(s)
+              li(v-if='true')
                 // inner menu: contains the messages
                 ul.menu
                   li
@@ -35,17 +35,17 @@ div(:class="['wrapper', classes]")
                       p Why not consider this a test message?
                   // end message
                 // /.menu
-              li.footer(v-if='userInfo.messages.length > 0')
+              li.footer(v-if='true')
                 a(href='javascript:;') See All Messages
           // /.messages-menu
           // Notifications Menu
           li.dropdown.notifications-menu
             a.dropdown-toggle(href='javascript:;', data-toggle='dropdown')
               i.fa.fa-bell-o
-              span.label.label-warning {{ userInfo.notifications | count }}
+              span.label.label-warning {{ }}
             ul.dropdown-menu
-              li.header You have {{ userInfo.notifications | count }} notification(s)
-              li(v-if='userInfo.notifications.length > 0')
+              li.header You have {{ }} notification(s)
+              li(v-if='true')
                 // Inner Menu: contains the notifications
                 ul.menu
                   li
@@ -54,16 +54,16 @@ div(:class="['wrapper', classes]")
                       i.fa.fa-users.text-aqua
                       |  5 new members joined today
                   // end notification
-              li.footer(v-if='userInfo.notifications.length > 0')
+              li.footer(v-if='true')
                 a(href='javascript:;') View all
           // Tasks Menu
           li.dropdown.tasks-menu
             a.dropdown-toggle(href='javascript:;', data-toggle='dropdown')
               i.fa.fa-flag-o
-              span.label.label-danger {{ userInfo.tasks | count }} 
+              span.label.label-danger {{  }} 
             ul.dropdown-menu
-              li.header You have {{ userInfo.tasks | count }} task(s)
-              li(v-if='userInfo.tasks.length > 0')
+              li.header You have {{  }} task(s)
+              li(v-if='true')
                 // Inner menu: contains the tasks
                 ul.menu
                   li
@@ -79,7 +79,7 @@ div(:class="['wrapper', classes]")
                         .progress-bar.progress-bar-aqua(style='width: 20%', role='progressbar', aria-valuenow='20', aria-valuemin='0', aria-valuemax='100')
                           span.sr-only 20% Complete
                   // end task item
-              li.footer(v-if='userInfo.tasks.length > 0')
+              li.footer(v-if='true')
                 a(href='javascript:;') View all tasks
           // User Account Menu
           li.dropdown.user.user-menu
@@ -101,12 +101,12 @@ div(:class="['wrapper', classes]")
   footer.main-footer
     .pull-right.hidden-xs
       b Version:  
-      span {{version.major}}.{{version.minor}}.{{version.versionCode}}
+      span {{v.major}}.{{v.minor}}.{{v.code}}
       b    Build date:  
       span {{version.date}}
     strong
       | Copyright © {{year}} &nbsp;
-      a(href='javascript:;') bluecolor
+      a(href='javascript:;') blue
       | .
     |  All rights reserved.
 // ./wrapper
@@ -118,7 +118,7 @@ div(:class="['wrapper', classes]")
 
 import _ from 'lodash'
 import faker from 'faker'
-import { mapState, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 import config from '../config'
 import Sidebar from './Sidebar'
 import 'hideseek'
@@ -130,7 +130,6 @@ export default {
   },
   data: function () {
     return {
-      // section: 'Dash',
       year: new Date().getFullYear(),
       classes: {
         fixed_layout: config.fixedLayout,
@@ -140,13 +139,11 @@ export default {
     }
   },
   computed: {
-    ...mapState([
-      'userInfo',
-      'version',
-      'connectionId'
-    ]),
     ...mapGetters('connections', [
       'connections'
+    ]),
+    ...mapGetters('app', [
+      'version'
     ]),
     connection () {
       return _.find(this.connections, {id: this.connectionId})
@@ -163,6 +160,17 @@ export default {
         email: faker.internet.email(),
         randomCard: faker.helpers.createCard()
       }
+    },
+    v () {
+      let version = {}
+      if (this.version.major) {
+        version = {
+          major: this.version.major.split('=')[1],
+          minor: this.version.minor.split('=')[1],
+          code: this.version.versionCode.split('=')[1]
+        }
+      }
+      return version
     }
   },
   methods: {
