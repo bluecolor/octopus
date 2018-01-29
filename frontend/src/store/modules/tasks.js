@@ -56,6 +56,7 @@ const actions = {
   },
   update ({commit}, payload) {
     api.update(payload.id, payload).then(response => {
+      window.history.back()
       notifySuccess('Updated task')
     },
     error => {

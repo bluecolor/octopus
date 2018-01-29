@@ -19,6 +19,10 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.lang.invoke.MethodHandles
 
+import org.jgrapht.{Graph}
+import org.jgrapht.graph.{DefaultEdge, DefaultDirectedGraph}
+import org.jgrapht.alg.CycleDetector
+
 import io.octopus.repository.TaskRepository
 import io.octopus.model.Task
 import io.octopus.model.User
@@ -104,6 +108,23 @@ class TaskService @Autowired()(val taskRepository: TaskRepository) {
     taskRepository.findByPrimaryOwnerId(user.id)
   }
 
+  def hasCycle(tasks: List[Task]) = {
+    var directedGraph: Graph[Long, DefaultEdge] = 
+      new DefaultDirectedGraph(classOf[DefaultEdge])
+
+    def addDependecies(task: Task) {
+      directedGraph.addVertex(task.id)
+      task.dependencies.foreach{ d =>
+        directedGraph.addEdge(task.id, d.id)
+        addDependecies(d)
+      }
+    }
+    tasks.foreach(addDependecies(_))
+    
+    val cycleDetector = new CycleDetector[Long, DefaultEdge](directedGraph)
+    cycleDetector.detectCycles
+  } 
+
   def create(task: Task): Task = {
     taskRepository.save(task)
   }
@@ -124,6 +145,13 @@ class TaskService @Autowired()(val taskRepository: TaskRepository) {
     t.primaryOwner = task.primaryOwner
     t.groups = task.groups
     t.primaryGroup = task.primaryGroup
+
+    var tasks = findAll.filter(_.id != id)
+    tasks += t
+    if(hasCycle(tasks.toList)) {
+      throw new RuntimeException("Update creates cycle.")
+    }
+    
     taskRepository.save(t)
   }
 
