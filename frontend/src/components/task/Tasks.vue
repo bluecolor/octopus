@@ -122,14 +122,14 @@
           :boundary-links="true" 
           :rotate="false"
         )  
-.align-center(v-else)
-  div.no-connection.hidden(style="width:330px; display: table-cell;vertical-align: middle;text-align: center;")
+.align-center.hidden(v-else-if="collection.length === 0 && filter.length === 0")
+  div.no-connection(v-if="collection.length === 0 && !loading" style="width:330px; display: table-cell;vertical-align: middle;text-align: center;")
     div(style="width:100%; display: inline-block;")
       i.fa.big-icon.text-gray-harbor.fa-cog(style="text-align: center;")
     div(style="width:100%; margin-top: 20px;display: inline-block;")
       span.text-gray-harbor(style="font-size:20px;") You don't have any task!  
     div(style="width:70%; margin-top: 20px;display: inline-block;")
-      router-link.btn.btn-block.btn-primary.btn-lg(to='parameter') Create Task
+      router-link.btn.btn-block.btn-primary.btn-lg(to='/task') Create Task
   div.no-connection(style="width:330px; display: table-cell;vertical-align: middle;text-align: center;")
     pulse-loader(:loading="loading" color="#d2d6de")
 
@@ -146,7 +146,7 @@ export default {
   data () {
     return {
       title: 'Tasks',
-      loading: true,
+      loading: false,
       selected: [],
       pageSize: 10,
       pagination: {currentPage: 1},
@@ -196,7 +196,9 @@ export default {
       }
     },
     tasks: function () {
+      console.log('ssss')
       this.selected = []
+      this.loading = false
     }
   },
   methods: {
@@ -219,6 +221,7 @@ export default {
       }
     },
     reload () {
+      this.loading = true
       this.$store.dispatch('tasks/findAll', this.q)
     },
     onRemove () {

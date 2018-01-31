@@ -79,6 +79,11 @@ export default new Router({
       component: Plan,
       name: 'PlanProps'
     }, {
+      path: 'plan/:id?clone=true',
+      props: true,
+      component: Plan,
+      name: 'ClonePlan'
+    }, {
       path: 'groups',
       component: Groups,
       name: 'Groups'

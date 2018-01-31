@@ -120,9 +120,9 @@
                 tbody
                   tr(v-for="m in task.groups")
                     td(style="width:20px")
-                      a(@click="setPrimaryGroup(m.id)" v-show="task.primaryGroup !== m.id" href="javascript:void();")
+                      a(@click="setPrimaryGroup(m.id)" v-show="task.primaryGroup !== m.id" href='javascript:void(0);')
                         span.fa.fa-star-o.text-gray
-                      a(v-show="task.primaryGroup === m.id" href="javascript:void();")
+                      a(v-show="task.primaryGroup === m.id" href='javascript:void(0);')
                         span.fa.fa-star.text-yellow
                     td(style="width:20px")
                       div(:style="`border-radius:0px;width:14px;height:14px;background-color:${m.color}`")
@@ -153,9 +153,9 @@
                 tbody
                   tr(v-for='m in task.owners')
                     td(style="width:20px")
-                      a(@click="setPrimaryOwner(m.id)" v-show="task.primaryOwner !== m.id" href="javascript:void();")
+                      a(@click="setPrimaryOwner(m.id)" v-show="task.primaryOwner !== m.id" href="javascript:void(0);")
                         span.fa.fa-star-o.text-gray
-                      a(v-show="task.primaryOwner === m.id" href="javascript:void();")
+                      a(v-show="task.primaryOwner === m.id" href="javascript:void(0);")
                         span.fa.fa-star.text-yellow
                     td 
                       router-link(:to="'user/' + m.id" ) {{m.username}}

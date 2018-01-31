@@ -96,6 +96,7 @@ class PlanService @Autowired()(val planRepository: PlanRepository) {
       throw new RuntimeException("You can not activate plan with no tasks!");
     }
 
+    p.name = plan.name
     p.connection = plan.connection
     p.priority = plan.priority
     p.active = plan.active
@@ -107,6 +108,7 @@ class PlanService @Autowired()(val planRepository: PlanRepository) {
     }else {
       askToSupervisor(RemovePlanTrigger(plan), classOf[RemovedPlanTrigger]).plan
     }
+    p
   }
 
   def delete(id: Long): Plan = {

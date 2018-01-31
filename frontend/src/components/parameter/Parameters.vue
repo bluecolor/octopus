@@ -1,5 +1,5 @@
 <template lang="pug">
-.col-md-8.col-md-offset-2(v-if="collection.length > 0")
+.col-md-8.col-md-offset-2(v-if="collection.length > 0 || filter.length > 0")
   .box.box-primary(style="border-top=0px")
     .box-header.with-border
       h3.box-title {{title}}
@@ -39,14 +39,14 @@
           :boundary-links="true" 
           :rotate="false"
         )  
-.align-center(v-else)
-  div.no-connection(style="width:330px; display: table-cell;vertical-align: middle;text-align: center;")
-    div(style="width:100%; display: inline-block;")
-      i.fa.big-icon.text-gray-harbor.fa-code(style="text-align: center;")
-    div(style="width:100%; margin-top: 20px;display: inline-block;")
-      span.text-gray-harbor(style="font-size:20px;") You don't have any parameter!  
-    div(style="width:70%; margin-top: 20px;display: inline-block;")
-      router-link.btn.btn-block.btn-primary.btn-lg(to='parameter') Create Parameter
+  .align-center(v-if="collection.length === 0 && filter.length === 0")
+    div.no-connection(style="width:330px; display: table-cell;vertical-align: middle;text-align: center;")
+      div(style="width:100%; display: inline-block;")
+        i.fa.big-icon.text-gray-harbor.fa-code(style="text-align: center;")
+      div(style="width:100%; margin-top: 20px;display: inline-block;")
+        span.text-gray-harbor(style="font-size:20px;") You don't have any parameter!  
+      div(style="width:70%; margin-top: 20px;display: inline-block;")
+        router-link.btn.btn-block.btn-primary.btn-lg(to='parameter') Create Parameter
 
 </template>
 

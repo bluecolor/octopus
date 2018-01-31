@@ -32,7 +32,7 @@
                 a(href='javascript:void(0);') Run
               li.divider(role='separator')
               li  
-                a(href='javascript:void(0);') Clone
+                router-link(:to="'/plan/'+selected[0]+'?clone=true'") Clone
               li.divider(role='separator')
               li  
                 a(href='javascript:void(0);') Export Plan
@@ -89,7 +89,7 @@
     div(style="width:100%; margin-top: 20px;display: inline-block;")
       span.text-gray-harbor(style="font-size:20px;") You don't have any plans!  
     div(style="width:70%; margin-top: 20px;display: inline-block;")
-      router-link.btn.btn-block.btn-primary.btn-lg(to='connection') Create Plan
+      router-link.btn.btn-block.btn-primary.btn-lg(to='plan') Create Plan
 
 </template>
 
