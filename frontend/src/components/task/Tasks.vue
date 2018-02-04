@@ -60,18 +60,22 @@
                 a(href='javascript:void(0);') Least crashing
         .dropdown.pull-right(style="display:inline;")
             button.btn.btn-default.btn-sm.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
-              | Owners
+              | {{filter.owner.id===undefined ? 'Owners' : filter.owner.name }}
               span.caret
             ul.dropdown-menu
               li(v-for="m in users")
-                router-link(to="'/users/' + m.id") {{m.name}}
+                a(href='javascript:void(0);' @click="onOwnerSelect(m)") {{m.name}}
+              li.footer(v-if='plans.length > 0')
+                a(href='javascript:void(0);' @click="onOwnerSelect()") All
         .dropdown.pull-right(style="display:inline;")
             button.btn.btn-default.btn-sm.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
-              | Groups
+              | {{filter.group.id===undefined ? 'Groups' : filter.group.name }}
               span.caret
             ul.dropdown-menu
               li(v-for="m in groups")
-                a(href='javascript:void(0);') {{m.name}}
+                a(href='javascript:void(0);' @click="onGroupSelect(m)") {{m.name}}
+              li.footer(v-if='plans.length > 0')
+                a(href='javascript:void(0);' @click="onGroupSelect()") All
         .dropdown.pull-right(style="display:inline;")
             button.btn.btn-default.btn-sm.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
               | {{filter.plan.id===undefined ? 'Plans' : filter.plan.name }}
@@ -81,6 +85,9 @@
                 a(href='javascript:void(0);' @click="onPlanSelect(m)") {{m.name}}
               li.footer(v-if='plans.length > 0')
                 a(href='javascript:void(0);' @click="onPlanSelect()") All
+        a.btn.btn-default.btn-sm.pull-right(@click="onClearFilter", data-toggle="tooltip" title="Clear filters" :class="hasFilter() ? '':'hidden'")
+          i.fa.fa-filter.text-danger.fa-lg 
+          | Clear filters 
       .table-responsive.connection-items
         table.table.table-hover
           tbody
@@ -235,6 +242,17 @@ export default {
     },
     onPlanSelect (plan) {
       this.filter.plan = plan !== undefined ? plan : {}
+    },
+    onGroupSelect (group) {
+      this.filter.group = group !== undefined ? group : {}
+    },
+    onOwnerSelect (owner) {
+      this.filter.owner = owner !== undefined ? owner : {}
+    },
+    onClearFilter () {
+    },
+    hasFilter () {
+      return (this.filter.plan.id !== undefined || this.filter.group.id || this.filter.owner.id)
     }
   },
   mounted () {
