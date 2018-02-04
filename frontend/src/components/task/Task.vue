@@ -236,7 +236,7 @@ export default {
         connection: null,
         plan: null,
         retry: 1,
-        priority: 0,
+        priority: 'Medium',
         active: 1,
         description: null,
         technology: null,

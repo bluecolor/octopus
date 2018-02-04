@@ -74,12 +74,13 @@
                 a(href='javascript:void(0);') {{m.name}}
         .dropdown.pull-right(style="display:inline;")
             button.btn.btn-default.btn-sm.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
-              | Plans
+              | {{filter.plan.id===undefined ? 'Plans' : filter.plan.name }}
               span.caret
             ul.dropdown-menu
               li(v-for="m in plans")
-                a(href='javascript:void(0);' @click="") {{m.name}}
-
+                a(href='javascript:void(0);' @click="onPlanSelect(m)") {{m.name}}
+              li.footer(v-if='plans.length > 0')
+                a(href='javascript:void(0);' @click="onPlanSelect()") All
       .table-responsive.connection-items
         table.table.table-hover
           tbody
@@ -122,7 +123,7 @@
           :boundary-links="true" 
           :rotate="false"
         )  
-.align-center.hidden(v-else-if="collection.length === 0 && filter.length === 0")
+.align-center.hidden(v-else-if="collection.length === 0 && filter.search.length === 0")
   div.no-connection(v-if="collection.length === 0 && !loading" style="width:330px; display: table-cell;vertical-align: middle;text-align: center;")
     div(style="width:100%; display: inline-block;")
       i.fa.big-icon.text-gray-harbor.fa-cog(style="text-align: center;")
@@ -151,7 +152,12 @@ export default {
       pageSize: 10,
       pagination: {currentPage: 1},
       maxPaginationSize: 7,
-      filter: '',
+      filter: {
+        search: '',
+        plan: {},
+        group: {},
+        owner: {}
+      },
       q: {}
     }
   },
@@ -170,19 +176,19 @@ export default {
     ]),
     total () {
       let tasks = this.tasks.all
-      if (_.isEmpty(this.filter)) {
+      if (_.isEmpty(this.filter.search)) {
         return tasks.length
       }
       tasks = _.filter(tasks, task => {
-        return task.name.toLowerCase().indexOf(this.filter.toLowerCase()) !== -1
+        return task.name.toLowerCase().indexOf(this.filter.search.toLowerCase()) !== -1
       })
       return tasks.length
     },
     collection () {
       let tasks = this.tasks.all
-      if (!_.isEmpty(this.filter)) {
+      if (!_.isEmpty(this.filter.search)) {
         tasks = _.filter(tasks, task => {
-          return task.name.toLowerCase().indexOf(this.filter.toLowerCase()) !== -1
+          return task.name.toLowerCase().indexOf(this.filter.search.toLowerCase()) !== -1
         })
       }
       const i = (this.pagination.currentPage - 1) * this.pageSize
@@ -227,10 +233,17 @@ export default {
     onRemove () {
       const id = this.selected[0]
       this.remove(id).finally(() => (this.selected = []))
+    },
+    onPlanSelect (plan) {
+      this.filter.plan = plan !== undefined ? plan : {}
     }
   },
   mounted () {
-    this.q.plan = this.$route.query.plan ? parseInt(this.$route.query.plan) : null
+    if (this.$route.query.plan) {
+      const id = parseInt(this.$route.query.plan)
+      this.filter.plan = _.find(this.plans, {id})
+      this.q.plan = id
+    }
     this.$store.dispatch('tasks/findAll', this.q)
   },
   components: {
@@ -290,6 +303,10 @@ export default {
   .popper {
     box-shadow: rgb(255, 251, 251) 0 0 6px 0;
     background-color: #fff;	
+  }
+
+  .dropdown-menu>li.footer>a {
+    border-top: 0.5px solid #f3ebeb
   }
 
 
