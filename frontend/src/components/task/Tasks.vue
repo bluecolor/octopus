@@ -5,7 +5,7 @@
       h3.box-title {{title}}
       .box-tools.pull-right
         .has-feedback.table-search
-          input.form-control.input-sm.search-box(autofocus=true, v-model="filter" type='text', placeholder='Search')
+          input.form-control.input-sm.search-box(autofocus=true, v-model="filter.search" type='text', placeholder='Search')
     .box-body.no-padding
       .table-controls
         a.btn.btn-default.btn-sm(@click='reload' type='button', data-toggle="tooltip" title="Reload",)
@@ -202,7 +202,6 @@ export default {
       }
     },
     tasks: function () {
-      console.log('ssss')
       this.selected = []
       this.loading = false
     }
