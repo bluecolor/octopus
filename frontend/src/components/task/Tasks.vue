@@ -163,7 +163,15 @@ export default {
         search: '',
         plan: {},
         group: {},
-        owner: {}
+        owner: {},
+        silent: false,
+        clear () {
+          this.silent = true
+          this.plan = {}
+          this.group = {}
+          this.owner = {}
+          this.silent = false
+        }
       },
       q: {}
     }
@@ -250,6 +258,7 @@ export default {
       this.filter.owner = owner !== undefined ? owner : {}
     },
     onClearFilter () {
+      this.filter.clear()
     },
     hasFilter () {
       return (this.filter.plan.id !== undefined || this.filter.group.id || this.filter.owner.id)
@@ -320,6 +329,17 @@ export default {
   .popper {
     box-shadow: rgb(255, 251, 251) 0 0 6px 0;
     background-color: #fff;	
+    padding: 0px;
+    min-width: 160px;
+  }
+
+  .popper li {
+    line-height:  1.02857143;
+  }
+
+  .pop-menu a {
+    color: #333;
+    text-align: left;
   }
 
   .dropdown-menu>li.footer>a {
