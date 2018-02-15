@@ -160,6 +160,7 @@ export default {
       pagination: {currentPage: 1},
       maxPaginationSize: 7,
       filter: {
+        sort: undefined,
         search: '',
         plan: {},
         group: {},
@@ -240,9 +241,11 @@ export default {
         this.removeBookmark(task.id)
       }
     },
-    reload () {
+    reload (q) {
       this.loading = true
-      this.$store.dispatch('tasks/findAll', this.q)
+      q = q || {}
+      q.plan = this.filter.plan ? this.filter.plan.id : undefined
+      this.$store.dispatch('tasks/findAll', q)
     },
     onRemove () {
       const id = this.selected[0]
@@ -250,6 +253,7 @@ export default {
     },
     onPlanSelect (plan) {
       this.filter.plan = plan !== undefined ? plan : {}
+      this.reload()
     },
     onGroupSelect (group) {
       this.filter.group = group !== undefined ? group : {}
@@ -261,16 +265,16 @@ export default {
       this.filter.clear()
     },
     hasFilter () {
-      return (this.filter.plan.id !== undefined || this.filter.group.id || this.filter.owner.id)
+      return (this.filter.sort !== undefined || this.filter.plan.id !== undefined || this.filter.group.id || this.filter.owner.id)
     }
   },
   mounted () {
+    let q = {}
     if (this.$route.query.plan) {
       const id = parseInt(this.$route.query.plan)
       this.filter.plan = _.find(this.plans, {id})
-      this.q.plan = id
     }
-    this.$store.dispatch('tasks/findAll', this.q)
+    this.reload(q)
   },
   components: {
     'popper': Popper,
