@@ -64,7 +64,7 @@ class TaskQuery extends Query{
         p.count / pageSize +1
     }
     p.page = page
-    p.pageSize = page
+    p.pageSize = pageSize
 
     val tasks = query.setFirstResult(page*pageSize).setMaxResults(pageSize).list.map(_.asInstanceOf[Task])
     p.content = tasks

@@ -24,6 +24,7 @@ const actions = {
   findAll ({commit}, payload) {
     commit(CLEAR)
     api.findAll(payload).then(response => {
+      console.log(response.data)
       commit(LOAD, response.data)
     })
   },

@@ -1,5 +1,5 @@
 <template lang="pug">
-.col-md-8.col-md-offset-2(v-if="collection.length > 0")
+.col-md-8.col-md-offset-2(v-if="collection.length > 0 || hasFilter")
   .box.box-primary(style="border-top=0px")
     .box-header.with-border
       h3.box-title {{title}}
@@ -85,7 +85,7 @@
                 a(href='javascript:void(0);' @click="onPlanSelect(m)") {{m.name}}
               li.footer(v-if='plans.length > 0')
                 a(href='javascript:void(0);' @click="onPlanSelect()") All
-        a.btn.btn-default.btn-sm.pull-right(@click="onClearFilter", data-toggle="tooltip" title="Clear filters" :class="hasFilter() ? '':'hidden'")
+        a.btn.btn-default.btn-sm.pull-right(@click="onClearFilter", data-toggle="tooltip" title="Clear filters" :class="hasFilter ? '':'hidden'")
           i.fa.fa-filter.text-danger.fa-lg 
           | Clear filters 
       .table-responsive.connection-items
@@ -123,12 +123,14 @@
     .box-footer.clearfix
       ul.pagination.pagination-sm.no-margin.pull-right  
         uib-pagination(
-          :total-items="total" 
+          :total-items="tasks.meta.count" 
           v-model="pagination" 
           :max-size="maxPaginationSize" 
           class="pagination-sm" 
           :boundary-links="true" 
           :rotate="false"
+          :items-per-page="itemsPerPage"
+          @change="onPage"
         )  
 .align-center.hidden(v-else-if="collection.length === 0 && filter.search.length === 0")
   div.no-connection(v-if="collection.length === 0 && !loading" style="width:330px; display: table-cell;vertical-align: middle;text-align: center;")
@@ -156,7 +158,7 @@ export default {
       title: 'Tasks',
       loading: false,
       selected: [],
-      pageSize: 10,
+      pageSize: 1,
       pagination: {currentPage: 1},
       maxPaginationSize: 7,
       filter: {
@@ -171,6 +173,7 @@ export default {
           this.plan = {}
           this.group = {}
           this.owner = {}
+          this.search = ''
           this.silent = false
         }
       },
@@ -191,25 +194,22 @@ export default {
       'plans'
     ]),
     total () {
-      let tasks = this.tasks.all
-      if (_.isEmpty(this.filter.search)) {
-        return tasks.length
-      }
-      tasks = _.filter(tasks, task => {
-        return task.name.toLowerCase().indexOf(this.filter.search.toLowerCase()) !== -1
-      })
-      return tasks.length
+      return this.tasks.all.length
+    },
+    itemsPerPage () {
+      return this.tasks.meta.pageSize
     },
     collection () {
-      let tasks = this.tasks.all
-      if (!_.isEmpty(this.filter.search)) {
-        tasks = _.filter(tasks, task => {
-          return task.name.toLowerCase().indexOf(this.filter.search.toLowerCase()) !== -1
-        })
-      }
-      const i = (this.pagination.currentPage - 1) * this.pageSize
-      return _.slice(tasks, i, i + this.pageSize)
-    }
+      return this.tasks.all
+    },
+    hasFilter () {
+      return (this.filter.sort !== undefined ||
+        this.filter.plan.id !== undefined ||
+        this.filter.group.id ||
+        this.filter.owner.id ||
+        !_.isEmpty(this.filter.search))
+    },
+    debounce () { return _.debounce(this.reload, 1000) }
   },
   watch: {
     selected: function () {
@@ -220,6 +220,9 @@ export default {
     tasks: function () {
       this.selected = []
       this.loading = false
+    },
+    'filter.search': function (v) {
+      this.debounce()
     }
   },
   methods: {
@@ -229,8 +232,8 @@ export default {
       'removeBookmark',
       'remove'
     ]),
-    pageChange (p) {
-      this.currentPage = p
+    onPage () {
+      this.reload()
     },
     clone () {
     },
@@ -242,9 +245,14 @@ export default {
       }
     },
     reload (q) {
+      console.log('reload')
       this.loading = true
       q = q || {}
       q.plan = this.filter.plan ? this.filter.plan.id : undefined
+      q.group = this.filter.group ? this.filter.group.id : undefined
+      q.owner = this.filter.owner ? this.filter.owner.id : undefined
+      q.search = _.isEmpty(this.filter.search) ? undefined : this.filter.search
+      q.page = this.pagination.currentPage - 1
       this.$store.dispatch('tasks/findAll', q)
     },
     onRemove () {
@@ -257,15 +265,15 @@ export default {
     },
     onGroupSelect (group) {
       this.filter.group = group !== undefined ? group : {}
+      this.reload()
     },
     onOwnerSelect (owner) {
       this.filter.owner = owner !== undefined ? owner : {}
+      this.reload()
     },
     onClearFilter () {
       this.filter.clear()
-    },
-    hasFilter () {
-      return (this.filter.sort !== undefined || this.filter.plan.id !== undefined || this.filter.group.id || this.filter.owner.id)
+      this.reload()
     }
   },
   mounted () {
