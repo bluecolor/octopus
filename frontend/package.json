@@ -50,6 +50,7 @@
     "vue-spinner": "^1.0.3",
     "vue-template-compiler": "^2.5.3",
     "vue-typeahead": "^2.3.2",
+    "vuejs-dialog": "^0.4.7",
     "vuejs-uib-pagination": "^1.0.4",
     "vuex": "^2.0.0",
     "vuex-router-sync": "^4.1.2",

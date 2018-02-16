@@ -10,6 +10,7 @@ import i18n from 'vue-i18n'
 import VeeValidate from 'vee-validate'
 import router from './router'
 import pagination from 'vuejs-uib-pagination'
+import VuejsDialog from 'vuejs-dialog'
 
 import 'pnotify/dist/pnotify.css'
 import 'pnotify/dist/pnotify.buttons.css'
@@ -30,6 +31,7 @@ Vue.use(i18n)
 Vue.use(VueRouter)
 Vue.use(VeeValidate)
 Vue.use(pagination)
+Vue.use(VuejsDialog)
 // Vue.use(ElementUI, {locale})
 Vue.config.productionTip = false
 Vue.config.lang = 'en'
