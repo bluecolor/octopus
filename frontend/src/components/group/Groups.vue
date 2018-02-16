@@ -54,7 +54,9 @@
       div(style="width:100%; display: inline-block;")
         i.fa.big-icon.text-gray-harbor.fa-cubes(style="text-align: center;")
       div(style="width:100%; margin-top: 20px;display: inline-block;")
-        span.text-gray-harbor(style="font-size:20px;") You do not have any groups !  
+        span.text-gray-harbor(style="font-size:20px;") You do not have any groups !
+      div(style="width:70%; margin-top: 20px;display: inline-block;")
+        router-link.btn.btn-block.btn-primary.btn-lg(to='/group') Create Group  
 </template>
 
 <script>

@@ -43,7 +43,7 @@ class Task{
 
   @BeanProperty
   @Fetch(value= FetchMode.JOIN)
-  @ManyToMany(fetch = FetchType.EAGER)
+  @ManyToMany(fetch = FetchType.EAGER, cascade = Array(CascadeType.REMOVE))
   @JoinTable(name = "task_group", 
     joinColumns = Array(new JoinColumn(name = "task_id", nullable = false, updatable = false)),
     inverseJoinColumns = Array(new JoinColumn(name = "group_id",nullable = false, updatable = false)) 
@@ -52,7 +52,7 @@ class Task{
 
   @BeanProperty
   @Fetch(value= FetchMode.JOIN)
-  @ManyToMany(fetch = FetchType.LAZY)
+  @ManyToMany(fetch = FetchType.LAZY, cascade = Array(CascadeType.REMOVE))
   @JoinTable(name="parent_child_task",
     joinColumns = Array(new JoinColumn(name = "parent_id", referencedColumnName= "id", nullable = false, updatable = false)),
     inverseJoinColumns = Array(new JoinColumn(name = "child_id", referencedColumnName="id", nullable = false, updatable = false))
@@ -90,7 +90,7 @@ class Task{
 
   @BeanProperty
   @Fetch(value= FetchMode.JOIN)
-  @ManyToMany(fetch = FetchType.LAZY)
+  @ManyToMany(fetch = FetchType.LAZY, cascade = Array(CascadeType.REMOVE))
   @JoinTable(name = "task_user", 
     joinColumns = Array(new JoinColumn(name = "task_id", nullable = false, updatable = false)),
     inverseJoinColumns = Array(new JoinColumn(name = "user_id",nullable = false, updatable = false)) 
@@ -104,7 +104,7 @@ class Task{
 
   @BeanProperty
   @Fetch(value= FetchMode.JOIN)
-  @ManyToMany(fetch = FetchType.LAZY)
+  @ManyToMany(fetch = FetchType.LAZY, cascade = Array(CascadeType.REMOVE))
   @JoinTable(name = "task_bookmark", 
     joinColumns = Array(new JoinColumn(name = "task_id", nullable = false, updatable = false)),
     inverseJoinColumns = Array(new JoinColumn(name = "user_id",nullable = false, updatable = false)) 
@@ -115,7 +115,6 @@ class Task{
   @Transient
   @BeanProperty
   var bookmarked: Boolean = false
-
 
   @BeanProperty
   @Fetch(value= FetchMode.SELECT)

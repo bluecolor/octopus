@@ -59,7 +59,7 @@ class Group {
 
   @BeanProperty
   @Fetch(value= FetchMode.SELECT)
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "primaryGroup")
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "primaryGroup", cascade = Array(CascadeType.REMOVE), orphanRemoval = true)
   @JsonIgnore
   var primaryTasks: java.util.Set[Task] = new java.util.HashSet[Task]
 
