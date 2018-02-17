@@ -6,10 +6,10 @@
         h3.box-title {{title}}
         .box-tools.pull-right
           .has-feedback.table-search
-            input.form-control.input-sm.search-box(autofocus=true, v-model="filter" type='text', placeholder='Search')
+            input.form-control.input-sm.search-box(autofocus=true, v-model="filter.searc" type='text', placeholder='Search')
       .box-body.no-padding
         .table-controls
-          a.btn.btn-default.btn-sm(@click='onReload' type='button', data-toggle="tooltip" title="Reload",)
+          a.btn.btn-default.btn-sm(@click='reload' type='button', data-toggle="tooltip" title="Reload",)
             i.fa.fa-refresh.text-blue.fa-lg
           a.btn.btn-default.btn-sm(@click="", data-toggle="tooltip" title="Delete", :class="selected.length > 0 ? '':'hidden'")
             i.fa.fa-trash-o.text-danger.fa-lg
@@ -58,18 +58,22 @@
 
           .dropdown.pull-right(style="display:inline;")
             a.btn.btn-default.btn-sm.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
-              | Status
+              | {{filter.status ? filter.status : 'Status'}}
               span.caret
             ul.dropdown-menu(aria-labelledby='dropdownMenu2')
               li
-                a(href='javascript:void(0);') RUNNING
+                a(href='javascript:void(0);' @click="onFilterByStatus('RUNNING')") RUNNING
               li
-                a(href='javascript:void(0);') IDLE
+                a(href='javascript:void(0);' @click="onFilterByStatus('IDLE')") IDLE
               li
-                a(href='javascript:void(0);') ERROR
+                a(href='javascript:void(0);' @click="onFilterByStatus('ERROR')") ERROR
               li
-                a(href='javascript:void(0);') SUCCESS
-
+                a(href='javascript:void(0);' @click="onFilterByStatus('SUCCESS')") SUCCESS
+              li.footer
+                a(href='javascript:void(0);' @click="onFilterByStatus()") All
+          a.btn.btn-default.btn-sm.pull-right(@click="onClearFilter", data-toggle="tooltip" title="Clear filters" :class="hasFilter ? '':'hidden'")
+            i.fa.fa-filter.text-danger.fa-lg 
+            | Clear filters     
         .table-responsive.connection-items
           table.table.table-hover
             tbody
@@ -138,13 +142,20 @@ export default {
   name: 'TaskInstances',
   data () {
     return {
-      session: this.$route.query.session,
       title: 'Task Instances',
       selected: [],
       pageSize: 10,
       pagination: {currentPage: 1},
       maxPaginationSize: 7,
-      filter: ''
+      filter: {
+        session: parseInt(this.$route.query.session),
+        search: undefined,
+        status: undefined,
+        clear () {
+          this.status = undefined
+          this.search = undefined
+        }
+      }
     }
   },
   computed: {
@@ -152,24 +163,16 @@ export default {
       'taskInstances'
     ]),
     total () {
-      let taskInstances = this.taskInstances.all
-      if (_.isEmpty(this.filter)) {
-        return taskInstances.length
-      }
-      taskInstances = _.filter(taskInstances, t => {
-        return t.name.toLowerCase().indexOf(this.filter.toLowerCase()) !== -1
-      })
-      return taskInstances.length
+      return this.taskInstances.all.length
     },
     collection () {
-      let taskInstances = this.taskInstances.all
-      if (!_.isEmpty(this.filter)) {
-        taskInstances = _.filter(this.taskInstances, t => {
-          return t.name.toLowerCase().indexOf(this.filter.toLowerCase()) !== -1
-        })
-      }
-      const i = (this.pagination.currentPage - 1) * this.pageSize
-      return _.slice(taskInstances, i, i + this.pageSize)
+      return this.taskInstances.all
+    },
+    hasFilter () {
+      return (
+        !_.isEmpty(this.filter.status) ||
+        !_.isEmpty(this.filter.search)
+      )
     }
   },
   watch: {
@@ -189,9 +192,10 @@ export default {
       'start',
       'block'
     ]),
-    onReload () {
-      const session = parseInt(this.session)
-      this.$store.dispatch('taskInstances/findAll', {session})
+    reload () {
+      const session = this.filter.session
+      const status = this.filter.status
+      this.$store.dispatch('taskInstances/findAll', {session, status})
     },
     pageChange (p) {
       this.currentPage = p
@@ -236,15 +240,22 @@ export default {
     },
     onBlock () {
       this.block(this.selected[0])
+    },
+    onFilterByStatus (s) {
+      this.filter.status = s
+      this.reload()
+    },
+    onClearFilter () {
+      this.filter.clear()
+      this.reload()
     }
   },
   components: {
     'popper': Popper
   },
   mounted () {
-    this.$store.dispatch('taskInstances/findAll', {
-      session: parseInt(this.session)
-    })
+    const session = this.filter.session
+    this.$store.dispatch('taskInstances/findAll', {session})
   }
 }
 </script>

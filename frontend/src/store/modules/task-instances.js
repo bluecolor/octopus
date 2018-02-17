@@ -68,7 +68,6 @@ const mutations = {
     state.all = []
   },
   [UPDATE] (state, data) {
-    console.log(data)
     const id = data.id
     const i = _.findIndex(state.all, {id})
     state.all.splice(i, 1)

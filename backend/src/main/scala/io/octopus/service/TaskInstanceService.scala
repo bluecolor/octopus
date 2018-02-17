@@ -83,14 +83,15 @@ class TaskInstanceService @Autowired()(val taskInstanceRepository: TaskInstanceR
   def findOne(id: Long): TaskInstance =
     taskInstanceRepository.findOne(id)
 
-  def findBySession(id: Long, page: Int, pageSize: Int, search:String,sortBy:String, order:String) = {
-    // val me = userService.findMe     
-    var p = taskInstanceQuery.findBySession(id, page, pageSize, search,sortBy, order) 
-    p.content = p.content.map{ instance =>
+  def findBySession(sessionId: Long, status: String, page: Int, pageSize: Int, search:String,sortBy:String, order:String) = {
+    var instances = taskInstanceQuery.findBySession(sessionId, page, pageSize, search,sortBy, order) 
+    instances.content = instances.content.filter{ instance =>
+      status == null || instance.status == status
+    }.map{ instance =>
       instance.dependencies = findDependencies(instance)
       instance
-    }.asJava
-    p  
+    }
+    instances 
   } 
 
   def withDependencies(instance: TaskInstance) = {
