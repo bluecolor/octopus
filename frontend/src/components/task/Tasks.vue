@@ -217,7 +217,7 @@ export default {
         this.selected.splice(0, 1)
       }
     },
-    tasks: function () {
+    'tasks.all': function () {
       this.selected = []
       this.loading = false
     },

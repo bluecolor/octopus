@@ -9,7 +9,7 @@
             input.form-control.input-sm.search-box(autofocus=true, v-model="filter" type='text', placeholder='Search')
       .box-body.no-padding
         .table-controls
-          a.btn.btn-default.btn-sm(@click='' type='button', data-toggle="tooltip" title="Reload",)
+          a.btn.btn-default.btn-sm(@click='onReload' type='button', data-toggle="tooltip" title="Reload",)
             i.fa.fa-refresh.text-blue.fa-lg
           a.btn.btn-default.btn-sm(@click="", data-toggle="tooltip" title="Delete", :class="selected.length > 0 ? '':'hidden'")
             i.fa.fa-trash-o.text-danger.fa-lg
@@ -178,7 +178,7 @@ export default {
         this.selected.splice(0, 1)
       }
     },
-    connections: function () {
+    'taskInstances.all': function () {
       this.selected = []
     }
   },
@@ -186,8 +186,13 @@ export default {
     ...mapActions('taskInstances', [
       'findAll',
       'done',
-      'start'
+      'start',
+      'block'
     ]),
+    onReload () {
+      const session = parseInt(this.session)
+      this.$store.dispatch('taskInstances/findAll', {session})
+    },
     pageChange (p) {
       this.currentPage = p
     },
@@ -195,7 +200,9 @@ export default {
       return getLabelByStatus(s)
     },
     dateString (x) {
-      return moment.unix(x / 1000).format('YYYY-MM-DD HH:mm')
+      if (x) {
+        return moment.unix(x / 1000).format('YYYY-MM-DD HH:mm')
+      }
     },
     progress (m) {
       if (['SUCCESS', 'DONE'].indexOf(m.status) !== -1) {
@@ -228,6 +235,7 @@ export default {
       this.start(this.selected[0])
     },
     onBlock () {
+      this.block(this.selected[0])
     }
   },
   components: {

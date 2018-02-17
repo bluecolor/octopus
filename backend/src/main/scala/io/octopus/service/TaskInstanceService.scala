@@ -215,6 +215,7 @@ class TaskInstanceService @Autowired()(val taskInstanceRepository: TaskInstanceR
     mt.convertAndSend(s"/topic/${SocketTopic.TASK_INSTANCE_BLOCKED}", (instance,me) );
     slackService.taskInstanceBlocked(instance,me)
     logInstance(instance,message)
+    instance.dependencies = findDependencies(instance)
     instance
   }
 

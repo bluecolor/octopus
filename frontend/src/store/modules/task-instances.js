@@ -40,6 +40,15 @@ const actions = {
     error => {
       notifyError(`Failed to update task ${error.response.data.message}`)
     })
+  },
+  block ({commit}, id) {
+    api.block(id).then(response => {
+      commit(UPDATE, response.data)
+      notifySuccess('Updated task')
+    },
+    error => {
+      notifyError(`Failed to update task ${error.response.data.message}`)
+    })
   }
 }
 

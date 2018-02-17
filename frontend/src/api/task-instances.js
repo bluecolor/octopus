@@ -12,5 +12,8 @@ export default {
   },
   start (id) {
     return axios.put(`${API_BASE}/task-instances/start/${id}`)
+  },
+  block (id) {
+    return axios.put(`${API_BASE}/task-instances/block/${id}`)
   }
 }
