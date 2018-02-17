@@ -17,7 +17,6 @@ const getters = {
 }
 
 const actions = {
-
   findAll ({commit}, payload) {
     commit(CLEAR)
     api.findAll(payload).then(response => {

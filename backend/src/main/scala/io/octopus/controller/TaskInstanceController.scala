@@ -59,12 +59,10 @@ class TaskInstanceController  @Autowired()(private val taskInstanceService: Task
     taskInstanceService.start(id)
   }
 
-
   @RequestMapping(value = Array("/done/{id}"), method = Array(RequestMethod.PUT))
   def done(@PathVariable("id") id: Long) = {
     taskInstanceService.done(id)
   }
-
 
   @RequestMapping(value = Array("/{ids}"), method = Array(RequestMethod.DELETE))
   def delete(@PathVariable("ids") ids: java.util.List[java.lang.Long]) = {

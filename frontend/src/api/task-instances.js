@@ -6,5 +6,11 @@ export default {
   findAll (payload) {
     const u = toUrlString(payload)
     return axios.get(`${API_BASE}/task-instances?${u}`)
+  },
+  done (id) {
+    return axios.put(`${API_BASE}/task-instances/done/${id}`)
+  },
+  start (id) {
+    return axios.put(`${API_BASE}/task-instances/start/${id}`)
   }
 }

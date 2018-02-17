@@ -25,13 +25,13 @@
               span.caret
             ul.dropdown-menu(aria-labelledby='dm1')
               li  
-                a(href='javascript:void(0);') Done
+                a(href='javascript:void(0);' @click="onDone") Done
               li  
-                a(href='javascript:void(0);') Stop
+                a(href='javascript:void(0);' @click="onStop") Stop
               li  
-                a(href='javascript:void(0);') Start
+                a(href='javascript:void(0);' @click="onStart") Start
               li  
-                a(href='javascript:void(0);') Block
+                a(href='javascript:void(0);' @click="onBlock") Block
               li.divider(role='separator')
               li
                 a(href='javascript:void(0);') Delete
@@ -90,7 +90,7 @@
                   ) {{m.task.primaryGroup.name}}
                 td 
                   popper(trigger='click', :options="{placement: 'left'}")
-                    .popper(v-show="m.dependencies.length > 0")
+                    .popper(v-show="m.dependencies && m.dependencies.length > 0")
                       div(slot="content")
                         ul.pop-menu
                           li(v-for="d in m.dependencies")
@@ -184,7 +184,9 @@ export default {
   },
   methods: {
     ...mapActions('taskInstances', [
-      'findAll'
+      'findAll',
+      'done',
+      'start'
     ]),
     pageChange (p) {
       this.currentPage = p
@@ -216,6 +218,16 @@ export default {
     },
     onDependenciesClick (e, m) {
       console.log(e)
+    },
+    onDone () {
+      this.done(this.selected[0])
+    },
+    onStop () {
+    },
+    onStart () {
+      this.start(this.selected[0])
+    },
+    onBlock () {
     }
   },
   components: {

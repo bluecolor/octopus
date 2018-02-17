@@ -150,7 +150,6 @@ export default {
       this.currentPage = p
     },
     unprotect () {
-      console.log('unp')
       this.unProtect(this.selected[0])
     }
   },
