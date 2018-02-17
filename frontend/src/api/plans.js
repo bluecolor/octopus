@@ -13,5 +13,8 @@ export default {
   },
   remove (id) {
     return axios.delete(`${API_BASE}/plans`, id)
+  },
+  unProtect (id) {
+    return axios.put(`${API_BASE}/plans/un-protect/${id}`)
   }
 }

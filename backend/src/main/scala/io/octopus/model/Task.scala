@@ -43,23 +43,21 @@ class Task{
 
   @BeanProperty
   @Fetch(value= FetchMode.JOIN)
-  @ManyToMany(fetch = FetchType.EAGER, cascade = Array(CascadeType.REMOVE))
+  @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(name = "task_group", 
     joinColumns = Array(new JoinColumn(name = "task_id", nullable = false, updatable = false)),
     inverseJoinColumns = Array(new JoinColumn(name = "group_id",nullable = false, updatable = false)) 
   )
   var groups: java.util.Set[Group] = _
 
+
   @BeanProperty
   @Fetch(value= FetchMode.JOIN)
-  @ManyToMany(fetch = FetchType.LAZY, cascade = Array(CascadeType.REMOVE))
-  @JoinTable(name="parent_child_task",
-    joinColumns = Array(new JoinColumn(name = "parent_id", referencedColumnName= "id", nullable = false, updatable = false)),
-    inverseJoinColumns = Array(new JoinColumn(name = "child_id", referencedColumnName="id", nullable = false, updatable = false))
-  ) 
+  @ManyToMany(fetch = FetchType.LAZY)
   var dependencies: java.util.Set[Task] = _
 
   @JsonIgnore
+  @BeanProperty
   @ManyToMany(mappedBy = "dependencies")
   var childs: java.util.Set[Task] = _
 
@@ -90,7 +88,7 @@ class Task{
 
   @BeanProperty
   @Fetch(value= FetchMode.JOIN)
-  @ManyToMany(fetch = FetchType.LAZY, cascade = Array(CascadeType.REMOVE))
+  @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(name = "task_user", 
     joinColumns = Array(new JoinColumn(name = "task_id", nullable = false, updatable = false)),
     inverseJoinColumns = Array(new JoinColumn(name = "user_id",nullable = false, updatable = false)) 
@@ -104,7 +102,7 @@ class Task{
 
   @BeanProperty
   @Fetch(value= FetchMode.JOIN)
-  @ManyToMany(fetch = FetchType.LAZY, cascade = Array(CascadeType.REMOVE))
+  @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(name = "task_bookmark", 
     joinColumns = Array(new JoinColumn(name = "task_id", nullable = false, updatable = false)),
     inverseJoinColumns = Array(new JoinColumn(name = "user_id",nullable = false, updatable = false)) 

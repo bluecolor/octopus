@@ -184,6 +184,7 @@ class TaskService @Autowired()(val taskRepository: TaskRepository) {
 
   def delete(id: Long): Task = {
     val task = taskRepository.findOne(id)
+    
     taskRepository.delete(id)
     task
   }

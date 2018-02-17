@@ -104,7 +104,7 @@
                 router-link(:to="'task/' + m.id" ) {{m.name}}
               td 
                 popper(trigger='click', :options="{placement: 'left'}")
-                  .popper(v-show="m.dependencies.length > 0")
+                  .popper
                     div(slot="content")
                       ul.pop-menu
                         li(v-for="d in m.dependencies")

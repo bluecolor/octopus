@@ -42,7 +42,7 @@
               li
                 a(href='javascript:void(0);') Protect
               li
-                a(href='javascript:void(0);') Unprotect
+                a(href='javascript:void(0);' @click="unprotect") Unprotect
               li.divider(role='separator')
               li
                 a(href='javascript:void(0);') Delete Sessions
@@ -68,9 +68,6 @@
                 router-link(:to="'connection/' + m.connection.id" ) {{m.connection.name}}
               td
                 span.label(:class="m.active ? 'label-success':'label-danger'") {{ `${m.active ? 'Active': 'Not Active'}` }}
-  
-              
-
 
     .box-footer.clearfix
       ul.pagination.pagination-sm.no-margin.pull-right  
@@ -146,12 +143,15 @@ export default {
   methods: {
     ...mapActions('plans', [
       'findAll',
-      'remove'
+      'remove',
+      'unProtect'
     ]),
     pageChange (p) {
       this.currentPage = p
     },
-    clone () {
+    unprotect () {
+      console.log('unp')
+      this.unProtect(this.selected[0])
     }
   },
   mounted () {

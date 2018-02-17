@@ -51,6 +51,15 @@ const actions = {
     error => {
       notifyError(`Failed to delete plan ${error.response.data.message}`)
     })
+  },
+  unProtect ({commit}, id) {
+    return api.unProtect(id).then(response => {
+      commit(UPDATE, response.data)
+      notifySuccess('Plan updated')
+    },
+    error => {
+      notifyError(`Failed to update plan ${error.response.data.message}`)
+    })
   }
 }
 
