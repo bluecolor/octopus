@@ -71,6 +71,15 @@
                 a(href='javascript:void(0);' @click="onFilterByStatus('SUCCESS')") SUCCESS
               li.footer
                 a(href='javascript:void(0);' @click="onFilterByStatus()") All
+          .dropdown.pull-right(style="display:inline;")
+            a.btn.btn-default.btn-sm.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
+              | {{filter.group ? filter.group.name : 'Group'}}
+              span.caret
+            ul.dropdown-menu
+              li(v-for="m in groups")
+                a(href='javascript:void(0);' @click="onFilterByGroup(m)") {{m.name}}
+              li.footer
+                a(href='javascript:void(0);' @click="onFilterByGroup()") All
           a.btn.btn-default.btn-sm.pull-right(@click="onClearFilter", data-toggle="tooltip" title="Clear filters" :class="hasFilter ? '':'hidden'")
             i.fa.fa-filter.text-danger.fa-lg 
             | Clear filters     
@@ -151,9 +160,11 @@ export default {
         session: parseInt(this.$route.query.session),
         search: undefined,
         status: undefined,
+        group: undefined,
         clear () {
           this.status = undefined
           this.search = undefined
+          this.group = undefined
         }
       }
     }
@@ -161,6 +172,9 @@ export default {
   computed: {
     ...mapGetters('taskInstances', [
       'taskInstances'
+    ]),
+    ...mapGetters('groups', [
+      'groups'
     ]),
     total () {
       return this.taskInstances.all.length
@@ -195,7 +209,12 @@ export default {
     reload () {
       const session = this.filter.session
       const status = this.filter.status
-      this.$store.dispatch('taskInstances/findAll', {session, status})
+      const group = this.filter.group
+      this.$store.dispatch('taskInstances/findAll', {
+        session,
+        status,
+        group
+      })
     },
     pageChange (p) {
       this.currentPage = p
@@ -243,6 +262,10 @@ export default {
     },
     onFilterByStatus (s) {
       this.filter.status = s
+      this.reload()
+    },
+    onFilterByGroup (g) {
+      this.filter.group = g
       this.reload()
     },
     onClearFilter () {
