@@ -87,8 +87,6 @@
                     div.session-name
                       router-link(:to="'task-instances?session=' + m.id" data-toggle="tooltip" title="Name") {{m.name}}
                   div.session-detail(style="height:100%; width:100%; overflow: hidden;")
-                    div.session-stat(style="padding-right:2px;")
-                      router-link(:to="'sessions/' + m.id" data-toggle="tooltip" title="See tasks") details
                     div.session-detail-label(data-toggle="tooltip" title="Completed tasks")
                       span completed:
                     div.session-stat
@@ -177,7 +175,9 @@ export default {
       return getLabelByStatus(status)
     },
     dateString (x) {
-      return moment.unix(x / 1000).format('YYYY-MM-DD HH:mm')
+      if (x) {
+        return moment.unix(x / 1000).format('YYYY-MM-DD HH:mm')
+      }
     },
     progress (s) {
       return (s.total === 0) ? 100 : Math.floor(100 * (s.success + s.done) / s.total)
