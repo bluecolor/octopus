@@ -72,7 +72,7 @@
                 section
                   codemirror(
                     ref='script' 
-                    :code='task.script' 
+                    v-model='task.script' 
                     :options='editorOptions') 
           #task-dependencies.tab-pane(style='margin:10px')
             .form-group

@@ -209,7 +209,7 @@ export default {
     reload () {
       const session = this.filter.session
       const status = this.filter.status
-      const group = this.filter.group
+      const group = this.filter.group ? this.filter.group.id : undefined
       this.$store.dispatch('taskInstances/findAll', {
         session,
         status,

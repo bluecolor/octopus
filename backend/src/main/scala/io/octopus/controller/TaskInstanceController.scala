@@ -10,7 +10,7 @@ import io.octopus.service.TaskInstanceService
 
 @RestController
 @RequestMapping(Array("/api/v1/task-instances"))
-class TaskInstanceController  @Autowired()(private val taskInstanceService: TaskInstanceService) {
+class TaskInstanceController @Autowired()(private val taskInstanceService: TaskInstanceService) {
 
   @RequestMapping(method = Array(RequestMethod.GET))
   def findAll(
