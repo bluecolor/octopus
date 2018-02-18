@@ -14,7 +14,7 @@
           i.fa.fa-plus.text-green.fa-lg
         router-link.btn.btn-default.btn-sm(to='/import' data-toggle="tooltip" title="Import")
           i.fa.fa-upload.text-yellow.fa-lg
-        a.btn.btn-default.btn-sm(@click="onRemove", data-toggle="tooltip" title="Delete", :class="selected.length > 0 ? '':'hidden'")
+        a.btn.btn-default.btn-sm(@click="onDelete", data-toggle="tooltip" title="Delete", :class="selected.length > 0 ? '':'hidden'")
           i.fa.fa-trash-o.text-danger.fa-lg
         
         .dropdown(v-show="selected.length > 0" style="display:inline;")
@@ -254,9 +254,22 @@ export default {
       q.page = this.pagination.currentPage - 1
       this.$store.dispatch('tasks/findAll', q)
     },
-    onRemove () {
+    onDelete () {
       const id = this.selected[0]
-      this.remove(id).finally(() => (this.selected = []))
+      const m = _.find(this.users, {id})
+      const message = `Are you sure?`
+      const options = {
+        loader: true,
+        okText: 'Delete',
+        cancelText: 'Close',
+        type: 'hard',
+        verification: m.name
+      }
+      this.$dialog.confirm(message, options).then((d) => {
+        this.remove(id).finally(() => {
+          d.close()
+        })
+      })
     },
     onPlanSelect (plan) {
       this.filter.plan = plan !== undefined ? plan : {}

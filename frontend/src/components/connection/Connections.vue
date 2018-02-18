@@ -14,7 +14,7 @@
           i.fa.fa-plus.text-green.fa-lg
         router-link.btn.btn-default.btn-sm(to='/connections/import' data-toggle="tooltip" title="Import")
           i.fa.fa-upload.text-yellow.fa-lg
-        a.btn.btn-default.btn-sm(@click="deleteConnection(selected[0])", data-toggle="tooltip" title="Delete", :class="selected.length > 0 ? '':'hidden'")
+        a.btn.btn-default.btn-sm(@click="onDelete", data-toggle="tooltip" title="Delete", :class="selected.length > 0 ? '':'hidden'")
           i.fa.fa-trash-o.text-danger.fa-lg
         a.btn.btn-default.btn-sm(@click="test", data-toggle="tooltip" title="Test", :class="selected.length > 0 ? '':'hidden'")
           i.fa.fa-flask.text-yellow.fa-lg
@@ -129,6 +129,23 @@ export default {
     exportConnection () {
       const id = this.selected[0]
       window.location = `api/v1/connections/export/${id}`
+    },
+    onDelete () {
+      const id = this.selected[0]
+      const c = _.find(this.connections, {id})
+      const message = `Are you sure? This may cause connection problems!`
+      const options = {
+        loader: true,
+        okText: 'Delete',
+        cancelText: 'Close',
+        type: 'hard',
+        verification: c.name
+      }
+      this.$dialog.confirm(message, options).then((d) => {
+        this.deleteConnection(id).finally(() => {
+          d.close()
+        })
+      })
     }
   },
   mounted () {

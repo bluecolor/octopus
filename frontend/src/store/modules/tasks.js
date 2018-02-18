@@ -65,12 +65,16 @@ const actions = {
     })
   },
   remove ({commit}, id) {
-    return api.remove(id).then(response => {
-      notifySuccess('Deleted task')
-      commit(REMOVE, id)
-    },
-    error => {
-      notifyError(`Error! ${error.response.data.message}`)
+    return new Promise((resolve, reject) => {
+      return api.remove(id).then(response => {
+        notifySuccess('Deleted task')
+        commit(REMOVE, id)
+        resolve(response.data)
+      },
+      error => {
+        notifyError(`Error! ${error.response.data.message}`)
+        reject(error.response.data.message)
+      })
     })
   }
 }

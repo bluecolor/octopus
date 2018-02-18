@@ -13,7 +13,7 @@
             i.fa.fa-refresh.text-blue.fa-lg
           router-link.btn.btn-default.btn-sm(to='/user',data-toggle="tooltip" title="New",)
             i.fa.fa-plus.text-green.fa-lg
-          a.btn.btn-default.btn-sm(@click="remove(selected[0])", data-toggle="tooltip" title="Delete", :class="selected.length > 0 ? '':'hidden'")
+          a.btn.btn-default.btn-sm(@click="onDelete", data-toggle="tooltip" title="Delete", :class="selected.length > 0 ? '':'hidden'")
             i.fa.fa-trash-o.text-danger.fa-lg
           router-link.btn.btn-default.btn-sm.btn-2.pull-right(to='/settings/mail' data-toggle="tooltip" title="No mail settings",)
             i.fa.fa-bell.text-danger.fa-lg  
@@ -116,7 +116,22 @@ export default {
     pageChange (p) {
       this.currentPage = p
     },
-    clone () {
+    onDelete () {
+      const id = this.selected[0]
+      const m = _.find(this.users, {id})
+      const message = `Are you sure?`
+      const options = {
+        loader: true,
+        okText: 'Delete',
+        cancelText: 'Close',
+        type: 'hard',
+        verification: m.name
+      }
+      this.$dialog.confirm(message, options).then((d) => {
+        this.remove(id).finally(() => {
+          d.close()
+        })
+      })
     }
   },
   mounted () {

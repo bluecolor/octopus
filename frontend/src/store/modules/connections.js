@@ -34,9 +34,16 @@ const actions = {
     })
   },
   remove ({ commit }, id) {
-    api.remove(id).then(response => {
-      commit(REMOVE, response.data.id)
-      notifySuccess('Connection deleted')
+    return new Promise((resolve, reject) => {
+      return api.remove(id).then(response => {
+        commit(REMOVE, response.data.id)
+        notifySuccess('Connection deleted')
+        resolve(response.data)
+      },
+      error => {
+        notifyError(`Failed to delete group ${error.response.data.message}`)
+        reject(error.response.data.message)
+      })
     })
   },
   test ({ commit }, payload) {
