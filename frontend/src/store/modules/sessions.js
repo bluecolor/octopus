@@ -1,11 +1,11 @@
 
 import api from '../../api/sessions'
-// import store from '../'
-// import _ from 'lodash'
-// import {success as notifySuccess, error as notifyError} from '../../lib/notify'
+import _ from 'lodash'
+import {success as notifySuccess, error as notifyError} from '../../lib/notify'
 
 const LOAD = 'LOAD'
 const CLEAR = 'CLEAR'
+const REMOVE = 'REMOVE'
 
 const state = {
   all: [],
@@ -21,6 +21,19 @@ const actions = {
     commit(CLEAR)
     api.findAll(payload).then(response => {
       commit(LOAD, response.data)
+    })
+  },
+  remove ({commit}, id) {
+    return new Promise((resolve, reject) => {
+      return api.remove(id).then(response => {
+        commit(REMOVE, id)
+        notifySuccess('Deleted session')
+        resolve(response.data)
+      },
+      error => {
+        notifyError(`Error! ${error.response.data.message}`)
+        reject(error.response.data.message)
+      })
     })
   }
 }
@@ -39,6 +52,12 @@ const mutations = {
   },
   [CLEAR] (state, records) {
     state.all = []
+  },
+  [REMOVE] (state, id) {
+    const i = _.findIndex(state.all, {id})
+    if (i !== -1) {
+      state.all.splice(i, 1)
+    }
   }
 }
 

@@ -6,10 +6,10 @@
         h3.box-title {{title}}
         .box-tools.pull-right
           .has-feedback.table-search
-            input.form-control.input-sm.search-box(autofocus=true, v-model="filter" type='text', placeholder='Search')
+            input.form-control.input-sm.search-box(autofocus=true, v-model="filter.search" type='text', placeholder='Search')
       .box-body.no-padding
         .table-controls
-          a.btn.btn-default.btn-sm(@click='findSessions' type='button', data-toggle="tooltip" title="Reload",)
+          a.btn.btn-default.btn-sm(@click='onReload' type='button', data-toggle="tooltip" title="Reload",)
             i.fa.fa-refresh.text-blue.fa-lg
           a.btn.btn-default.btn-sm(@click="deleteSession(selected[0])", data-toggle="tooltip" title="Delete", :class="selected.length > 0 ? '':'hidden'")
             i.fa.fa-trash-o.text-danger.fa-lg
@@ -23,7 +23,7 @@
             )
               | More
               span.caret
-            ul.dropdown-menu(aria-labelledby='dm1')
+            ul.dropdown-menu
               li  
                 a(href='javascript:void(0);') Stop
               li  
@@ -59,18 +59,25 @@
           
           .dropdown.pull-right(style="display:inline;")
             a.btn.btn-default.btn-sm.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
-              | Status
+              | {{filter.status ? filter.status : 'Status'}}
               span.caret
-            ul.dropdown-menu(aria-labelledby='dropdownMenu2')
-              li
-                a(href='javascript:void(0);') RUNNING
-              li
-                a(href='javascript:void(0);') IDLE
-              li
-                a(href='javascript:void(0);') ERROR
-              li
-                a(href='javascript:void(0);') SUCCESS
-
+            ul.dropdown-menu
+              li(v-for="m in ['RUNNING', 'IDLE', 'ERROR', 'SUCCESS']")
+                a(href='javascript:void(0);' @click="onStatusFilter(m)" ) {{m}}
+              li.footer
+                a(href='javascript:void(0);' @click="onStatusFilter") All
+          .dropdown.pull-right(style="display:inline;")
+            a.btn.btn-default.btn-sm.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
+              | {{filter.plan ? filter.plan.name : 'Plan'}}
+              span.caret
+            ul.dropdown-menu
+              li(v-for="m in plans")
+                a(href='javascript:void(0);' @click="onPlanFilter(m)") {{m.name}}
+              li.footer
+                a(href='javascript:void(0);' @click="onPlanFilter") All
+          a.btn.btn-default.btn-sm.pull-right(@click="onClearFilter", data-toggle="tooltip" title="Clear filters" :class="hasFilter ? '':'hidden'")
+            i.fa.fa-filter.text-danger.fa-lg 
+            | Clear filters
         .table-responsive.connection-items
           table.table.table-hover
             tbody
@@ -109,7 +116,6 @@
                     .progress.progress-striped(style="margin-bottom:0px;")
                       .progress-bar.progress-bar-info(role='progressbar' :style="'width:' + progress(m.stats) +'%;'")
                         | {{progress(m.stats)}}%
-
       .box-footer.clearfix
         ul.pagination.pagination-sm.no-margin.pull-right  
           uib-pagination(
@@ -130,6 +136,7 @@
 
 <script>
 
+import _ from 'lodash'
 import moment from 'moment'
 import {mapGetters, mapActions} from 'vuex'
 import {getLabelByStatus} from '../../util'
@@ -142,18 +149,37 @@ export default {
       pageSize: 10,
       pagination: {currentPage: 1},
       maxPaginationSize: 7,
-      filter: ''
+      filter: {
+        search: undefined,
+        plan: undefined,
+        status: undefined,
+        clear () {
+          this.search = undefined
+          this.plan = undefined
+          this.status = undefined
+        }
+      }
     }
   },
   computed: {
     ...mapGetters('sessions', [
       'sessions'
     ]),
+    ...mapGetters('plans', [
+      'plans'
+    ]),
     total () {
       return this.sessions.length
     },
     collection () {
       return this.sessions.all
+    },
+    hasFilter () {
+      return !(
+        _.isEmpty(this.filter.search) &&
+        _.isEmpty(this.filter.plan) &&
+        _.isEmpty(this.filter.status)
+      )
     }
   },
   watch: {
@@ -167,10 +193,20 @@ export default {
     }
   },
   methods: {
-    ...mapActions('connections', {
-      deleteSession: 'remove',
-      findSessions: 'find'
-    }),
+    ...mapActions('connections', [
+      'remove',
+      'findAll'
+    ]),
+    onReload () {
+      const search = this.filter.search
+      const plan = this.filter.plan ? this.filter.plan.id : undefined
+      const status = this.filter.status
+      this.$store.dispatch('sessions/findAll', {
+        status,
+        plan,
+        search
+      })
+    },
     statusLabel (status) {
       return getLabelByStatus(status)
     },
@@ -186,6 +222,18 @@ export default {
       if (stats.error > 0) {
         return 'background-color: antiquewhite'
       }
+    },
+    onStatusFilter (m) {
+      this.filter.status = m
+      this.onReload()
+    },
+    onPlanFilter (m) {
+      this.filter.plan = m
+      this.onReload()
+    },
+    onClearFilter () {
+      this.filter.clear()
+      this.onReload()
     }
   }
 }
