@@ -60,8 +60,13 @@ class SessionService @Autowired()(val sessionRepository: SessionRepository) {
   private val log:Logger  = LoggerFactory.getLogger(MethodHandles.lookup.lookupClass)
 
 
-  def findAll(search: String, sortBy: String, order : String, pageNo: Int, pageSize: Int) = {
-    sessionQuery.findAll(pageNo, pageSize, search, sortBy, order)
+  def findAll(planId: java.lang.Long, status: String, search: String, sortBy: String, order : String, pageNo: Int, pageSize: Int) = {
+    var sessions = sessionQuery.findAll(pageNo, pageSize, search, sortBy, order)
+    sessions.content = sessions.content.filter{ session =>
+      (status == null || session.status == status) &&
+      (planId == null || session.plan == null || session.plan.id == planId)
+    }
+    sessions
   }
 
   def findOne(id: Long): Session = 

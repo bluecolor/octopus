@@ -16,12 +16,16 @@ class SessionController  @Autowired()(private val sessionService: SessionService
   @RequestMapping(method = Array(RequestMethod.GET) )
   def findAll(
     @RequestParam(value="search",required=false) search: Optional[String],
+    @RequestParam(value="status",required=false) status: Optional[String],
+    @RequestParam(value="plan",required=false) plan: Optional[java.lang.Long],
     @RequestParam(value="sortBy",required=false) sortBy: Optional[String],
     @RequestParam(value="order", required=false) order : Optional[String],
     @RequestParam(value="page",  required=false) page: Optional[Int], 
     @RequestParam(value="pageSize", required=false) pageSize: Optional[Int]
   ) = 
     sessionService.findAll(
+      plan.orElse(null),
+      status.orElse(null),
       search.orElse(""), 
       sortBy.orElse("name"), 
       order.orElse("asc"), 
