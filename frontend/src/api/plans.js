@@ -16,5 +16,8 @@ export default {
   },
   unProtect (id) {
     return axios.put(`${API_BASE}/plans/un-protect/${id}`)
+  },
+  protect (id) {
+    return axios.put(`${API_BASE}/plans/protect/${id}`)
   }
 }

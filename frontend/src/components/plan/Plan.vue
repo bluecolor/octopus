@@ -106,7 +106,6 @@ export default {
       if (this.$route.query.clone === 'true' || !this.id) {
         return true
       }
-      console.log('new plan')
       return false
     },
     init () {

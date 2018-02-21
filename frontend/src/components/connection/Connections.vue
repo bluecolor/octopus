@@ -8,7 +8,7 @@
           input.form-control.input-sm.search-box(autofocus=true, v-model="filter" type='text', placeholder='Search')
     .box-body.no-padding
       .table-controls
-        a.btn.btn-default.btn-sm(@click='findConnections' type='button', data-toggle="tooltip" title="Reload",)
+        a.btn.btn-default.btn-sm(@click='findConnections' type='button', data-toggle="tooltip" title="Reload")
           i.fa.fa-refresh.text-blue.fa-lg
         router-link.btn.btn-default.btn-sm(to='/connection',data-toggle="tooltip" title="New",)
           i.fa.fa-plus.text-green.fa-lg
@@ -34,11 +34,12 @@
                     input.el-checkbox__original(type='checkbox', v-model="selected" :value ='m.id')
               td 
                 router-link(:to="'connection/' + m.id" ) {{m.name}}
-              td {{m.jdbcUrl}}
-              td {{m.odiUsername}}
-              td {{m.workRepo}}
-              td 
-                span(:class="m.isDefault === 1 ? 'default-text' : 'hidden'") Default
+              td(style="text-align:left") 
+                span(title="Connection type") {{m.connectionType}}
+              td(style="text-align:left") 
+                span(title="Destination") {{destination(m)}}
+              td(style="text-align:left")
+                span(title="Username") {{m.username}}
     .box-footer.clearfix
       ul.pagination.pagination-sm.no-margin.pull-right  
         uib-pagination(
@@ -119,8 +120,6 @@ export default {
     pageChange (p) {
       this.currentPage = p
     },
-    clone () {
-    },
     test () {
       const id = this.selected[0]
       const connection = _.find(this.connections, {id})
@@ -146,6 +145,13 @@ export default {
           d.close()
         })
       })
+    },
+    destination (c) {
+      switch (c.connectionType) {
+        case 'SSH': return c.host
+        case 'LOCAL': return 'localhost'
+        case 'JDBC': return c.jdbcUrl
+      }
     }
   },
   mounted () {

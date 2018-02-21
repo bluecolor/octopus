@@ -20,6 +20,7 @@ import Parameters from '@/components/parameter/Parameters.vue'
 import Parameter from '@/components/parameter/Parameter.vue'
 import Tasks from '@/components/task/Tasks.vue'
 import Task from '@/components/task/Task.vue'
+import Upload from '@/components/upload/Upload.vue'
 
 Vue.use(Router)
 
@@ -38,6 +39,9 @@ export default new Router({
       props: true,
       component: Connection,
       name: 'Connection'
+    }, {
+      path: 'import',
+      component: Upload
     }, {
       path: 'connection',
       component: Connection,

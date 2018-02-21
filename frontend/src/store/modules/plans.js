@@ -44,16 +44,27 @@ const actions = {
     })
   },
   remove ({ commit }, payload) {
-    return api.remove(payload).then(response => {
-      commit(LOAD, response.data)
-      notifySuccess('Deleted plan')
-    },
-    error => {
-      notifyError(`Failed to delete plan ${error.response.data.message}`)
+    return new Promise((resolve, reject) => {
+      return api.remove(payload).then(response => {
+        commit(LOAD, response.data)
+        notifySuccess('Deleted plan')
+      },
+      error => {
+        notifyError(`Failed to delete plan ${error.response.data.message}`)
+      })
     })
   },
   unProtect ({commit}, id) {
     return api.unProtect(id).then(response => {
+      commit(UPDATE, response.data)
+      notifySuccess('Plan updated')
+    },
+    error => {
+      notifyError(`Failed to update plan ${error.response.data.message}`)
+    })
+  },
+  protect ({commit}, id) {
+    return api.protect(id).then(response => {
       commit(UPDATE, response.data)
       notifySuccess('Plan updated')
     },

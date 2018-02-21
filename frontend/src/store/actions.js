@@ -11,5 +11,6 @@ export default {
     this.dispatch('users/findAll')
     this.dispatch('parameters/findAll')
     this.dispatch('app/findVersion')
+    this.dispatch('settings/findAll')
   }
 }

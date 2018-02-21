@@ -154,7 +154,6 @@ class SessionService @Autowired()(val sessionRepository: SessionRepository) {
   private def findGroupSlotMap(running: java.util.List[TaskInstance]) = {
     var slots:Map[Long, Int] = Map()
     val groups = groupService.findAll
-
     groups.foreach{g => 
       slots += (g.id -> g.parallel)
     }
@@ -168,7 +167,7 @@ class SessionService @Autowired()(val sessionRepository: SessionRepository) {
   }
 
   def findRunnable(id: Long): java.util.List[TaskInstance] = {
-    val maxParallel = settingService.findByName("max_parallel")(0).value.toInt
+    val maxParallel = settingService.findByName("max_parallel").value.toInt
     val session = findOne(id)
     val running = taskInstanceService.findBySessionAndStatus(id, Status.RUNNING)
     val idle = taskInstanceService.findBySessionAndStatus(id, Status.IDLE)

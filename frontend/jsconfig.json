@@ -1,0 +1,9 @@
+{
+  "typeAcquisition": {
+    "include": [
+        "lodash",
+        "axios",
+        "moment"
+    ]
+  }
+}

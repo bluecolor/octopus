@@ -28,7 +28,6 @@ class SettingService @Autowired()(val settingRepository: SettingRepository){
 
   private val log:Logger  = LoggerFactory.getLogger(MethodHandles.lookup.lookupClass)
 
-
   @(Autowired @setter)
   private var userService: UserService = _
 
@@ -38,18 +37,29 @@ class SettingService @Autowired()(val settingRepository: SettingRepository){
 
   def findOne(id: Long) = settingRepository.findOne(id)
 
+  def save(setting: Setting): Setting = {
+    var s = findByName(setting.name)
+    if (s != null) {
+      s.user = userService.findMe
+      s.value = setting.value
+      settingRepository.save(s)
+    } else {
+      settingRepository.save(setting)
+    }
+  }
+
   @throws(classOf[SettingAlreadyExistException])
   def create(setting: Setting) = {
     setting.name = setting.name.trim
     val s = findByName(setting.name)
-    if(s != null && !s.isEmpty)
+    if(s != null)
       throw new SettingAlreadyExistException(s"""Setting "${setting.name}" already exists!""")
     
     settingRepository.save(setting)
   }
 
   def update(setting: Setting) = {
-    var s = settingRepository.findOne(setting.id);
+    var s = findByName(setting.name);
     s.user = userService.findMe
     s.value = setting.value
     settingRepository.save(s)
@@ -65,9 +75,9 @@ class SettingService @Autowired()(val settingRepository: SettingRepository){
   // use findSettingsByName
   def findMailSettings : Option[MailSetting] = {
     val setting = settingRepository.findByNameIgnoreCase("mail")
-    if(!setting.isEmpty) {
+    if(setting != null) {
       val mapper = new ObjectMapper
-      val m = mapper.readValue(setting(0).value, classOf[MailSetting]);
+      val m = mapper.readValue(setting.value, classOf[MailSetting]);
       return Some(m)
     }
     return None
@@ -77,9 +87,9 @@ class SettingService @Autowired()(val settingRepository: SettingRepository){
   // use findSettingsByName
   def findSlackSettings: Option[Slack] = {
     val setting = settingRepository.findByNameIgnoreCase("slack")
-    if(!setting.isEmpty) {
+    if(setting != null) {
       val mapper = new ObjectMapper
-      val m = mapper.readValue(setting(0).value, classOf[Slack]);
+      val m = mapper.readValue(setting.value, classOf[Slack]);
       return Some(m)
     }
     return None
@@ -87,27 +97,23 @@ class SettingService @Autowired()(val settingRepository: SettingRepository){
 
   def findSettingsByName[T](c: T, name: String)(implicit tag: ClassTag[T]): Option[T] = {
     val setting = settingRepository.findByNameIgnoreCase(name)
-    if(!setting.isEmpty) {
+    if(setting != null) {
       val mapper = new ObjectMapper
-      val m = mapper.readValue(setting(0).value, tag.runtimeClass);
+      val m = mapper.readValue(setting.value, tag.runtimeClass);
       return Some(m.asInstanceOf[T])
     }
     return None
   } 
 
-
-
   def activeMailService: Boolean = {
     val s = settingRepository.findByNameIgnoreCase("mail")
-    if(!s.isEmpty) {
+    if(s != null) {
       val mapper = new ObjectMapper
-      val m = mapper.readValue(s(0).value, classOf[MailSetting])
-      return m.active.toLowerCase == "yes"
+      val m = mapper.readValue(s.value, classOf[MailSetting])
+      return m.active == 1
     }else{
       return false
     }  
   }
-
-
 
 }

@@ -1,6 +1,6 @@
 <template lang="pug">
 .row
-  .col-md-8.col-md-offset-2(v-if="collection.length > 0")
+  .col-md-8.col-md-offset-2(v-if="collection.length > 0 || hasFilter")
     .box.box-primary(style="border-top=0px")
       .box-header.with-border
         h3.box-title {{title}}
@@ -92,7 +92,7 @@
                     div.session-status
                       span.label(style="border-radius:0px;" :class="statusLabel(m.status)"  data-toggle="tooltip" title="Status") {{m.status}} 
                     div.session-name
-                      router-link(:to="'task-instances?session=' + m.id" data-toggle="tooltip" title="Name") {{m.name}}
+                      router-link(:to="'task-instances?session=' + m.id" data-toggle="tooltip" title="Session name") {{m.name}}
                   div.session-detail(style="height:100%; width:100%; overflow: hidden;")
                     div.session-detail-label(data-toggle="tooltip" title="Completed tasks")
                       span completed:
@@ -107,7 +107,7 @@
                       div.session-detail-label(data-toggle="tooltip" title="Completed tasks")
                         span plan: 
                       div.session-plan
-                        router-link(:to="'plans/' + m.plan.id" data-toggle="tooltip" title="See plan") {{m.plan.name}}
+                        router-link(:to="'plan/' + m.plan.id" data-toggle="tooltip" title="See plan") {{m.plan.name}}
                   td(style="width:200px")
                     span(data-toggle="tooltip" title="Session start date") {{dateString(m.startDate)}}
                   td(style="width:200px")
@@ -126,7 +126,7 @@
             :boundary-links="true" 
             :rotate="false"
           )  
-  .align-center(v-else)
+  .align-center(v-if="!hasFilter && collection.length===0")
     div.no-connection(style="width:330px; display: table-cell;vertical-align: middle;text-align: center;")
       div(style="width:100%; display: inline-block;")
         i.fa.big-icon.text-gray-harbor.fa-tasks(style="text-align: center;")

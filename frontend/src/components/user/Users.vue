@@ -31,11 +31,11 @@
                   span.fa.fa-lg.fa-shield.text-orange(v-show="m.system" data-toggle="tooltip" title="System user")
                   span.fa.fa-lg.fa-lock.text-danger(v-show="!m.system && m.locked" data-toggle="tooltip" title="Locked")
                 td 
-                  router-link(:to="'user/' + m.id" ) {{m.username}}
+                  router-link(:to="'user/' + m.id" title="Username") {{m.username}}
                 td
-                  span {{m.name}}
+                  span(title="Name") {{m.name}}
                 td
-                  span {{m.role}}    
+                  span(title="Role") {{m.role}}    
                 
       .box-footer.clearfix
         ul.pagination.pagination-sm.no-margin.pull-right  

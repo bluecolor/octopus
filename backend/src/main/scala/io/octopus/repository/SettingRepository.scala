@@ -8,5 +8,5 @@ import io.octopus.model.Setting
 
 @Repository
 trait SettingRepository extends JpaRepository[Setting, java.lang.Long] {
-  def findByNameIgnoreCase(name: String) : java.util.List[Setting]
+  def findByNameIgnoreCase(name: String) : Setting
 }
