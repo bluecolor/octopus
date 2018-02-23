@@ -7,34 +7,23 @@ git clone https://github.com/bluecolor/octopus
 
 
 ### Configuration
-- configure `octopus.shell` using the `application.properties.template` file in `OCTOPUS_HOME`
+- configure `octopus.shell` using the `application.properties.template` file in `backend` directory
   - rename the `application.properties.template` file to `application.properties` and enter the 
   repository connection parameters and octopus shell initiation parameters.
 
-### Bower
+### Backend
 ```
-cd octopus/src/main/resources/static
-bower install
-```
-
-
-### Gulp
-```
-cd octopus/src/main/resources/static
-npm install
-# generate html files
-gulp pug
-# generate style sheets
-gulp sass
-# listen for changes, development only
-gulp
+  cd octopus/backend
+  gradle bootrun
 ```
 
-### Boot
+
+### Frontend
 ```
-cd octopus
-gradle bootrun
+cd octopus/frontend
+npm run dev
 ```
+
 
 ### Usage
 - create system user from the `octopus shell`:
@@ -48,9 +37,7 @@ gradle bootrun
   ```
 - open app in browser and login with `system user` that you created in previous step.
   ```
-  http://localhost:8080
+  http://localhost:9090
   ```
 
 ### Documentation
-
-See [here](https://github.com/bluecolor/octopus/wiki) for user guide and documentation.
