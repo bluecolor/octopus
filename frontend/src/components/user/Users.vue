@@ -13,7 +13,7 @@
             i.fa.fa-refresh.text-blue.fa-lg
           router-link.btn.btn-default.btn-sm(to='/user',data-toggle="tooltip" title="New",)
             i.fa.fa-plus.text-green.fa-lg
-          a.btn.btn-default.btn-sm(@click="remove(selected[0])", data-toggle="tooltip" title="Delete", :class="selected.length > 0 ? '':'hidden'")
+          a.btn.btn-default.btn-sm(@click="onDelete", data-toggle="tooltip" title="Delete", :class="selected.length > 0 ? '':'hidden'")
             i.fa.fa-trash-o.text-danger.fa-lg
           router-link.btn.btn-default.btn-sm.btn-2.pull-right(to='/settings/mail' data-toggle="tooltip" title="No mail settings",)
             i.fa.fa-bell.text-danger.fa-lg  
@@ -31,11 +31,11 @@
                   span.fa.fa-lg.fa-shield.text-orange(v-show="m.system" data-toggle="tooltip" title="System user")
                   span.fa.fa-lg.fa-lock.text-danger(v-show="!m.system && m.locked" data-toggle="tooltip" title="Locked")
                 td 
-                  router-link(:to="'user/' + m.id" ) {{m.username}}
+                  router-link(:to="'user/' + m.id" title="Username") {{m.username}}
                 td
-                  span {{m.name}}
+                  span(title="Name") {{m.name}}
                 td
-                  span {{m.role}}    
+                  span(title="Role") {{m.role}}    
                 
       .box-footer.clearfix
         ul.pagination.pagination-sm.no-margin.pull-right  
@@ -116,7 +116,22 @@ export default {
     pageChange (p) {
       this.currentPage = p
     },
-    clone () {
+    onDelete () {
+      const id = this.selected[0]
+      const m = _.find(this.users, {id})
+      const message = `Are you sure?`
+      const options = {
+        loader: true,
+        okText: 'Delete',
+        cancelText: 'Close',
+        type: 'hard',
+        verification: m.name
+      }
+      this.$dialog.confirm(message, options).then((d) => {
+        this.remove(id).finally(() => {
+          d.close()
+        })
+      })
     }
   },
   mounted () {

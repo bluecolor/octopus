@@ -50,16 +50,14 @@ class Task{
   )
   var groups: java.util.Set[Group] = _
 
+
   @BeanProperty
   @Fetch(value= FetchMode.JOIN)
   @ManyToMany(fetch = FetchType.LAZY)
-  @JoinTable(name="parent_child_task",
-    joinColumns = Array(new JoinColumn(name = "parent_id", referencedColumnName= "id", nullable = false, updatable = false)),
-    inverseJoinColumns = Array(new JoinColumn(name = "child_id", referencedColumnName="id", nullable = false, updatable = false))
-  ) 
   var dependencies: java.util.Set[Task] = _
 
   @JsonIgnore
+  @BeanProperty
   @ManyToMany(mappedBy = "dependencies")
   var childs: java.util.Set[Task] = _
 
@@ -115,7 +113,6 @@ class Task{
   @Transient
   @BeanProperty
   var bookmarked: Boolean = false
-
 
   @BeanProperty
   @Fetch(value= FetchMode.SELECT)

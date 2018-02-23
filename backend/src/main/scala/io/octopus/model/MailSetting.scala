@@ -5,7 +5,7 @@ import scala.beans.BeanProperty
 class MailSetting {
 
   @BeanProperty
-  var active: String = _
+  var active: Int = _
   
   @BeanProperty
   var host: String = _
@@ -28,6 +28,6 @@ class MailSetting {
   @BeanProperty
   var connectionSecurity: String = "ssl"
 
-  def isActive = active == "yes"
+  def isActive = active == 1
 
 }

@@ -1,61 +1,68 @@
-import store from '../'
 import api from '../../api/settings'
 import _ from 'lodash'
 import {success as notifySuccess, error as notifyError} from '../../lib/notify'
 
-const LOAD_SETTINGS = 'LOAD_SETTINGS'
-const SAVE_SETTINGS = 'SAVE_SETTINGS'
+const LOAD = 'LOAD'
+const CREATE = 'CREATE'
+const UPDATE = 'UPDATE'
 
 const state = {
-  settings: []
+  all: []
 }
 
 const getters = {
-  settings: state => state.settings,
-  mailSettings: state => {
-    const connectionId = store.state.connectionId
-    const ms = _.find(state.settings, s => s.connection.id === connectionId && s.name.toLowerCase() === 'mail')
-    if (ms) {
-      return ms.value
-    }
-  }
+  settings: state => state.all,
+  mail: state => _.find(state.all, {name: 'MAIL'}),
+  slack: state => _.find(state.all, {name: 'SLACK'}),
+  maxParallel: state => _.find(state.all, {name: 'MAX_PARALLEL'})
 }
 
 // actions
 const actions = {
-  findAll ({ commit }) {
-    const connectionId = store.state.connectionId
-    return api.findAll(connectionId).then(response => {
-      commit(LOAD_SETTINGS, response.data)
+  findAll ({commit}) {
+    return api.findAll().then(response => {
+      commit(LOAD, response.data)
     })
   },
-  saveSettings ({ commit }, payload) {
-    const connectionId = store.state.connectionId
-    return api.saveSettings(connectionId, payload).then(response => {
-      commit(SAVE_SETTINGS, {connectionId, data: response.data})
-      notifySuccess(`Saved settings`)
+  create ({commit}, payload) {
+    return api.create(payload).then(response => {
+      commit(CREATE, response.data)
+      notifySuccess('Settings saved')
     },
     error => {
-      console.log(error)
-      notifyError(`Failed to save mail settings`)
+      notifyError(`Error! ${error.response.data.message}`)
+    })
+  },
+  update ({commit}, payload) {
+    return api.update(payload.id, payload).then(response => {
+      commit(UPDATE, response.data)
+      notifySuccess('Settings saved')
+    },
+    error => {
+      notifyError(`Error! ${error.response.data.message}`)
     })
   }
 }
 
 // mutations
 const mutations = {
-  [LOAD_SETTINGS] (state, records) {
-    state.settings = records.map(s => {
-      s.value = JSON.parse(s.value)
+  [LOAD] (state, records) {
+    state.all = records.map(s => {
+      s.val = JSON.parse(s.value)
       return s
     })
-    console.log(state.settings)
+    console.log(state.all)
   },
-  [SAVE_SETTINGS] (state, payload) {
-    let i = _.findIndex(state.settings, s => s.connection.id === payload.connectionId && s.name.toLowerCase() === payload.data.name)
-    state.settings.splice(i, 1)
-    payload.value = JSON.parse(payload.data.value)
-    state.settings.push(payload)
+  [UPDATE] (state, setting) {
+    const name = setting.name
+    setting.val = JSON.parse(setting.value)
+    const i = _.findIndex(state.all, {name})
+    state.all.splice(i, 1)
+    state.all.push(setting)
+  },
+  [CREATE] (state, setting) {
+    setting.val = JSON.parse(setting.value)
+    state.all.push(setting)
   }
 }
 

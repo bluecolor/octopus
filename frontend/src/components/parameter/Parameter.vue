@@ -11,7 +11,7 @@
             input.form-control(v-model="parameter.name" required=true, autofocus=true)
           .form-group
             label Value
-            input.form-control(v-model="parameter.value" required=true, autofocus=true)
+            input.form-control(v-model="parameter.value" required=true)
           .form-group
             label Description
             textarea.form-control(v-model="parameter.description" rows="6")

@@ -1,11 +1,11 @@
 
 import api from '../../api/task-instances'
-// import store from '../'
-// import _ from 'lodash'
-// import {success as notifySuccess, error as notifyError} from '../../lib/notify'
+import _ from 'lodash'
+import {success as notifySuccess, error as notifyError} from '../../lib/notify'
 
 const LOAD = 'LOAD'
 const CLEAR = 'CLEAR'
+const UPDATE = 'UPDATE'
 
 const state = {
   all: [],
@@ -17,11 +17,37 @@ const getters = {
 }
 
 const actions = {
-
   findAll ({commit}, payload) {
     commit(CLEAR)
     api.findAll(payload).then(response => {
       commit(LOAD, response.data)
+    })
+  },
+  done ({commit}, id) {
+    api.done(id).then(response => {
+      commit(UPDATE, response.data)
+      notifySuccess('Updated task')
+    },
+    error => {
+      notifyError(`Failed to update task ${error.response.data.message}`)
+    })
+  },
+  start ({commit}, id) {
+    api.start(id).then(response => {
+      commit(UPDATE, response.data)
+      notifySuccess('Updated task')
+    },
+    error => {
+      notifyError(`Failed to update task ${error.response.data.message}`)
+    })
+  },
+  block ({commit}, id) {
+    api.block(id).then(response => {
+      commit(UPDATE, response.data)
+      notifySuccess('Updated task')
+    },
+    error => {
+      notifyError(`Failed to update task ${error.response.data.message}`)
     })
   }
 }
@@ -40,6 +66,12 @@ const mutations = {
   },
   [CLEAR] (state, records) {
     state.all = []
+  },
+  [UPDATE] (state, data) {
+    const id = data.id
+    const i = _.findIndex(state.all, {id})
+    state.all.splice(i, 1)
+    state.all.push(data)
   }
 }
 

@@ -2,11 +2,14 @@ import axios from 'axios'
 import { API_BASE } from './constants'
 
 export default {
-  findAll (connectionId) {
-    return axios.get(`${API_BASE}/settings/connection/${connectionId}`)
+  findAll () {
+    return axios.get(`${API_BASE}/settings`)
   },
-  saveSettings (connectionId, payload) {
-    return axios.post(`${API_BASE}/settings/connection/${connectionId}`, payload)
+  create (payload) {
+    return axios.post(`${API_BASE}/settings`, payload)
+  },
+  update (id, payload) {
+    return axios.post(`${API_BASE}/settings/${id}`, payload)
   }
 
 }

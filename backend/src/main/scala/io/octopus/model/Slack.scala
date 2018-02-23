@@ -6,31 +6,27 @@ import scala.beans.BeanProperty
 class Notifications{
 
   @BeanProperty
-  var taskError: String = _
+  var taskError: Int = _
 
   @BeanProperty
-  var taskBlocked: String = _
+  var taskBlocked: Int = _
 
   @BeanProperty
-  var taskDone: String = _
+  var taskDone: Int = _
 
   @BeanProperty
-  var taskKilled: String = _
+  var taskKilled: Int = _
 
-  def notifyTaskError = taskError == "yes"
-  def notifyTaskBlocked = taskBlocked == "yes"
-  def notifyTaskKilled = taskKilled == "yes"
-  def notifyTaskDone = taskDone == "yes"
-
-
-
-
+  def notifyTaskError = taskError == 1
+  def notifyTaskBlocked = taskBlocked == 1
+  def notifyTaskKilled = taskKilled == 1
+  def notifyTaskDone = taskDone == 1
 }
 
 class Slack {
 
   @BeanProperty
-  var active: String = _
+  var active: Int = _
 
   @BeanProperty
   var notifications: Notifications = _
@@ -41,6 +37,6 @@ class Slack {
   @BeanProperty
   var url: String = _
 
-   def isActive = active == "yes"
+   def isActive = active == 1
 
 }

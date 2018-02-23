@@ -14,6 +14,7 @@ import groups from './modules/groups'
 import parameters from './modules/parameters'
 import app from './modules/app'
 import tasks from './modules/tasks'
+import settings from './modules/settings'
 
 Vue.use(Vuex)
 
@@ -34,6 +35,7 @@ export default new Vuex.Store({
     groups,
     parameters,
     app,
-    tasks
+    tasks,
+    settings
   }
 })

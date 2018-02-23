@@ -15,7 +15,7 @@
             i.fa.fa-plus.text-green.fa-lg
           router-link.btn.btn-default.btn-sm(to='/import' data-toggle="tooltip" title="Import")
             i.fa.fa-upload.text-yellow.fa-lg
-          a.btn.btn-default.btn-sm(@click="remove(selected[0])", data-toggle="tooltip" title="Delete", :class="selected.length > 0 ? '':'hidden'")
+          a.btn.btn-default.btn-sm(@click="onDelete", data-toggle="tooltip" title="Delete", :class="selected.length > 0 ? '':'hidden'")
             i.fa.fa-trash-o.text-danger.fa-lg
           a.btn.btn-default.btn-sm(data-toggle="tooltip" title="Export group" :class="selected.length > 0 ? '':'hidden'")
             i.fa.fa-download.text-green.fa-lg  
@@ -54,7 +54,9 @@
       div(style="width:100%; display: inline-block;")
         i.fa.big-icon.text-gray-harbor.fa-cubes(style="text-align: center;")
       div(style="width:100%; margin-top: 20px;display: inline-block;")
-        span.text-gray-harbor(style="font-size:20px;") You do not have any groups !  
+        span.text-gray-harbor(style="font-size:20px;") You do not have any groups !
+      div(style="width:70%; margin-top: 20px;display: inline-block;")
+        router-link.btn.btn-block.btn-primary.btn-lg(to='/group') Create Group  
 </template>
 
 <script>
@@ -110,10 +112,34 @@ export default {
         case 3: return 'High priority'
         case 4: return 'Top priority'
       }
+    },
+    onDelete () {
+      const id = this.selected[0]
+      const g = _.find(this.groups, {id})
+      const message = `Are you sure? This will also delete tasks with the primary group ${g.name}`
+      const options = {
+        loader: true,
+        okText: 'Delete',
+        cancelText: 'Close',
+        type: 'hard',
+        verification: g.name
+      }
+      this.$dialog.confirm(message, options).then((d) => {
+        this.remove(id).finally(() => {
+          d.close()
+        })
+      })
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="css">
+
+.dg-content-footer,
+.dg-form {
+  background-color: white !important;
+  border: none !important;
+}
+
 </style>

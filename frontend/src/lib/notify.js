@@ -1,4 +1,3 @@
-
 import PNotify from 'pnotify'
 import 'pnotify/dist/pnotify.desktop'
 

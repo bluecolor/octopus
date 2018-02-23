@@ -26,18 +26,9 @@ class SettingController  @Autowired()(private val settingService: SettingService
   @RequestMapping(value = Array("/active-mail-service"), method = Array(RequestMethod.GET))
   def activeMailService: Boolean = settingService.activeMailService
  
-
   @RequestMapping(method = Array(RequestMethod.POST))
-  def create(@RequestBody setting: Setting) = {
-    var s:Setting = null; 
-    try{
-      s = settingService.create(setting)
-    }catch{
-      case integrityViolation:DataIntegrityViolationException => 
-        throw new UniqueConstraintViolationException("Setting already exists!")  
-    }
-    s
-  }
+  def create(@RequestBody setting: Setting) =
+    settingService.save(setting)
 
   @RequestMapping(value = Array("/{id}"), method = Array(RequestMethod.PUT))
   def update(@PathVariable("id") id: Long, @RequestBody setting: Setting) = 

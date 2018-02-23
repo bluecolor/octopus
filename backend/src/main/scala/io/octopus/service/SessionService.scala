@@ -60,8 +60,13 @@ class SessionService @Autowired()(val sessionRepository: SessionRepository) {
   private val log:Logger  = LoggerFactory.getLogger(MethodHandles.lookup.lookupClass)
 
 
-  def findAll(search: String, sortBy: String, order : String, pageNo: Int, pageSize: Int) = {
-    sessionQuery.findAll(pageNo, pageSize, search, sortBy, order)
+  def findAll(planId: java.lang.Long, status: String, search: String, sortBy: String, order : String, pageNo: Int, pageSize: Int) = {
+    var sessions = sessionQuery.findAll(pageNo, pageSize, search, sortBy, order)
+    sessions.content = sessions.content.filter{ session =>
+      (status == null || session.status == status) &&
+      (planId == null || session.plan == null || session.plan.id == planId)
+    }
+    sessions
   }
 
   def findOne(id: Long): Session = 
@@ -149,7 +154,6 @@ class SessionService @Autowired()(val sessionRepository: SessionRepository) {
   private def findGroupSlotMap(running: java.util.List[TaskInstance]) = {
     var slots:Map[Long, Int] = Map()
     val groups = groupService.findAll
-
     groups.foreach{g => 
       slots += (g.id -> g.parallel)
     }
@@ -163,7 +167,7 @@ class SessionService @Autowired()(val sessionRepository: SessionRepository) {
   }
 
   def findRunnable(id: Long): java.util.List[TaskInstance] = {
-    val maxParallel = settingService.findByName("max_parallel")(0).value.toInt
+    val maxParallel = settingService.findByName("max_parallel").value.toInt
     val session = findOne(id)
     val running = taskInstanceService.findBySessionAndStatus(id, Status.RUNNING)
     val idle = taskInstanceService.findBySessionAndStatus(id, Status.IDLE)

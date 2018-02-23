@@ -83,14 +83,16 @@ class TaskInstanceService @Autowired()(val taskInstanceRepository: TaskInstanceR
   def findOne(id: Long): TaskInstance =
     taskInstanceRepository.findOne(id)
 
-  def findBySession(id: Long, page: Int, pageSize: Int, search:String,sortBy:String, order:String) = {
-    // val me = userService.findMe     
-    var p = taskInstanceQuery.findBySession(id, page, pageSize, search,sortBy, order) 
-    p.content = p.content.map{ instance =>
+  def findBySession(sessionId: Long, group: java.lang.Long, status: String, page: Int, pageSize: Int, search:String,sortBy:String, order:String) = {
+    var instances = taskInstanceQuery.findBySession(sessionId, page, pageSize, search,sortBy, order) 
+    instances.content = instances.content.filter{ instance =>
+      (status == null || instance.status == status) &&
+      (group == null || instance.task.primaryGroup == null || instance.task.primaryGroup.id == group)
+    }.map{ instance =>
       instance.dependencies = findDependencies(instance)
       instance
-    }.asJava
-    p  
+    }
+    instances 
   } 
 
   def withDependencies(instance: TaskInstance) = {
@@ -132,11 +134,12 @@ class TaskInstanceService @Autowired()(val taskInstanceRepository: TaskInstanceR
     taskInstanceRepository.save(instances)
   }
 
-  def update(taskInstance: TaskInstance): TaskInstance = {
-    var instance = findOne(taskInstance.id)
-    instance.priority = taskInstance.priority
-    instance.technology= taskInstance.technology
-    instance.script = taskInstance.script
+  def update(i: TaskInstance): TaskInstance = {
+    var instance = findOne(i.id)
+    instance.priority = i.priority
+    instance.technology= i.technology
+    instance.status = i.status
+    instance.script = i.script
     taskInstanceRepository.save(instance)
   }
 
@@ -214,6 +217,7 @@ class TaskInstanceService @Autowired()(val taskInstanceRepository: TaskInstanceR
     mt.convertAndSend(s"/topic/${SocketTopic.TASK_INSTANCE_BLOCKED}", (instance,me) );
     slackService.taskInstanceBlocked(instance,me)
     logInstance(instance,message)
+    instance.dependencies = findDependencies(instance)
     instance
   }
 
@@ -247,7 +251,6 @@ class TaskInstanceService @Autowired()(val taskInstanceRepository: TaskInstanceR
       val msg = s"Status change from ${instance.status} to ${Status.DONE} is not allowed!"
       log.error(s"TaskInstance(${instance.id}): ${msg}")
       throw InvalidStatusTransitionException(msg)
-      sendTaskInstanceMail(instance)
     }
     instance.status = Status.DONE
     update(instance)
@@ -257,14 +260,10 @@ class TaskInstanceService @Autowired()(val taskInstanceRepository: TaskInstanceR
     mt.convertAndSend(s"/topic/${SocketTopic.TASK_INSTANCE_DONE}", (instance,me) );
     slackService.taskInstanceDone(instance,me)
     logInstance(instance,message)
+    instance.dependencies = findDependencies(instance)
     instance
   }
 
-  def sendTaskInstanceMail(instance: TaskInstance) = {
-    appInit.system.actorSelection("/user/mail") ! SendTaskInstanceMail(instance)
-    instance
-  }
-  
   @throws(classOf[InvalidStatusTransitionException])
   def start(id: Long) = {
     var instance = findOne(id)
@@ -276,8 +275,15 @@ class TaskInstanceService @Autowired()(val taskInstanceRepository: TaskInstanceR
     instance.endDate= null
     instance.status = Status.IDLE
     update(instance)
+    instance.dependencies = findDependencies(instance)
+    instance
   }
-
+  
+  def sendTaskInstanceMail(instance: TaskInstance) = {
+    appInit.system.actorSelection("/user/mail") ! SendTaskInstanceMail(instance)
+    instance
+  }
+  
   private def logInstance(instance: TaskInstance, message: String = null) = {
     taskInstanceLogService.create(instance, message)
   }

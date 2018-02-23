@@ -19,14 +19,44 @@
 </template>
 
 <script>
+import {mapGetters, mapActions} from 'vuex'
+
 export default {
   name: 'GeneralSettings',
   data () {
-    return {}
+    return {
+      maxParallel: {
+        id: undefined,
+        value: 64
+      },
+      taskCheckInterval: {
+        id: undefined,
+        value: 30
+      }
+    }
+  },
+  computed: {
+    ...mapGetters('settings', [
+      'maxParallel'
+    ])
   },
   methods: {
+    ...mapActions('settings', [
+      'create',
+      'update'
+    ]),
     close () {
       window.history.back()
+    }
+  },
+  onSave () {
+    const name = 'SLACK'
+    const value = JSON.stringify(this.s)
+    const id = this.s.id
+    if (id) {
+      this.update({id, name, value})
+    } else {
+      this.create({name, value})
     }
   }
 }

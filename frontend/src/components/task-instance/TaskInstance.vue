@@ -89,7 +89,7 @@
                       a.js-more(href='javascript:void(0);' style='margin-right:20px' model-id!='<%- id %>')
                         i.fa.fa-ellipsis-h.text-green-fade.fa-lg
       .box-footer
-        a.btn.btn-danger.js-cancel-btn Close
+        a.btn.btn-danger(@click="onClose") Close
         a.ladda-button.btn.btn-primary.pull-right.js-save-btn(data-style="expand-left") Save 
 </template>
 
@@ -170,6 +170,9 @@ export default {
     },
     toDateString (x) {
       return dateString(x)
+    },
+    onClose () {
+      window.history.back()
     }
   },
   components: {

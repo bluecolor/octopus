@@ -44,8 +44,9 @@ class GroupService @Autowired()(val groupRepository: GroupRepository) {
     groupRepository.save(g)
   }
 
+  @Transactional
   def delete(id: Long): Group = {
-    val group = groupRepository.findOne(id)
+    val group = groupRepository.findOne(id)      
     groupRepository.delete(id)
     group
   }

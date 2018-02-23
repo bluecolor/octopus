@@ -70,6 +70,29 @@ class TaskService @Autowired()(val taskRepository: TaskRepository) {
     p
   }
 
+  def findAll(
+    plan: java.lang.Long,
+    group: java.lang.Long,
+    owner: java.lang.Long,
+    search: String, 
+    sortBy: String, 
+    order: String, 
+    page: Int, 
+    pageSize: Int
+  ) = {    
+    val me = userService.findMe
+    val p = taskQuery.findAll(page,pageSize,search,sortBy,order)
+    p.content = p.content.map(t=>{
+      t.bookmarked = t.bookmarkers.map(_.id).contains(me.id)
+      t
+    }).filter{t =>
+      ( plan == null || (plan != null && t.plan != null && t.plan.id == plan) ) &&
+      ( group == null || (group != null && t.primaryGroup != null && t.primaryGroup.id == group) ) &&
+      ( owner == null || (owner != null && t.primaryOwner != null && t.primaryOwner.id == owner) )
+    }
+    p
+  }
+
   def findOne(id: Long): Task = taskRepository.findOne(id)
 
   def findByPlan(id: Long) =  taskRepository.findByPlanId(id)
@@ -161,6 +184,7 @@ class TaskService @Autowired()(val taskRepository: TaskRepository) {
 
   def delete(id: Long): Task = {
     val task = taskRepository.findOne(id)
+    
     taskRepository.delete(id)
     task
   }

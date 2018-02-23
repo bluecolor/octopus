@@ -32,12 +32,16 @@ const actions = {
     })
   },
   remove ({ commit }, id) {
-    api.remove(id).then(response => {
-      commit(REMOVE, response.data.id)
-      notifySuccess('User deleted')
-    },
-    error => {
-      notifyError(error.response.data.message)
+    return new Promise((resolve, reject) => {
+      return api.remove(id).then(response => {
+        commit(REMOVE, response.data.id)
+        notifySuccess('User deleted')
+        resolve(response.data)
+      },
+      error => {
+        notifyError(error.response.data.message)
+        reject(error.response.data.message)
+      })
     })
   }
 }

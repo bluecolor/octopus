@@ -14,7 +14,7 @@
           i.fa.fa-plus.text-green.fa-lg
         router-link.btn.btn-default.btn-sm(to='/import' data-toggle="tooltip" title="Import")
           i.fa.fa-upload.text-yellow.fa-lg
-        a.btn.btn-default.btn-sm(@click="remove(selected[0])", data-toggle="tooltip" title="Delete", :class="selected.length > 0 ? '':'hidden'")
+        a.btn.btn-default.btn-sm(@click="onDelete", data-toggle="tooltip" title="Delete", :class="selected.length > 0 ? '':'hidden'")
           i.fa.fa-trash-o.text-danger.fa-lg
 
         .dropdown(style="display:inline;" :class="selected.length > 0 ? '':'hidden'")
@@ -32,21 +32,29 @@
                 a(href='javascript:void(0);') Run
               li.divider(role='separator')
               li  
-                a(href='javascript:void(0);') Clone
+                router-link(:to="'/plan/'+selected[0]+'?clone=true'") Clone
               li.divider(role='separator')
+              li
+                a(href='javascript:void(0);' @click="onExportPlan") Export Plan
               li  
-                a(href='javascript:void(0);') Export Plan
-              li  
-                a(href='javascript:void(0);') Export Tasks  
+                a(href='javascript:void(0);' @click="onExportTasks") Export Tasks  
               li.divider(role='separator')
               li
-                a(href='javascript:void(0);') Protect
+                a(href='javascript:void(0);' @click="onProtect") Protect
               li
-                a(href='javascript:void(0);') Unprotect
+                a(href='javascript:void(0);' @click="onUnprotect") Unprotect
               li.divider(role='separator')
               li
-                a(href='javascript:void(0);') Delete Sessions
-                
+                a(href='javascript:void(0);' @click="onDeleteSessions") Delete Sessions
+        .dropdown.pull-right(style="display:inline;")
+          a.btn.btn-default.btn-sm.dropdown-toggle.text-green(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
+            | Sort By
+            span.caret
+          ul.dropdown-menu
+            li
+              a(href='javascript:void(0);') Name ascending
+            li
+              a(href='javascript:void(0);') Name descending
       .table-responsive.connection-items
         table.table.table-hover
           tbody
@@ -68,9 +76,6 @@
                 router-link(:to="'connection/' + m.connection.id" ) {{m.connection.name}}
               td
                 span.label(:class="m.active ? 'label-success':'label-danger'") {{ `${m.active ? 'Active': 'Not Active'}` }}
-  
-              
-
 
     .box-footer.clearfix
       ul.pagination.pagination-sm.no-margin.pull-right  
@@ -89,7 +94,7 @@
     div(style="width:100%; margin-top: 20px;display: inline-block;")
       span.text-gray-harbor(style="font-size:20px;") You don't have any plans!  
     div(style="width:70%; margin-top: 20px;display: inline-block;")
-      router-link.btn.btn-block.btn-primary.btn-lg(to='connection') Create Plan
+      router-link.btn.btn-block.btn-primary.btn-lg(to='plan') Create Plan
 
 </template>
 
@@ -146,13 +151,45 @@ export default {
   methods: {
     ...mapActions('plans', [
       'findAll',
-      'remove'
+      'remove',
+      'unProtect',
+      'protect'
     ]),
     pageChange (p) {
       this.currentPage = p
     },
-    clone () {
-    }
+    onUnprotect () {
+      this.unProtect(this.selected[0])
+    },
+    onProtect () {
+      this.protect(this.selected[0])
+    },
+    onDelete () {
+      const id = this.selected[0]
+      const m = _.find(this.plans, {id})
+      const message = `Are you sure?`
+      const options = {
+        loader: true,
+        okText: 'Delete',
+        cancelText: 'Close',
+        type: 'hard',
+        verification: m.name
+      }
+      this.$dialog.confirm(message, options).then((d) => {
+        this.remove(id).finally(() => {
+          d.close()
+        })
+      })
+    },
+    onExportPlan () {
+      const id = this.selected[0]
+      window.location = `api/v1/plans/export/${id}`
+    },
+    onExportTasks () {
+      const id = this.selected[0]
+      window.location = `api/v1/plans/export-tasks/${id}`
+    },
+    onDeleteSessions () {}
   },
   mounted () {
   }

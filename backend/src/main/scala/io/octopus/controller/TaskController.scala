@@ -19,21 +19,24 @@ class TaskController  @Autowired()(private val taskService: TaskService) {
   @RequestMapping(method = Array(RequestMethod.GET) )
   def findAll(
     @RequestParam(value="plan",required=false) plan: java.lang.Long,
+    @RequestParam(value="group",required=false) group: java.lang.Long,
+    @RequestParam(value="owner",required=false) owner: java.lang.Long,
     @RequestParam(value="search",required=false) search: Optional[String],
     @RequestParam(value="sortBy",required=false) sortBy: Optional[String],
     @RequestParam(value="order", required=false) order : Optional[String],
-    @RequestParam("page") page: Optional[Int], 
-    @RequestParam("pageSize") pageSize: Optional[Int]
-  ) = {
+    @RequestParam("page") page: Optional[java.lang.Integer], 
+    @RequestParam("pageSize") pageSize: Optional[java.lang.Integer]
+  ) = 
     taskService.findAll(
       plan,
+      group,
+      owner,
       search.orElse(""),
       sortBy.orElse("name"),
       order.orElse("asc"),
       page.orElse(0), 
       pageSize.orElse(15)
     )
-  }
 
   @RequestMapping(value = Array("/plan/{id}"), method = Array(RequestMethod.GET))
   def findByPlan(@PathVariable("id") id: Long) = taskService.findByPlan(id)

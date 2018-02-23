@@ -44,12 +44,16 @@ const actions = {
     })
   },
   remove ({ commit }, id) {
-    return api.remove(id).then(response => {
-      commit(REMOVE, response.data)
-      notifySuccess('Deleted group')
-    },
-    error => {
-      notifyError(`Failed to delete group ${error.response.data.message}`)
+    return new Promise((resolve, reject) => {
+      return api.remove(id).then(response => {
+        commit(REMOVE, response.data)
+        notifySuccess('Deleted group')
+        resolve(response.data)
+      },
+      error => {
+        notifyError(`Failed to delete group ${error.response.data.message}`)
+        reject(error.response.data.message)
+      })
     })
   }
 }
