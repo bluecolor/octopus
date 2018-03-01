@@ -9,11 +9,13 @@ const UPDATE = 'UPDATE'
 
 const state = {
   all: [],
-  meta: {}
+  meta: {},
+  loading: false
 }
 
 const getters = {
-  taskInstances: state => state
+  taskInstances: state => state,
+  loading: state => state.loading
 }
 
 const actions = {
@@ -54,6 +56,7 @@ const actions = {
 
 const mutations = {
   [LOAD] (state, data) {
+    state.loading = false
     state.all = data.content
     state.meta = {
       count: data.count,
@@ -65,6 +68,7 @@ const mutations = {
     }
   },
   [CLEAR] (state, records) {
+    state.loading = true
     state.all = []
   },
   [UPDATE] (state, data) {

@@ -72,3 +72,7 @@ tr .radio {
 .el-color-picker__trigger {
   border: none !important;
 }
+
+.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
+  background-color: #eeeeee6e;
+}

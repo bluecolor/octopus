@@ -12,11 +12,13 @@ const REMOVE = 'REMOVE'
 
 const state = {
   all: [],
-  meta: {}
+  meta: {},
+  loading: false
 }
 
 const getters = {
-  tasks: state => state
+  tasks: state => state,
+  loading: state => state.loading
 }
 
 const actions = {
@@ -24,7 +26,6 @@ const actions = {
   findAll ({commit}, payload) {
     commit(CLEAR)
     api.findAll(payload).then(response => {
-      console.log(response.data)
       commit(LOAD, response.data)
     })
   },
@@ -81,6 +82,7 @@ const actions = {
 
 const mutations = {
   [LOAD] (state, data) {
+    state.loading = false
     state.all = data.content
     state.meta = {
       count: data.count,
@@ -92,6 +94,7 @@ const mutations = {
     }
   },
   [CLEAR] (state, records) {
+    state.loading = true
     state.all = []
   },
   [BOOKMARK] (state, id) {

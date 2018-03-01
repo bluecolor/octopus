@@ -186,8 +186,26 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style>
 .vue-slider-component {
   padding: 2px !important;
 }
+
+.input-group-addon {
+  line-height: 1.28;
+  border-bottom-right-radius: 3px;
+  border-top-right-radius: 3px;
+}
+
+.CodeMirror {
+  height: 450px !important;
+  border: solid 1px #cccccc96;
+  border-radius: 3px;
+}
+
+.CodeMirror-gutters {
+  border-right: 1px solid rgba(255,255,255,.15);
+  background-color: #dddddd1c;
+}
+
 </style>

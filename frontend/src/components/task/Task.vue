@@ -63,7 +63,7 @@
               .form-group
                 label Description
                 textarea.form-control(v-model="task.description")
-          #task-script.tab-pane(style='margin:10px')
+          #task-script.tab-pane(style='margin:10px;height:620px;')
             .box-body
                 .form-group
                   label Technology
@@ -73,7 +73,8 @@
                   codemirror(
                     ref='script' 
                     v-model='task.script' 
-                    :options='editorOptions') 
+                    :options='editorOptions'
+                  ) 
           #task-dependencies.tab-pane(style='margin:10px')
             .form-group
               v-select(label='name', 
@@ -384,7 +385,7 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
+<style>
 .input-group-addon {
   line-height: 1.56;
 }
@@ -445,5 +446,15 @@ img {
   border-top-right-radius: 3px;
 }
 
+.CodeMirror {
+  height: 450px !important;
+  border: solid 1px #cccccc96;
+  border-radius: 3px;
+}
+
+.CodeMirror-gutters {
+  border-right: 1px solid rgba(255,255,255,.15);
+  background-color: #dddddd1c;
+}
 
 </style>
