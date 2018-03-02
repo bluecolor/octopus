@@ -6,6 +6,8 @@ bin
 !docs/**/*.html
 playground
 build/**
+!frontend/build
+!frontend/build/**
 db
 bin
 build
