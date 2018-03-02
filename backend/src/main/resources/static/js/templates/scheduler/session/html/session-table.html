@@ -1,0 +1,63 @@
+
+<div class="row"> 
+  <div class="col-md-10 col-md-offset-1">
+    <div class="box" style="border-top=0px;">
+      <div class="box-header with-border">
+        <h3 class="box-title">Sessions</h3>
+        <div class="box-tools pull-right">
+          <div class="has-feedback table-search">
+            <input class="form-control input-sm js-search" type="text" placeholder="Search"/><span class="glyphicon glyphicon-search form-control-feedback"></span>
+          </div>
+        </div>
+      </div>
+      <div class="box-body no-padding">
+        <div class="table-controls"><a class="btn btn-default btn-sm js-reload" type="button" data-toggle="tooltip" title="Refresh"><i class="fa fa-refresh text-blue fa-lg"></i></a><a class="js-trash-btn btn btn-default btn-sm hidden" data-toggle="tooltip" title="Delete Session"><i class="fa fa-trash-o text-danger fa-lg"></i></a>
+          <div class="dropdown hidden js-more-btn" style="display:inline;" name="more">
+            <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">More<span class="caret"></span></button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+              <li> <a class="js-stop-session" href="javascript:void(0);">Stop</a></li>
+              <li> <a class="js-start-session" href="javascript:void(0);">Start</a></li>
+              <li class="divider" role="separator"></li>
+              <li class="js-trash-btn"><a href="javascript:void(0);">Delete</a></li>
+            </ul>
+          </div>
+          <div class="dropdown pull-right" style="display:inline;" name="status"><a class="btn btn-default btn-sm dropdown-toggle text-green" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Sort By<span class="caret"></span></a>
+            <ul class="dropdown-menu js-sort" aria-labelledby="dropdownMenu1">
+              <li><a href="javascript:void(0);" name="status" order="-1">Status ascending</a></li>
+              <li><a href="javascript:void(0);" name="status" order="1">Status descending</a></li>
+              <li class="divider" role="separator"></li>
+              <li><a href="javascript:void(0);" name="name" order="-1">Name ascending</a></li>
+              <li><a href="javascript:void(0);" name="name" order="1">Name descending</a></li>
+              <li class="divider" role="separator"></li>
+              <li><a href="javascript:void(0);" name="scheduledate" order="-1">Schedule date ascending</a></li>
+              <li><a href="javascript:void(0);" name="scheduledate" order="1">Schedule date descending</a></li>
+              <li class="divider" role="separator"></li>
+              <li><a href="javascript:void(0);" name="startdate" order="-1">Start date ascending</a></li>
+              <li><a href="javascript:void(0);" name="startdate" order="1">Start date descending              </a></li>
+            </ul>
+          </div>
+          <div class="pull-right">
+            <select name="status" style="margin-right:10px;" multiple="multiple">
+              <option name="running" value="RUNNING">RUNNING</option>
+              <option name="idle" value="IDLE">IDLE</option>
+              <option name="success" value="SUCCESS">SUCCESS</option>
+              <option name="error" value="ERROR">ERROR</option>
+            </select>
+          </div>
+          <div class="pull-right">
+            <select name="plan" style="margin-right:10px;" multiple="multiple"></select>
+          </div>
+          <div class="js-daterangepicker pull-right date-picker" data-toggle="tooltip" title="Schedule date"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></div><a class="btn btn-default btn-sm js-clear-filter-btn text-red-plum pull-right hidden" href="#" style="margin-right:10px;"><i class="fa fa-filter fa-lg"></i>  Clear filter</a>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <tbody class="js-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="box-footer clearfix">
+        <ul class="pagination pagination-sm no-margin pull-right"></ul>
+      </div>
+    </div>
+  </div>
+</div>

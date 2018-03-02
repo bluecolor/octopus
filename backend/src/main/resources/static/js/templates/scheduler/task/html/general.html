@@ -1,0 +1,34 @@
+
+<div class="box-body">
+  <div class="form-group js-task-name">
+    <label>Name</label>
+    <input class="form-control js-task-name" name="name" type="text" placeholder="Task name ..." required="required" autofocus="autofocus"/>
+  </div>
+  <div class="form-group js-retry-count">
+    <label>Retry Count</label>
+    <input class="form-control js-task-name" value="0" name="retryCount" type="number" placeholder="" min="0"/>
+  </div>
+  <div class="form-group js-retry-count">
+    <label>Priority</label>
+    <div style="min-width:400px;">
+      <input class="form-control slider" style="min-width:400px;" type="text" name="priority" data-slider-value="2"/>
+    </div>
+  </div>
+  <div class="form-group">
+    <label>Active</label>
+    <fieldset>
+      <div class="radio radio-inline radio-danger" style="display:inline;">
+        <input id="radio-active-1" type="radio" name="radio-active" value="1" checked="1"/>
+        <label for="radio1">Yes</label>
+      </div>
+      <div class="radio radio-inline radio-danger" style="display:inline;">
+        <input id="radio-active-2" type="radio" name="radio-active" value="0"/>
+        <label for="radio2">No</label>
+      </div>
+    </fieldset>
+  </div>
+  <div class="form-group">
+    <label>Description</label>
+    <textarea class="form-control" rows="3" name="description"></textarea>
+  </div>
+</div>

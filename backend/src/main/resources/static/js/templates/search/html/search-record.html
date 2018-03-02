@@ -1,0 +1,21 @@
+
+<td style="opacity:0.3;width:20px;border:0px; vertical-align:middle;"><span class="pull-right"><i class="fa fa-lg <%= resultTypeIconCls %>"></i></span></td>
+<td style="border:0px;">      
+  <div><a href="" style="font-weight:600 !important;"><%=name%></a></div><% if(resultType == 'User') {%>
+  <div><span style="color:#c6bcbc;"><%= result.username %></span></div>
+  <div><span style="color:#5b626d;"><%= result.email %></span></div><% } %>
+<% if(resultType == 'Group') {%>
+  <div><span style="color:#c6bcbc;"><%= `Max parallel: ${result.parallel}` %></span></div>
+  <div><% if(result.connection) {%><span style="color:#5b626d;"><%= `Default connection: ${result.connection.name}` %></span><%} %></div><% } %>
+<% if(resultType == 'Task') {%>
+  <div><span style="color:#c6bcbc;">owned by   </span><a class="search-owner" href=""><%= result.primaryOwner.username %></a></div><% } %>
+</td>
+<td style="border:0px;"><% if(resultType == 'Task') {%>
+  <div><a class="search-plan" href=""><%= result.plan.name %></a></div><%}%>
+</td>
+<td style="border:0px;"><% if(resultType == 'Task') {%>
+  <div><a class="search-primary-group" href=""><%= result.primaryGroup.name %></a></div><%}%>
+</td>
+<td style="width:60px;border:0px;">
+  <div><span style="color:#c6bcbc;"><%= resultType %></span></div>
+</td>

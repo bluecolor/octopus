@@ -1,0 +1,18 @@
+
+<td style="width:20px;">
+  <div class="checkbox js-checkbox">
+    <input class="styled" type="checkbox" value="<%= id %>" aria-label="" name="checkbox"/>
+    <label></label>
+  </div>
+</td>
+<td style="width:100px;"><span class="label <%= label %>" data-toggle="tooltip" title="Status"><%- status?status:'UNKNOWN' %> </span></td>
+<td style="max-width:100px;"><a href="#/scheduler/task-instances/<%= id %>" data-toggle="tooltip" title="Name"><%- task.name %></a></td>
+<td style="max-width:100px;"><% if(task.primaryGroup) {%><span class="label" style="background-color:<%= task.primaryGroup.color %>;"><%- task.primaryGroup.name %> </span><% } %></td>
+<td><a class="js-dependencies" model-id="<%- id %>" href="javascript:void(0);" data-toggle="tooltip" title="Dependencies"><%- dependencies.length %></a></td>
+<td style="width:200px;"><span data-toggle="tooltip" title="Session start date"><%= color.startDate  %></span></td>
+<td style="width:200px;"><span data-toggle="tooltip" title="Session end date"><%= color.endDate %></span></td>
+<td>
+  <div class="progress progress-striped" style="margin-bottom:0px;" data-toggle="tooltip" title="Progress">
+    <div class="progress-bar progress-bar-info" role="progressbar" style="width: <%=progress%>%;"><%- progress %>%</div>
+  </div>
+</td>

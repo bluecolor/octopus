@@ -1,0 +1,34 @@
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3"> 
+    <div class="box box-primary">
+      <div class="box-header with-border">
+        <h3 class="box-title">My Profile</h3>
+      </div>
+      <div class="panel-body" style="height:400px;"> 
+        <form name="profile-form" role="form">
+          <div class="box-body">
+            <div class="form-group">
+              <label>Username</label>
+              <input class="form-control js-username" name="username" type="text" required="required" autofocus="autofocus"/>
+            </div>
+            <div class="form-group">
+              <label>Name</label>
+              <input class="form-control js-name" name="name" type="text" required="required"/>
+            </div>
+            <div class="form-group">
+              <label>Role</label>
+              <input class="form-control js-name" name="role" type="text" readonly="readonly"/>
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input class="form-control js-name" name="email" type="text" required="required"/>
+            </div>
+            <div class="form-group"><a class="btn btn-success js-change-pass" href="#/profile/password">Change Password</a></div>
+          </div>
+        </form>
+      </div>
+      <div class="box-footer"><a class="btn btn-danger js-cancel-btn">Close</a><a class="ladda-button btn btn-primary pull-right js-save-btn" data-style="expand-left">Save</a></div>
+    </div>
+  </div>
+</div>

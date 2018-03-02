@@ -1,0 +1,74 @@
+
+<div class="row"> 
+  <div class="col-md-12">
+    <div class="box" style="border-top=0px;">
+      <div class="box-header with-border">
+        <h3 class="box-title">Tasks of Session - <%= session %></h3>
+        <div class="box-tools pull-right">
+          <div class="input-group task-search" style="margin-left:10px; align:center;">
+            <div class="input-group-btn">
+              <button class="btn btn-sm btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">Filter <span class="fa fa-caret-down"></span></button>
+              <ul class="dropdown-menu js-search-menu">
+                <li><a href="#" name="my-tasks">Your tasks</a></li>
+                <li><a href="#" name="bookmarked">Bookmarked tasks</a></li>
+                <li class="divider"></li>
+                <li><a href="#">View advanced search syntax</a></li>
+              </ul>
+            </div>
+            <input class="form-control input-sm" type="text" placeholder="Search" name="search"/>
+          </div>
+        </div>
+      </div>
+      <div class="box-body no-padding">
+        <div class="table-controls"><a class="btn btn-default btn-sm js-reload" type="button" data-toggle="tooltip" title="Refresh"><i class="fa fa-refresh text-blue fa-lg"></i></a><a class="js-trash-btn btn btn-default btn-sm hidden" data-toggle="tooltip" title="Delete Session"><i class="fa fa-trash-o text-danger fa-lg"></i></a>
+          <div class="dropdown hidden js-more-btn" style="display:inline;" name="more">
+            <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">More<span class="caret"></span></button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+              <li> <a class="js-done-task" href="javascript:void(0);">Done</a></li>
+              <li> <a class="js-stop-task" href="javascript:void(0);">Stop</a></li>
+              <li> <a class="js-start-task" href="javascript:void(0);">Start</a></li>
+              <li> <a class="js-block-task" href="javascript:void(0);">Block</a></li>
+              <li class="divider" role="separator"></li>
+              <li class="js-delete"><a href="javascript:void(0);">Delete</a></li>
+            </ul>
+          </div>
+          <div class="dropdown pull-right" style="display:inline;" name="sort"><a class="btn btn-default btn-sm dropdown-toggle text-green" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Sort By<span class="caret"></span></a>
+            <ul class="dropdown-menu js-sort" aria-labelledby="dropdownMenu1">
+              <li><a href="javascript:void(0);" name="status" order="-1">Status ascending</a></li>
+              <li><a href="javascript:void(0);" name="status" order="1">Status descending</a></li>
+              <li class="divider" role="separator"></li>
+              <li><a href="javascript:void(0);" name="name" order="-1">Name ascending</a></li>
+              <li><a href="javascript:void(0);" name="name" order="1">Name descending</a></li>
+              <li class="divider" role="separator"></li>
+              <li><a href="javascript:void(0);" name="duration" order="-1">Duration ascending</a></li>
+              <li><a href="javascript:void(0);" name="duration" order="1">Duration descending              </a></li>
+            </ul>
+          </div>
+          <div class="pull-right">
+            <select name="owner" style="margin-right:10px;" multiple="multiple"></select>
+          </div>
+          <div class="pull-right">
+            <select name="group" style="margin-right:10px;" multiple="multiple"></select>
+          </div>
+          <div class="pull-right">
+            <select name="status" style="margin-right:10px;" multiple="multiple">
+              <option name="status-running" value="RUNNING">RUNNING</option>
+              <option name="status-idle" value="IDLE">IDLE</option>
+              <option name="status-done" value="DONE">DONE</option>
+              <option name="status-success" value="SUCCESS">SUCCESS</option>
+              <option name="status-error" value="ERROR">ERROR</option>
+            </select>
+          </div><a class="btn btn-default btn-sm js-clear-filter-btn text-red-plum pull-right hidden" href="#" style="margin-right:15px;"><i class="fa fa-filter fa-lg"></i>  Clear filter    </a>
+        </div>
+        <div class="table-responsive connection-items">
+          <table class="table table-hover">
+            <tbody class="js-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="box-footer clearfix">
+        <ul class="pagination pagination-sm no-margin pull-right"></ul>
+      </div>
+    </div>
+  </div>
+</div>

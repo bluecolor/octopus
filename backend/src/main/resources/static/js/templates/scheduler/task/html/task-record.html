@@ -1,0 +1,14 @@
+
+<td>
+  <div class="checkbox js-checkbox">
+    <input class="styled" type="checkbox" value="<%= id %>" aria-label="" name="checkbox"/>
+    <label></label>
+  </div>
+</td>
+<td>   <a class="js-bookmark bookmark-item pull-left" href="javascript:void(0)" style="margin-right:20px;" model-id="<%- id %>"><% if(bookmarked) {%><i class="fa fa-bookmark text-yellow fa-lg"></i><%}else{%><i class="fa fa-bookmark-o text-gray fa-lg"></i><%}%>  </a></td>
+<td><% if(!active) {%><i class="fa fa-ban text-danger fa-lg" data-toggle="tooltip" title="Disabled"></i><%}%></td>
+<td><a href="#/scheduler/tasks/<%= id %>"><%- name %></a></td>
+<td><a class="js-dependencies" model-id="<%- id %>" href="#"><%- dependencies.length %></a></td>
+<td><% if(primaryGroup) {%><span class="label" style="background-color:<%= primaryGroup.color %>;"><%- primaryGroup.name %> </span><% } %></td>
+<td class="js-plan"><a href="#/scheduler/plans/<%= plan.id %>"><%- plan.name %></a></td>
+<td>   <a class="js-stats" href="javascript:void(0)" data-toggle="popover" model-id="<%- id %>"><i class="fa fa-bar-chart text-green-fade fa-lg"></i></a></td>

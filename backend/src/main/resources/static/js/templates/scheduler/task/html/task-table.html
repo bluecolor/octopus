@@ -1,0 +1,85 @@
+
+<div class="row"> 
+  <div class="col-md-12">
+    <div class="box" style="border-top=0px;">
+      <div class="box-header with-border">
+        <h3 class="box-title">Tasks</h3>
+        <div class="box-tools pull-right table-search">
+          <div class="input-group" style="margin-left:10px; align:center;">
+            <div class="input-group-btn">
+              <button class="btn btn-sm btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">Filter <span class="fa fa-caret-down"></span></button>
+              <ul class="dropdown-menu js-search-menu">
+                <li><a href="#" name="myTasks">Your Tasks</a></li>
+                <li><a href="#" name="disabled">Disabled Tasks</a></li>
+                <li><a href="#" name="bookmarked">Bookmarked Tasks</a></li>
+                <li class="divider"></li>
+                <li><a href="#">View advanced search syntax</a></li>
+              </ul>
+            </div>
+            <input class="form-control input-sm table-search" type="text" placeholder="Search" name="search"/>
+          </div>
+        </div>
+      </div>
+      <div class="box-body no-padding">
+        <div class="table-controls"><a class="btn btn-default btn-sm js-reload-btn"><i class="fa fa-refresh text-blue fa-lg"></i></a><a class="js-new-task-btn btn btn-default btn-sm" href="#/scheduler/tasks/new"><i class="fa fa-plus text-green fa-lg"></i></a><a class="btn btn-default btn-sm js-import-btn" href="#/scheduler/tasks/import" data-toggle="tooltip" title="Import tasks"><i class="fa fa-upload text-yellow fa-lg"></i></a><a class="btn btn-default btn-sm js-delete-task hidden" data-toggle="tooltip" title="Delete task"><i class="fa fa-trash-o text-danger fa-lg"></i></a>
+          <div class="dropdown hidden" style="display:inline;" name="more">
+            <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">More<span class="caret"></span></button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+              <li> <a class="js-run-task" href="javascript:void(0);">Run</a></li>
+              <li class="divider" role="separator"></li>
+              <li class="js-duplicate-task"><a href="javascript:void(0);">Duplicate</a></li>
+              <li class="js-task-dep"><a href="javascript:void(0);">Dependencies</a></li>
+              <li> <a class="js-export-task" href="javascript:void(0);">Export</a></li>
+              <li class="divider" role="separator"></li>
+              <li><a class="js-enable-task" href="javascript:void(0);">Enable</a></li>
+              <li><a class="js-disable-task" href="javascript:void(0);">Disable</a></li>
+              <li class="js-delete-task divider" role="separator"></li>
+              <li><a class="js-delete-task" href="javascript:void(0);">Delete</a></li>
+            </ul>
+          </div><span class="js-selected-tasks text-gray-harbor hidden"></span>
+          <div class="dropdown pull-right" style="display:inline;" name="sort"><a class="btn btn-default btn-sm dropdown-toggle text-green" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Sort By<span class="caret"></span></a>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+              <li class="js-sort-name-asc"><a href="javascript:void(0);">Name ascending</a></li>
+              <li class="js-sort-name-desc"><a href="javascript:void(0);">Name descending</a></li>
+              <li class="divider" role="separator"></li>
+              <li class="js-sort-avgd-asc"><a href="javascript:void(0);">Avg. duration ascending</a></li>
+              <li class="js-sort-avgd-desc"><a href="javascript:void(0);">Avg. duration descending</a></li>
+              <li class="divider" role="separator">               </li>
+              <li class="js-sort-most-crash"><a href="javascript:void(0);">Most crashing              </a></li>
+              <li class="js-sort-least-crash"><a href="javascript:void(0);">Least crashing              </a></li>
+            </ul>
+          </div>
+          <div class="pull-right">
+            <select name="owner" style="margin-right:10px;" multiple="multiple"></select>
+          </div>
+          <div class="pull-right" style="margin-right:10px;">
+            <select name="group" style="margin-right:10px;" multiple="multiple"></select>
+          </div>
+          <div class="pull-right">
+            <select name="plan" style="margin-right:10px;" multiple="multiple"></select>
+          </div><a class="btn btn-default btn-sm js-clear-filter-btn text-red-plum pull-right hidden" href="#" style="margin-right:15px;"><i class="fa fa-filter fa-lg"></i>  Clear filter</a>
+        </div>
+        <div class="table-responsive connection-items">
+          <table class="table table-hover display">
+            <thead>
+              <tr>
+                <th style="width:20px;"> </th>
+                <th style="width:20px;"></th>
+                <th style="width:20px;"></th>
+                <th data-sortable="true">Task Name </th>
+                <th data-sortable="true">Dependencies</th>
+                <th data-sortable="true">Group</th>
+                <th data-sortable="true">Plan</th>
+                <th style="width:20px;"></th>
+              </tr>
+            </thead>
+            <tbody class="js-table-body plan-table"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="box-footer clearfix">
+        <ul class="pagination pagination-sm no-margin pull-right"></ul>
+      </div>
+    </div>
+  </div>
+</div>

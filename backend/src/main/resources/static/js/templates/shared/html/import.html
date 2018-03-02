@@ -1,0 +1,18 @@
+
+<div class="row">
+  <div class="col-md-12"> 
+    <div class="box box-primary">
+      <div class="box-header with-border">
+        <h3 class="box-title"><%= title!=false ? title: 'Import' %></h3>
+      </div>
+      <div class="box-body" style="min-height:320px;">
+        <form enctype="multipart/form-data" method="POST">
+          <div class="form-group">
+            <input class="js-import file-loading" name="file" type="file" multiple="" data-overwrite-initial="false" data-min-file-count="1"/>
+          </div>
+        </form>
+      </div>
+      <div class="box-footer"><a class="btn btn-danger js-cancel-btn">Close</a></div>
+    </div>
+  </div>
+</div>

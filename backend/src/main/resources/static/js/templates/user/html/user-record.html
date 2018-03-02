@@ -1,0 +1,11 @@
+
+<td style="width:20px;"><% if(system) { %><span class="<%= system ? "fa fa-lg fa-shield text-danger":"" %>" data-toggle="tooltip" title="System user"></span><% } else { %>
+  <div class="checkbox js-user-checkbox <%= system ? "hidden":"" %>">
+    <input class="styled" type="checkbox" value="<%= id %>" aria-label="" name="checkbox"/>
+    <label></label>
+  </div><% } %>     
+</td>
+<td style="width:20px;"><span class="<%= locked ? "fa fa-lg fa-lock text-danger":"" %>" data-toggle="tooltip" title="User locked"></span></td>
+<td><a href="#/users/<%= id %>"> <b><%- username %></b></a></td>
+<td><%- name %> </td>
+<td> <b><%- role %></b></td>

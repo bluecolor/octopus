@@ -1,0 +1,88 @@
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3"> 
+    <div class="box box-primary">
+      <div class="box-header with-border">
+        <h3 class="box-title">Mail Settings</h3>
+      </div>
+      <form role="form">
+        <div class="box-body">
+          <div class="form-group">
+            <label>Mail service active</label>
+            <fieldset>
+              <div class="radio radio-inline radio-danger" style="display:inline;">
+                <input id="radio-service-1" type="radio" name="active" _value="yes" checked="1"/>
+                <label for="radio-service-1">Yes</label>
+              </div>
+              <div class="radio radio-inline radio-danger" style="display:inline;">
+                <input id="radio-service-2" type="radio" name="active" _value="no"/>
+                <label for="radio-service-2">No</label>
+              </div>
+            </fieldset>
+          </div>
+          <div class="row">
+            <div class="col-xs-9">
+              <div class="form-group">
+                <label>Host</label>
+                <input class="form-control" name="host" type="text" placeholder="Host or IP Address"/>
+              </div>
+            </div>
+            <div class="col-xs-3">
+              <div class="form-group">
+                <label>Port</label>
+                <input class="form-control" name="port" type="number" value="25" min="1" max="65535"/>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Username</label>
+            <input class="form-control" name="username" type="text" placeholder="Username ..."/>
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input class="form-control" name="password" type="password" placeholder="Password ..."/>
+          </div>
+          <div class="form-group">
+            <label>Connection security</label>
+            <fieldset>
+              <div class="radio radio-inline radio-danger" style="display:inline;">
+                <input id="radio-con-sec-ssl" type="radio" name="consec" _value="ssl" checked="1"/>
+                <label for="radio-con-sec-ssl">SSL</label>
+              </div>
+              <div class="radio radio-inline radio-danger" style="display:inline;">
+                <input id="radio-con-sec-tls" type="radio" name="consec" _value="tls"/>
+                <label for="radio-con-sec-tls">TLS</label>
+              </div>
+              <div class="radio radio-inline radio-danger" style="display:inline;">
+                <input id="radio-con-sec-none" type="radio" name="consec" _value="none"/>
+                <label for="radio-con-sec-none">None</label>
+              </div>
+            </fieldset>
+          </div>
+          <div class="form-group">
+            <label>Send from</label>
+            <input class="form-control" name="sendFrom" type="text" placeholder="sender@yourdomain.com"/>
+          </div>
+          <div class="form-group">
+            <label>Send task mail to</label>
+            <fieldset>
+              <div class="radio radio-inline radio-danger" style="display:inline;">
+                <input id="radio-mail-1" type="radio" name="sendTo" _value="o"/>
+                <label for="radio-mail-1">Owners</label>
+              </div>
+              <div class="radio radio-inline radio-danger" style="display:inline;">
+                <input id="radio-mail-2" type="radio" name="sendTo" _value="p" checked="0"/>
+                <label for="radio-mail-2">Primary owner</label>
+              </div>
+              <div class="radio radio-inline radio-danger" style="display:inline;">
+                <input id="radio-mail-3" type="radio" name="sendTo" _value="n" checked="1"/>
+                <label for="radio-mail-3">Nobody        </label>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+        <div class="box-footer"><a class="btn btn-danger js-cancel-btn">Close</a><a class="disabled ladda-button btn btn-primary pull-right js-save-btn" data-style="expand-left">Save</a><a class="disabled ladda-button btn btn-warning pull-right js-test-btn" style="margin-right:10px;" data-style="expand-left">Test</a></div>
+      </form>
+    </div>
+  </div>
+</div>

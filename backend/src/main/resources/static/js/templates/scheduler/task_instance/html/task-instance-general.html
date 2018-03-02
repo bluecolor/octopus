@@ -1,0 +1,23 @@
+
+<div class="box-body">
+  <div class="form-group js-task-name">
+    <label>Name</label>
+    <div class="input-group">
+      <input class="form-control js-task-name" name="name" type="text" readonly="readonly"/><a class="btn btn-default input-group-addon" href="#/scheduler/tasks/<%= task.id %>">Go</a>
+    </div>
+  </div>
+  <div class="form-group js-retry-count">
+    <label>Retry Count</label>
+    <input class="form-control js-task-name" value="0" name="retryCount" type="number" readonly="readonly"/>
+  </div>
+  <div class="form-group js-retry-count">
+    <label>Priority</label>
+    <div style="min-width:400px;">
+      <input class="form-control slider" style="min-width:400px;" type="text" name="priority" data-slider-value="2"/>
+    </div>
+  </div>
+  <div class="form-group">
+    <label>Description</label>
+    <textarea class="form-control" style="height:263px;" name="description" readonly="readonly"></textarea>
+  </div>
+</div>

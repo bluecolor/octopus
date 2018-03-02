@@ -1,0 +1,41 @@
+
+<div class="row"> 
+  <div class="col-md-8 col-md-offset-2">
+    <div class="box" style="border-top=0px;">
+      <div class="box-header with-border">
+        <h3 class="box-title">Plans</h3>
+        <div class="box-tools pull-right">
+          <div class="has-feedback table-search">
+            <input class="form-control input-sm js-search" type="text" placeholder="Search"/><span class="glyphicon glyphicon-search form-control-feedback"></span>
+          </div>
+        </div>
+      </div>
+      <div class="box-body no-padding">
+        <div class="table-controls"><a class="btn btn-default btn-sm js-reload" type="button" data-toggle="tooltip" title="Refresh"><i class="fa fa-refresh text-blue fa-lg"></i></a><a class="js-new-plan btn btn-default btn-sm" href="#/scheduler/plans/new" data-toggle="tooltip" title="New plan"><i class="fa fa-plus text-green fa-lg"></i></a><a class="btn btn-default btn-sm js-import-btn" href="#/scheduler/plans/import" data-toggle="tooltip" title="Import"><i class="fa fa-upload text-yellow fa-lg"></i></a><a class="js-trash-btn btn btn-default btn-sm hidden" data-toggle="tooltip" title="Delete plan"><i class="fa fa-trash-o text-danger fa-lg"></i></a>
+          <div class="dropdown hidden js-more-btn" style="display:inline;" name="more">
+            <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">More<span class="caret"></span></button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+              <li> <a class="js-run" href="javascript:void(0);">Run</a></li>
+              <li class="divider" role="separator"></li>
+              <li class="js-export-plan"><a href="javascript:void(0);">Export Plan</a></li>
+              <li class="js-export-tasks"><a href="javascript:void(0);">Export Tasks</a></li>
+              <li class="divider" role="separator"></li>
+              <li class="js-protect"><a href="javascript:void(0);">Protect</a></li>
+              <li class="js-un-protect"><a href="javascript:void(0);">Unprotect</a></li>
+              <li class="divider" role="separator"></li>
+              <li class="js-delete-sessions"><a href="javascript:void(0);">Delete Sessions</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="table-responsive connection-items">
+          <table class="table table-hover">
+            <tbody class="js-plan-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="box-footer clearfix">
+        <ul class="pagination pagination-sm no-margin pull-right">         </ul>
+      </div>
+    </div>
+  </div>
+</div>

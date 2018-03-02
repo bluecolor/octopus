@@ -1,0 +1,5 @@
+
+<td style="width:100px;"><span class="label <%= label %>" data-toggle="tooltip" title="Status"><%- status?status:'UNKNOWN' %> </span></td>
+<td style="width:100px;"><%- moment(date).format('MMM DD HH:mm:ss') %></td>
+<td style="width:100px;"><%- `${(log==null?'':log).substring(0,30)}...` %></td>
+<td style="width:20px;"><a class="js-more" href="javascript:void(0);" style="margin-right:20px;" model-id="<%- id %>"><i class="fa fa-ellipsis-h text-green-fade fa-lg"></i></a></td>

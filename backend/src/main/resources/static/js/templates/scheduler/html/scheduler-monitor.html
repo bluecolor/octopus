@@ -1,0 +1,70 @@
+
+<div class="row">
+  <div class="col-lg-3 col-md-6">
+    <div class="panel panel-warning">
+      <div class="panel-heading">
+        <div class="row">
+          <div class="col-xs-3"><i class="fa fa-gear fa-5x"></i></div>
+          <div class="col-xs-9 text-right">
+            <div class="huge"><%- taskCount %></div>
+            <div>Task Definition<%- taskCount>1?'s':'' %> </div>
+          </div>
+        </div>
+      </div><a href="#/scheduler/tasks">
+        <div class="panel-footer"><span class="pull-left">View Details</span><span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+          <div class="clearfix"></div>
+        </div></a>
+    </div>
+  </div>
+  <div class="col-lg-3 col-md-6">
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        <div class="row">
+          <div class="col-xs-3"><i class="fa fa-calendar-check-o fa-5x"></i></div>
+          <div class="col-xs-9 text-right">
+            <div class="huge"><%- planCount %></div>
+            <div>Run Plan<%- planCount>1?'s':'' %></div>
+          </div>
+        </div>
+      </div><a href="#/scheduler/plans">
+        <div class="panel-footer"><span class="pull-left">View Details</span><span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+          <div class="clearfix"></div>
+        </div></a>
+    </div>
+  </div>
+  <div class="col-lg-3 col-md-6">
+    <div class="panel panel-success">
+      <div class="panel-heading">
+        <div class="row">
+          <div class="col-xs-3"><i class="fa fa-tasks fa-5x"></i></div>
+          <div class="col-xs-9 text-right">
+            <div class="huge"><%- sessionCount %></div>
+            <div>Active Sessions</div>
+          </div>
+        </div>
+      </div><a href="#/scheduler/sessions">
+        <div class="panel-footer"><span class="pull-left">View Details</span><span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+          <div class="clearfix"></div>
+        </div></a>
+    </div>
+  </div>
+  <div class="col-lg-3 col-md-6">
+    <div class="panel panel-danger">
+      <div class="panel-heading">
+        <div class="row">
+          <div class="col-xs-3"><i class="fa fa-exclamation fa-5x"></i></div>
+          <div class="col-xs-9 text-right">
+            <div class="huge"><%- errorCount %></div>
+            <div>Alerts</div>
+          </div>
+        </div>
+      </div><a href="#/alerts">
+        <div class="panel-footer"><span class="pull-left">View Details</span><span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+          <div class="clearfix"></div>
+        </div></a>
+    </div>
+  </div>
+</div>
+<div class="row" style="margin-top:50px;">
+  <div class="col-md-6 col-md-offset-3"></div>
+</div>

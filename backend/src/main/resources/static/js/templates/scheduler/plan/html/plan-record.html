@@ -1,0 +1,14 @@
+
+<td style="width:20px;">
+  <div class="checkbox js-plan-checkbox">
+    <input class="styled" type="checkbox" value="<%= id %>" aria-label="" name="connection-checkbox"/>
+    <label></label>
+  </div>
+</td>
+<td style="width:20px;"><span class="<%= protect ? "fa fa-lg fa-shield text-red-plum":"" %>" data-toggle="tooltip" title="Protected"> </span></td>
+<td><a href="#/scheduler/plans/<%= id %>"><%- name %></a></td>
+<td class="js-plan-parallel"><%- parallel + " parallel" %></td>
+<td><a href="#/scheduler/tasks?plan=<%=id%>"><%- `${stats.taskCount} task${stats.taskCount==1?'':'s'}` %></a></td>
+<td class="connection-type"><%- connection.name %> </td>
+<td><span class="label <%= active ? "label-success":"label-danger" %>"><%- active ? 'Active': 'Not Active'  %></span></td>
+<td>  <a class="js-stats" href="javascript:void(0)" data-toggle="popover" model-id="<%- id %>"><i class="fa fa-bar-chart text-green-fade fa-lg"></i></a></td>
