@@ -1,0 +1,19 @@
+{
+  "presets": [
+    ["env", { "modules": false }],
+    "stage-2"
+  ],
+  "plugins": ["jsx-v-model", "transform-vue-jsx", "transform-runtime",["component", 
+    [{
+      "libraryName": "element-ui",
+      "styleLibraryName": "theme-chalk"
+    }]]
+  ],
+  "comments": false,
+  "env": {
+    "test": {
+      "presets": ["env", "stage-2"],
+      "plugins": [ "istanbul" ]
+    }
+  }
+}

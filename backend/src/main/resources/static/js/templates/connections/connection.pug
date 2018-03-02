@@ -1,0 +1,46 @@
+.row
+  .col-md-6.col-md-offset-3  
+    .box.box-primary
+      .box-header.with-border
+        h3.box-title Connection
+      form(name="connection-form", role='form')
+        .box-body
+          .form-group
+            label Name
+            input.js-item.form-control.js-connection-name(name="name", type='text', placeholder='Connection name ...', required=true)
+          .form-group
+            label Type
+            select.js-item.form-control.js-connection-type(name="type")
+              option(value="SSH")   SSH
+              option(value="JDBC")  JDBC - Database
+              option(value="LOCAL") Local
+          section.js-jdbc-props.hidden
+            .form-group
+              label JDBC URL
+              input.js-item.form-control(name="jdbcUrl" type='text' placeholder='e.g. jdbc:postgresql://host:port/database')
+            .form-group
+              label Username
+              input.js-item.form-control(name="username" type='text' placeholder='Username ...')
+            .form-group
+              label Password
+              input.js-item.form-control(name="password" type='password' placeholder='Password ...')
+          section.js-ssh-props            
+            .row
+              div.col-xs-9
+                .form-group
+                  label Host
+                  input.js-item.form-control(name="host" type='text' placeholder='Host or IP Address')
+              div.col-xs-3
+                .form-group
+                  label Port
+                  input.js-item.form-control(name="port" type='number' value="22" min="1" max="65535")
+            .form-group
+              label Username
+              input.js-item.form-control(name="username" type='text' placeholder='Username ...')
+            .form-group
+              label Password
+              input.js-item.form-control(name="password" type='password' placeholder='Password ...')          
+        .box-footer
+          a.btn.btn-danger.js-cancel-btn Close
+          a.js-item.disabled.ladda-button.btn.btn-primary.pull-right.js-save-btn(data-style="expand-left") Save
+          a.ladda-button.btn.btn-warning.pull-right.js-test-btn(data-style="expand-left" style="margin-right:10px;") Test
