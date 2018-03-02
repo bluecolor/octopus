@@ -131,12 +131,14 @@
             :rotate="false"
           )  
   .align-center(v-else)
-    div.no-connection(style="width:330px; display: table-cell;vertical-align: middle;text-align: center;")
+    div.no-connection(v-if="!loading" style="width:330px; display: table-cell;vertical-align: middle;text-align: center;")
       div(style="width:100%; display: inline-block;")
         i.fa.big-icon.text-gray-harbor.fa-tasks(style="text-align: center;")
       div(style="width:100%; margin-top: 20px;display: inline-block;")
         span.text-gray-harbor(style="font-size:20px;") No task instance for this session!
-      
+    div.no-connection(v-if="loading" style="width:330px; display: table-cell;vertical-align: middle;text-align: center;")
+      pulse-loader(:loading="loading" color="#d2d6de")
+   
 </template>
 
 <script>
@@ -146,6 +148,7 @@ import moment from 'moment'
 import { getLabelByStatus } from '../../util'
 import Popper from 'vue-popperjs'
 import 'vue-popperjs/dist/css/vue-popper.css'
+import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
 
 export default {
   name: 'TaskInstances',
@@ -171,7 +174,8 @@ export default {
   },
   computed: {
     ...mapGetters('taskInstances', [
-      'taskInstances'
+      'taskInstances',
+      'loading'
     ]),
     ...mapGetters('groups', [
       'groups'
@@ -274,7 +278,8 @@ export default {
     }
   },
   components: {
-    'popper': Popper
+    'popper': Popper,
+    'pulse-loader': PulseLoader
   },
   mounted () {
     const session = this.filter.session

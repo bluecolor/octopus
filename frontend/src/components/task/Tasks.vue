@@ -132,16 +132,16 @@
           :items-per-page="itemsPerPage"
           @change="onPage"
         )  
-.align-center(v-else-if="collection.length === 0 && !hasFilter")
-  div.no-connection(style="width:330px; display: table-cell;vertical-align: middle;text-align: center;")
+.align-center(v-else-if="loading || (collection.length === 0 && !hasFilter)")
+  div.no-connection(v-if="!loading" style="width:330px; display: table-cell;vertical-align: middle;text-align: center;")
     div(style="width:100%; display: inline-block;")
       i.fa.big-icon.text-gray-harbor.fa-cog(style="text-align: center;")
     div(style="width:100%; margin-top: 20px;display: inline-block;")
       span.text-gray-harbor(style="font-size:20px;") You don't have any task!  
     div(style="width:70%; margin-top: 20px;display: inline-block;")
       router-link.btn.btn-block.btn-primary.btn-lg(to='/task') Create Task
-  div.no-connection(style="width:330px; display: table-cell;vertical-align: middle;text-align: center;")
-    pulse-loader(:loading="loading && collection.length > 0" color="#d2d6de")
+  div.no-connection(v-if="loading" style="width:330px; display: table-cell;vertical-align: middle;text-align: center;")
+    pulse-loader(:loading="loading" color="#d2d6de")
 
 </template>
 
@@ -156,7 +156,6 @@ export default {
   data () {
     return {
       title: 'Tasks',
-      loading: false,
       selected: [],
       pageSize: 1,
       pagination: {currentPage: 1},
@@ -182,7 +181,8 @@ export default {
   },
   computed: {
     ...mapGetters('tasks', [
-      'tasks'
+      'tasks',
+      'loading'
     ]),
     ...mapGetters('users', [
       'users'
