@@ -46,11 +46,13 @@ const actions = {
   remove ({ commit }, payload) {
     return new Promise((resolve, reject) => {
       return api.remove(payload).then(response => {
-        commit(LOAD, response.data)
+        commit(REMOVE, response.data)
         notifySuccess('Deleted plan')
+        resolve(response.data)
       },
       error => {
         notifyError(`Failed to delete plan ${error.response.data.message}`)
+        reject(error.response.data.message)
       })
     })
   },

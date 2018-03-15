@@ -175,7 +175,7 @@ export default {
         type: 'hard',
         verification: m.name
       }
-      this.$dialog.confirm(message, options).then((d) => {
+      this.$dialog.confirm(message, options).then(d => {
         this.remove(id).finally(() => {
           d.close()
         })

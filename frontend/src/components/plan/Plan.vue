@@ -36,7 +36,7 @@
                 :speed=0.2)
           .form-group
             label Active
-            fieldset(:disabled="isNewPlan()")
+            fieldset(:disabled="isNewPlan")
               .radio.radio-inline.radio-danger(style="display:inline")
                 input#radio-active-1(v-model="plan.active" type='radio', name='radio-active', value='1')
                 label(for='radio-active-1')
@@ -61,7 +61,7 @@
             textarea.form-control(v-model="plan.description" rows="3")
         .box-footer
           a.btn.btn-danger(@click="close") Close
-          a.ladda-button.btn.btn-primary.pull-right(@click="onSave" data-style="expand-left") Save  
+          a.ladda-button.btn.btn-primary.pull-right(:class="isValid?'':'disabled'" @click="onSave" data-style="expand-left") Save  
 </template>
 
 <script>
@@ -78,10 +78,11 @@ export default {
       priority: ['Low', 'Medium', 'High', 'Top'],
       plan: {
         priority: 'Medium',
-        connection: null,
+        connection: undefined,
         active: '0',
         protect: '1',
-        parallel: 10
+        parallel: 10,
+        schedule: undefined
       }
     }
   },
@@ -91,7 +92,20 @@ export default {
     ]),
     ...mapGetters('plans', [
       'plans'
-    ])
+    ]),
+    isNewPlan () {
+      if (this.$route.query.clone === 'true' || !this.id) {
+        return true
+      }
+      return false
+    },
+    isValid () {
+      return (
+        this.plan.name &&
+        this.plan.schedule &&
+        this.plan.connection
+      )
+    }
   },
   methods: {
     ...mapActions('plans', [
@@ -101,12 +115,6 @@ export default {
     ]),
     close () {
       window.history.back()
-    },
-    isNewPlan () {
-      if (this.$route.query.clone === 'true' || !this.id) {
-        return true
-      }
-      return false
     },
     init () {
       if (_.isEmpty(this.id)) {
@@ -119,6 +127,9 @@ export default {
       if (this.plan) {
         this.plan.connection = this.plan.connection ? this.plan.connection.id : undefined
         this.plan.priority = this.priority[Math.max(this.plan.priority, 1) - 1]
+      }
+      if (this.$route.query.clone === 'true') {
+        this.plan.id = undefined
       }
     },
     onSave () {

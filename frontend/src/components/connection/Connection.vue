@@ -85,7 +85,10 @@ export default {
     setValues () {
       if (!_.isEmpty(this.id)) {
         const id = parseInt(this.id)
-        this.connection = _.find(this.connections, {id})
+        this.connection = _.chain(this.connections).find({id}).cloneDeep().value()
+      }
+      if (this.$route.query.clone === 'true') {
+        this.connection.id = undefined
       }
     }
   },
