@@ -51,7 +51,6 @@ const mutations = {
       s.val = JSON.parse(s.value)
       return s
     })
-    console.log(state.all)
   },
   [UPDATE] (state, setting) {
     const name = setting.name

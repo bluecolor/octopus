@@ -85,6 +85,10 @@ springBoot {
 
 dependencies {
 
+  compile fileTree(include: [
+    '*.jar'
+  ], dir: 'lib')
+
   // compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
 
 	compile "org.springframework.boot:spring-boot-devtools"	

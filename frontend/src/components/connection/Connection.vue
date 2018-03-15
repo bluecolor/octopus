@@ -44,8 +44,8 @@
                   input.form-control(v-model="connection.password" type='password' placeholder='Password ...')          
           .box-footer
             a.btn.btn-danger.js-cancel-btn(v-on:click="close") Close
-            a.ladda-button.btn.btn-primary.pull-right(@click="save" data-style="expand-left") Save
-            a.ladda-button.btn.btn-warning.pull-right.disabled(data-style="expand-left" style="margin-right:10px;" @click="testConnection(connection)") Test
+            a.ladda-button.btn.btn-primary.pull-right(:class="isValid ? '':'disabled'" @click="save" data-style="expand-left") Save
+            a.ladda-button.btn.btn-warning.pull-right(:class="isValid ? '':'disabled'" data-style="expand-left" style="margin-right:10px;" @click="testConnection(connection)") Test
 </template>
 
 <script>
@@ -59,15 +59,15 @@ export default {
   data () {
     return {
       connection: {
-        id: null,
-        name: null,
+        id: undefined,
+        name: undefined,
         disabled: false,
         connectionType: 'SSH',
-        host: '',
-        port: '',
-        jdbcUrl: '',
-        username: '',
-        password: ''
+        host: undefined,
+        port: undefined,
+        jdbcUrl: undefined,
+        username: undefined,
+        password: undefined
       }
     }
   },
@@ -94,6 +94,21 @@ export default {
       'connections'
     ]),
     isValid () {
+      if (_.isEmpty(this.connection.name)) { return false }
+      switch (this.connection.connectionType) {
+        case 'SSH': return (
+          this.connection.host &&
+          this.connection.port &&
+          this.connection.username &&
+          this.connection.password
+        )
+        case 'JDBC': return (
+          this.connection.jdbcUrl &&
+          this.connection.username &&
+          this.connection.password
+        )
+      }
+      return true
     }
   },
   mounted () {
