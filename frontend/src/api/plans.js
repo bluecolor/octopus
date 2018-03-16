@@ -12,7 +12,10 @@ export default {
     return axios.put(`${API_BASE}/plans/${id}`, data)
   },
   remove (id) {
-    return axios.delete(`${API_BASE}/plans`, id)
+    return axios.delete(`${API_BASE}/plans/${id}`)
+  },
+  removeSessions (id) {
+    return axios.delete(`${API_BASE}/plans/${id}/sessions`)
   },
   unProtect (id) {
     return axios.put(`${API_BASE}/plans/un-protect/${id}`)

@@ -21,5 +21,11 @@ export default {
   },
   remove (id) {
     return axios.delete(`${API_BASE}/tasks/${id}`)
+  },
+  enable (id) {
+    return axios.put(`${API_BASE}/tasks/enable/${id}`)
+  },
+  disable (id) {
+    return axios.put(`${API_BASE}/tasks/disable/${id}`)
   }
 }

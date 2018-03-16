@@ -1,4 +1,4 @@
-package io.octopus.controller 
+package io.octopus.controller
 
 import java.util.{Date, Optional}
 import java.text.SimpleDateFormat
@@ -24,9 +24,9 @@ class TaskController  @Autowired()(private val taskService: TaskService) {
     @RequestParam(value="search",required=false) search: Optional[String],
     @RequestParam(value="sortBy",required=false) sortBy: Optional[String],
     @RequestParam(value="order", required=false) order : Optional[String],
-    @RequestParam("page") page: Optional[java.lang.Integer], 
+    @RequestParam("page") page: Optional[java.lang.Integer],
     @RequestParam("pageSize") pageSize: Optional[java.lang.Integer]
-  ) = 
+  ) =
     taskService.findAll(
       plan,
       group,
@@ -34,7 +34,7 @@ class TaskController  @Autowired()(private val taskService: TaskService) {
       search.orElse(""),
       sortBy.orElse("name"),
       order.orElse("asc"),
-      page.orElse(0), 
+      page.orElse(0),
       pageSize.orElse(15)
     )
 
@@ -71,7 +71,7 @@ class TaskController  @Autowired()(private val taskService: TaskService) {
     val now = new Date
     val df = new SimpleDateFormat("yyyyMMddHHmmss")
     val date = df.format(now)
-    
+
     response.setContentType("application/octet-stream; charset=utf-8")
     response.setHeader("Content-Disposition", s"attachment; filename='sch.tasks.$date.json'")
     response.getWriter().print(taskService.export(tasks))
@@ -91,7 +91,7 @@ class TaskController  @Autowired()(private val taskService: TaskService) {
     taskService.bookmark(id)
 
   @RequestMapping(value = Array("/un-bookmark/{id}"), method = Array(RequestMethod.PUT))
-  def unBookmark(@PathVariable("id") id: Long) = 
+  def unBookmark(@PathVariable("id") id: Long) =
     taskService.unBookmark(id)
 
   @RequestMapping(value = Array("/disable/{id}"), method = Array(RequestMethod.PUT))
@@ -100,15 +100,15 @@ class TaskController  @Autowired()(private val taskService: TaskService) {
   }
 
   @RequestMapping(value = Array("/enable/{id}"), method = Array(RequestMethod.PUT))
-  def enable(@PathVariable("id") id: Long) = 
+  def enable(@PathVariable("id") id: Long) =
     taskService.enable(id)
 
   @RequestMapping(value = Array("/enable"), method = Array(RequestMethod.PUT))
-  def enable(@RequestBody tasks: java.util.List[java.lang.Long]) = 
+  def enable(@RequestBody tasks: java.util.List[java.lang.Long]) =
     taskService.enable(tasks)
 
   @RequestMapping(value = Array("/disable"), method = Array(RequestMethod.PUT))
-  def disable(@RequestBody tasks: java.util.List[java.lang.Long]) = 
+  def disable(@RequestBody tasks: java.util.List[java.lang.Long]) =
     taskService.disable(tasks)
 
 }

@@ -9,6 +9,7 @@ export default {
     this.dispatch('plans/findAll')
     this.dispatch('groups/findAll')
     this.dispatch('users/findAll')
+    this.dispatch('users/findMe')
     this.dispatch('parameters/findAll')
     this.dispatch('app/findVersion')
     this.dispatch('settings/findAll')

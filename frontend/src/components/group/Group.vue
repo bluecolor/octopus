@@ -33,7 +33,7 @@
             textarea.form-control(name="description" rows="3")
         .box-footer
           a.btn.btn-danger(@click="close") Close
-          a.ladda-button.btn.btn-primary.pull-right(@click="onSave" data-style="expand-left") Save  
+          a.ladda-button.btn.btn-primary.pull-right(:class="isValid?'':'disabled'" @click="onSave" data-style="expand-left") Save  
 </template>
 
 <script>
@@ -53,6 +53,7 @@ export default {
       title: 'Group',
       priority: ['Low', 'Medium', 'High', 'Top'],
       group: {
+        name: undefined,
         parallel: 20,
         priority: 'Medium',
         color: '#69A4D4'
@@ -62,7 +63,13 @@ export default {
   computed: {
     ...mapGetters('groups', [
       'groups'
-    ])
+    ]),
+    isValid () {
+      return (
+        this.group.name &&
+        this.group.parallel
+      )
+    }
   },
   methods: {
     ...mapActions('groups', [

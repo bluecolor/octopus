@@ -17,7 +17,7 @@
             textarea.form-control(v-model="parameter.description" rows="6")
         .box-footer
           a.btn.btn-danger(@click="close") Close
-          a.ladda-button.btn.btn-primary.pull-right(@click="onSave" data-style="expand-left") Save
+          a.ladda-button.btn.btn-primary.pull-right(:class="isValid?'':'disabled'" @click="onSave" data-style="expand-left") Save
           
 </template>
 
@@ -32,7 +32,10 @@ export default {
   data () {
     return {
       title: 'Parameter',
-      parameter: {}
+      parameter: {
+        name: undefined,
+        value: undefined
+      }
     }
   },
   methods: {
@@ -65,7 +68,13 @@ export default {
   computed: {
     ...mapGetters('parameters', [
       'parameters'
-    ])
+    ]),
+    isValid () {
+      return (
+        this.parameter.name &&
+        this.parameter.value
+      )
+    }
   },
   mounted () {
     this.init()

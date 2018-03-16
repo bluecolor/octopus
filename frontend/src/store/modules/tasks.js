@@ -1,6 +1,4 @@
-
 import api from '../../api/tasks'
-// import store from '../'
 import _ from 'lodash'
 import {success as notifySuccess, error as notifyError} from '../../lib/notify'
 
@@ -9,6 +7,7 @@ const CLEAR = 'CLEAR'
 const BOOKMARK = 'BOOKMARK'
 const REMOVE_BOOKMARK = 'REMOVE_BOOKMARK'
 const REMOVE = 'REMOVE'
+const UPDATE = 'UPDATE'
 
 const state = {
   all: [],
@@ -77,6 +76,16 @@ const actions = {
         reject(error.response.data.message)
       })
     })
+  },
+  enable ({commit}, id) {
+    return api.enable(id).then(response => {
+      notifySuccess('Enabled task')
+      commit(UPDATE, response.data)
+    },
+    error => {
+      console.log(error)
+      notifyError(`Error! ${error.response.data.message}`)
+    })
   }
 }
 
@@ -118,6 +127,14 @@ const mutations = {
     if (i !== -1) {
       state.all.splice(i, 1)
     }
+  },
+  [UPDATE] (state, task) {
+    const id = task.id
+    const i = _.findIndex(state.all, {id})
+    if (i !== -1) {
+      state.all.splice(i, 1)
+    }
+    this.all.push(task)
   }
 }
 

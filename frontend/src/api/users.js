@@ -2,6 +2,9 @@ import axios from 'axios'
 import { API_BASE } from './constants'
 
 export default {
+  findMe () {
+    return axios.get(`${API_BASE}/users/me`)
+  },
   findAll () {
     return axios.get(`${API_BASE}/users`)
   },

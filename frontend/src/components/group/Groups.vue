@@ -17,7 +17,7 @@
             i.fa.fa-upload.text-yellow.fa-lg
           a.btn.btn-default.btn-sm(@click="onDelete", data-toggle="tooltip" title="Delete", :class="selected.length > 0 ? '':'hidden'")
             i.fa.fa-trash-o.text-danger.fa-lg
-          a.btn.btn-default.btn-sm(data-toggle="tooltip" title="Export group" :class="selected.length > 0 ? '':'hidden'")
+          a.btn.btn-default.btn-sm(@click="onExportGroup" data-toggle="tooltip" title="Export group" :class="selected.length > 0 ? '':'hidden'")
             i.fa.fa-download.text-green.fa-lg  
 
         .table-responsive.connection-items
@@ -129,6 +129,11 @@ export default {
           d.close()
         })
       })
+    },
+    onExportGroup () {
+      const id = this.selected[0]
+      window.location = `api/v1/groups/export/${id}`
+      this.selected = []
     }
   }
 }

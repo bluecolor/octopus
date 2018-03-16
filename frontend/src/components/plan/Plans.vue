@@ -1,5 +1,5 @@
 <template lang="pug">
-.col-md-8.col-md-offset-2(v-if="collection.length > 0")
+.col-md-8.col-md-offset-2(v-if="plans.length > 0")
   .box.box-primary(style="border-top=0px")
     .box-header.with-border
       h3.box-title {{title}}
@@ -52,9 +52,9 @@
             span.caret
           ul.dropdown-menu
             li
-              a(href='javascript:void(0);') Name ascending
+              a(@click="onSort('name', 'asc')" href='javascript:void(0);') Name ascending
             li
-              a(href='javascript:void(0);') Name descending
+              a(@click="onSort('name', 'desc')" href='javascript:void(0);') Name descending
       .table-responsive.connection-items
         table.table.table-hover
           tbody
@@ -111,7 +111,11 @@ export default {
       pageSize: 10,
       pagination: {currentPage: 1},
       maxPaginationSize: 7,
-      filter: ''
+      filter: '',
+      sort: {
+        name: 'name',
+        direction: 'asc'
+      }
     }
   },
   computed: {
@@ -128,7 +132,7 @@ export default {
       return plans.length
     },
     collection () {
-      let plans = this.plans
+      let plans = _.orderBy(this.plans, [this.sort.name], [this.sort.direction])
       if (!_.isEmpty(this.filter)) {
         plans = _.filter(this.plans, plan => {
           return plan.name.toLowerCase().indexOf(this.filter.toLowerCase()) !== -1
@@ -153,7 +157,8 @@ export default {
       'findAll',
       'remove',
       'unProtect',
-      'protect'
+      'protect',
+      'removeSessions'
     ]),
     pageChange (p) {
       this.currentPage = p
@@ -184,12 +189,21 @@ export default {
     onExportPlan () {
       const id = this.selected[0]
       window.location = `api/v1/plans/export/${id}`
+      this.selected = []
     },
     onExportTasks () {
       const id = this.selected[0]
       window.location = `api/v1/plans/export-tasks/${id}`
+      this.selected = []
     },
-    onDeleteSessions () {}
+    onDeleteSessions () {
+      const id = this.selected[0]
+      this.removeSessions(id)
+    },
+    onSort (name, direction) {
+      this.sort.name = name
+      this.sort.direction = direction
+    }
   },
   mounted () {
   }

@@ -6,17 +6,29 @@ import {success as notifySuccess, error as notifyError} from '../../lib/notify'
 const LOAD = 'LOAD'
 const SAVE = 'SAVE'
 const REMOVE = 'REMOVE'
+const SET_ME = 'SET_ME'
 
 const state = {
-  all: []
+  all: [],
+  me: undefined
 }
 
 const getters = {
-  users: state => state.all
+  users: state => state.all,
+  me: state => state.me
 }
 
 // actions
 const actions = {
+  findMe ({commit}) {
+    return api.findMe().then(response => {
+      commit(SET_ME, response.data)
+    },
+    error => {
+      console.log(error.response.data.message)
+      notifyError('Unable to load current user')
+    })
+  },
   findAll ({ commit }) {
     api.findAll().then(response => {
       commit(LOAD, response.data)
@@ -48,6 +60,9 @@ const actions = {
 
 // mutations
 const mutations = {
+  [SET_ME] (state, me) {
+    state.me = me
+  },
   [LOAD] (state, records) {
     state.all = records
   },

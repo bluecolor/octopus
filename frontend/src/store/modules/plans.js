@@ -56,6 +56,15 @@ const actions = {
       })
     })
   },
+  removeSessions ({ commit }, id) {
+    return api.removeSessions(id).then(response => {
+      notifySuccess('Deleted sessions')
+    },
+    error => {
+      console.log(error)
+      notifyError(`Failed to delete sessions ${error.response.data.message}`)
+    })
+  },
   unProtect ({commit}, id) {
     return api.unProtect(id).then(response => {
       commit(UPDATE, response.data)

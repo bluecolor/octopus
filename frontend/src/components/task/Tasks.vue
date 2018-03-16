@@ -1,5 +1,5 @@
 <template lang="pug">
-.col-md-8.col-md-offset-2(v-if="collection.length > 0 || hasFilter")
+.col-md-8.col-md-offset-2(v-if="tasks.all.length > 0")
   .box.box-primary(style="border-top=0px")
     .box-header.with-border
       h3.box-title {{title}}
@@ -16,26 +16,26 @@
           i.fa.fa-upload.text-yellow.fa-lg
         a.btn.btn-default.btn-sm(@click="onDelete", data-toggle="tooltip" title="Delete", :class="selected.length > 0 ? '':'hidden'")
           i.fa.fa-trash-o.text-danger.fa-lg
-        
+
         .dropdown(v-show="selected.length > 0" style="display:inline;")
             button.btn.btn-default.btn-sm.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
               | More
               span.caret
             ul.dropdown-menu(aria-labelledby='dropdownMenu1')
-              li  
+              li
                 a(href='javascript:void(0);') Run
               li.divider(role='separator')
               li
                 router-link(:to="'/task/'+selected[0]+'?clone=true'") Clone
               li
                 a(href='javascript:void(0);') Dependencies
-              li  
+              li
                 a(href='javascript:void(0);') Export
               li.divider(role='separator')
               li
-                a(href='javascript:void(0);') Enable
+                a(@click="onEnable(true)" href='javascript:void(0);') Enable
               li
-                a(href='javascript:void(0);') Disable
+                a(@click="onEnable(false)" href='javascript:void(0);') Disable
               li.divider(role='separator')
               li
                 a(href='javascript:void(0);') Delete
@@ -53,9 +53,9 @@
                 a(href='javascript:void(0);') Avg. duration ascending
               li
                 a(href='javascript:void(0);') Avg. duration descending
-              li.divider(role='separator')                
+              li.divider(role='separator')
               li
-                a(href='javascript:void(0);') Most crashing              
+                a(href='javascript:void(0);') Most crashing
               li
                 a(href='javascript:void(0);') Least crashing
         .dropdown.pull-right(style="display:inline;")
@@ -86,8 +86,8 @@
               li.footer(v-if='plans.length > 0')
                 a(href='javascript:void(0);' @click="onPlanSelect()") All
         a.btn.btn-default.btn-sm.pull-right(@click="onClearFilter", data-toggle="tooltip" title="Clear filters" :class="hasFilter ? '':'hidden'")
-          i.fa.fa-filter.text-danger.fa-lg 
-          | Clear filters 
+          i.fa.fa-filter.text-danger.fa-lg
+          | Clear filters
       .table-responsive.connection-items
         table.table.table-hover
           tbody
@@ -97,47 +97,47 @@
                   span.el-checkbox__input(:class="selected.indexOf(m.id)>-1 ? 'is-checked':''")
                     span.el-checkbox__inner
                     input.el-checkbox__original(type='checkbox', v-model="selected" :value ='m.id')
-              td 
+              td
                 a.pull-left(@click="setBookmark(m)" href='javascript:void(0)' style='margin-right:20px' )
                   i.fa.fa-lg(:class="`${m.bookmarked ? 'fa-bookmark text-yellow': 'fa-bookmark-o text-gray'}`")
-              td 
+              td
                 router-link(:to="'task/' + m.id" ) {{m.name}}
-              td 
+              td
                 popper(trigger='click', :options="{placement: 'left'}")
                   .popper
                     div(slot="content")
                       ul.pop-menu
                         li(v-for="d in m.dependencies")
                           router-link(:to="'task/' + d.id") {{d.name}}
-                        
+
                   a.top(href='javascript:void(0)', slot='reference' data-toggle="tooltip" title="Dependencies")
                     | {{m.dependencies.length}}
-              td 
+              td
                 span.label(
-                  :style="'border-radius:0px; background-color:'+ m.primaryGroup.color+';'", 
+                  :style="'border-radius:0px; background-color:'+ m.primaryGroup.color+';'",
                   data-toggle="tooltip" title="Group"
                 ) {{m.primaryGroup.name}}
-              td 
-                router-link(v-show="m.plan" :to="'plan/' + m.plan.id" data-toggle="tooltip" title="Plan") {{m.plan.name}}  
+              td
+                router-link(v-show="m.plan" :to="'plan/' + m.plan.id" data-toggle="tooltip" title="Plan") {{m.plan.name}}
 
     .box-footer.clearfix
-      ul.pagination.pagination-sm.no-margin.pull-right  
+      ul.pagination.pagination-sm.no-margin.pull-right
         uib-pagination(
-          :total-items="tasks.meta.count" 
-          v-model="pagination" 
-          :max-size="maxPaginationSize" 
-          class="pagination-sm" 
-          :boundary-links="true" 
+          :total-items="tasks.meta.count"
+          v-model="pagination"
+          :max-size="maxPaginationSize"
+          class="pagination-sm"
+          :boundary-links="true"
           :rotate="false"
           :items-per-page="itemsPerPage"
           @change="onPage"
-        )  
-.align-center(v-else-if="loading || (collection.length === 0 && !hasFilter)")
+        )
+.align-center(v-else)
   div.no-connection(v-if="!loading" style="width:330px; display: table-cell;vertical-align: middle;text-align: center;")
     div(style="width:100%; display: inline-block;")
       i.fa.big-icon.text-gray-harbor.fa-cog(style="text-align: center;")
     div(style="width:100%; margin-top: 20px;display: inline-block;")
-      span.text-gray-harbor(style="font-size:20px;") You don't have any task!  
+      span.text-gray-harbor(style="font-size:20px;") You don't have any task!
     div(style="width:70%; margin-top: 20px;display: inline-block;")
       router-link.btn.btn-block.btn-primary.btn-lg(to='/task') Create Task
   div.no-connection(v-if="loading" style="width:330px; display: table-cell;vertical-align: middle;text-align: center;")
@@ -219,7 +219,6 @@ export default {
     },
     'tasks.all': function () {
       this.selected = []
-      this.loading = false
     },
     'filter.search': function (v) {
       this.debounce()
@@ -230,10 +229,21 @@ export default {
       'findAll',
       'bookmark',
       'removeBookmark',
-      'remove'
+      'remove',
+      'enable',
+      'disable'
     ]),
     onPage () {
       this.reload()
+    },
+    onEnable (b) {
+      const id = this.selected[0]
+      if (b) {
+        this.enable(id)
+      } else {
+        this.disable(id)
+      }
+      this.selected = []
     },
     clone () {
     },
@@ -245,7 +255,6 @@ export default {
       }
     },
     reload (q) {
-      this.loading = true
       q = q || {}
       q.plan = this.filter.plan ? this.filter.plan.id : undefined
       q.group = this.filter.group ? this.filter.group.id : undefined
@@ -320,7 +329,7 @@ export default {
     bottom: 0;
     left: 0;
     right: 0;
-    margin: 50px auto; 
+    margin: 50px auto;
   }
 
   .box {
@@ -333,11 +342,11 @@ export default {
   }
 
   .big-icon {
-    font-size: 132px; 
+    font-size: 132px;
   }
 
   .text-gray-harbor {
-    color: #757D75; 
+    color: #757D75;
   }
 
   .default-text {
@@ -352,7 +361,7 @@ export default {
 
   .popper {
     box-shadow: rgb(255, 251, 251) 0 0 6px 0;
-    background-color: #fff;	
+    background-color: #fff;
     padding: 0px;
     min-width: 160px;
   }

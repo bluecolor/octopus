@@ -121,9 +121,9 @@
                 tbody
                   tr(v-for="m in task.groups")
                     td(style="width:20px")
-                      a(@click="setPrimaryGroup(m.id)" v-show="task.primaryGroup !== m.id" href='javascript:void(0);')
+                      a(@click="setPrimaryGroup(m.id)" v-show="task.primaryGroup.id !== m.id" href='javascript:void(0);')
                         span.fa.fa-star-o.text-gray
-                      a(v-show="task.primaryGroup === m.id" href='javascript:void(0);')
+                      a(v-show="task.primaryGroup.id === m.id" href='javascript:void(0);')
                         span.fa.fa-star.text-yellow
                     td(style="width:20px")
                       div(:style="`border-radius:0px;width:14px;height:14px;background-color:${m.color}`")
@@ -154,9 +154,9 @@
                 tbody
                   tr(v-for='m in task.owners')
                     td(style="width:20px")
-                      a(@click="setPrimaryOwner(m.id)" v-show="task.primaryOwner !== m.id" href="javascript:void(0);")
+                      a(@click="setPrimaryOwner(m.id)" v-show="task.primaryOwner.id !== m.id" href="javascript:void(0);")
                         span.fa.fa-star-o.text-gray
-                      a(v-show="task.primaryOwner === m.id" href="javascript:void(0);")
+                      a(v-show="task.primaryOwner.id === m.id" href="javascript:void(0);")
                         span.fa.fa-star.text-yellow
                     td 
                       router-link(:to="'user/' + m.id" ) {{m.username}}
@@ -167,7 +167,7 @@
                         i.fa.fa-times.text-danger.fa-lg.hover-active
       .box-footer
         a.btn.btn-danger(@click='close') Close
-        a.ladda-button.btn.btn-primary.pull-right(@click="onSave" data-style='expand-left') Save
+        a.ladda-button.btn.btn-primary.pull-right(:class="isValid?'':'disabled'" @click="onSave" data-style='expand-left') Save
 </template>
 
 <script>
@@ -233,16 +233,16 @@ export default {
         options: []
       },
       task: {
-        name: '',
-        connection: null,
-        plan: null,
+        name: undefined,
+        connection: undefined,
+        plan: undefined,
         retry: 1,
         priority: 'Medium',
         active: 1,
-        description: null,
-        technology: null,
-        primaryGroup: null,
-        script: '',
+        description: undefined,
+        technology: undefined,
+        primaryGroup: undefined,
+        script: undefined,
         dependencies: [],
         groups: [],
         owners: []
@@ -266,8 +266,18 @@ export default {
       'groups'
     ]),
     ...mapGetters('users', [
+      'me',
       'users'
-    ])
+    ]),
+    isValid () {
+      return (
+        this.task.name &&
+        this.task.retry > -1 &&
+        this.task.technology &&
+        this.task.script &&
+        !_.isEmpty(this.task.owners)
+      )
+    }
   },
   methods: {
     ...mapActions('tasks', [
@@ -276,16 +286,16 @@ export default {
     ]),
     setPrimaryGroup (id) {
       if (!id && this.task.groups[0]) {
-        this.task.primaryGroup = this.task.groups[0].id
+        this.task.primaryGroup = this.task.groups[0]
       } else {
-        this.task.primaryGroup = id
+        this.task.primaryGroup = _.find(this.groups, {id})
       }
     },
     setPrimaryOwner (id) {
       if (!id && this.task.owners[0]) {
-        this.task.primaryOwner = this.task.owners[0].id
+        this.task.primaryOwner = this.task.owners[0]
       } else {
-        this.task.primaryOwner = id
+        this.task.primaryOwner = _.find(this.users, {id})
       }
     },
     close () {
@@ -341,16 +351,20 @@ export default {
       if (!user) {
         return
       }
-      const u = _.find(this.task.owners, {id: user.id})
-      if (!u) {
-        this.task.owners.push(user)
+      const id = user.id
+      const u = _.find(this.users, {id})
+      if (!_.find(this.task.owners, {id})) {
+        this.task.owners.push(u)
+      }
+      if (this.task.owners.length === 1) {
+        this.task.primaryOwner = u
       }
     },
     init (id) {
       let task = _.chain(this.tasks.all).find({id: id}).cloneDeep().value()
       if (task) {
-        task.primaryGroup = task.primaryGroup ? task.primaryGroup.id : undefined
-        task.primaryOwner = task.primaryOwner ? task.primaryOwner.id : undefined
+        task.primaryGroup = task.primaryGroup ? task.primaryGroup : undefined
+        task.primaryOwner = task.primaryOwner ? task.primaryOwner : undefined
         task.technology = task.technology ? task.technology.id : undefined
         task.connection = task.connection ? task.connection.id : undefined
         task.plan = task.plan.id ? task.plan.id : undefined
@@ -381,6 +395,7 @@ export default {
     if (this.id) {
       this.init(parseInt(this.id))
     }
+    this.onSelectUser(this.me)
   }
 }
 </script>
@@ -442,8 +457,8 @@ img {
 }
 
 .input-group-addon {
-  border-bottom-right-radius: 3px;
-  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px !important;
+  border-top-right-radius: 3px !important;
 }
 
 .CodeMirror {
