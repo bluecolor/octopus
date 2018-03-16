@@ -13,5 +13,9 @@ export default {
     this.dispatch('parameters/findAll')
     this.dispatch('app/findVersion')
     this.dispatch('settings/findAll')
+
+    // setInterval(() => {
+    //   this.dispatch('sessions/findAll')
+    // }, 20 * 1000)
   }
 }

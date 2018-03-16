@@ -1,6 +1,6 @@
 <template lang="pug">
 .row
-  .col-md-8.col-md-offset-2(v-if="collection.length > 0 || hasFilter")
+  .col-md-8.col-md-offset-2(v-if="sessions.all.length > 0")
     .box.box-primary(style="border-top=0px")
       .box-header.with-border
         h3.box-title {{title}}
@@ -15,18 +15,18 @@
             i.fa.fa-trash-o.text-danger.fa-lg
           .dropdown(style="display:inline;" :class="selected.length > 0 ? '':'hidden'")
             button.btn.btn-default.btn-sm.dropdown-toggle(
-              type='button', 
-              data-toggle='dropdown', 
-              aria-haspopup='true', 
+              type='button',
+              data-toggle='dropdown',
+              aria-haspopup='true',
               aria-expanded='true'
               style="color:#212121;"
             )
               | More
               span.caret
             ul.dropdown-menu
-              li  
+              li
                 a(href='javascript:void(0);') Stop
-              li  
+              li
                 a(href='javascript:void(0);') Start
               li.divider(role='separator')
               li
@@ -55,8 +55,8 @@
               li
                 a(href='javascript:void(0);') Start date ascending
               li
-                a(href='javascript:void(0);') Start date descending              
-          
+                a(href='javascript:void(0);') Start date descending
+
           .dropdown.pull-right(style="display:inline;")
             a.btn.btn-default.btn-sm.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
               | {{filter.status ? filter.status : 'Status'}}
@@ -76,7 +76,7 @@
               li.footer
                 a(href='javascript:void(0);' @click="onPlanFilter") All
           a.btn.btn-default.btn-sm.pull-right(@click="onClearFilter", data-toggle="tooltip" title="Clear filters" :class="hasFilter ? '':'hidden'")
-            i.fa.fa-filter.text-danger.fa-lg 
+            i.fa.fa-filter.text-danger.fa-lg
             | Clear filters
         .table-responsive.connection-items
           table.table.table-hover
@@ -86,11 +86,11 @@
                   label.el-checkbox
                     span.el-checkbox__input(:class="selected.indexOf(m.id)>-1 ? 'is-checked':''")
                       span.el-checkbox__inner
-                      input.el-checkbox__original(type='checkbox', v-model="selected" :value ='m.id')  
+                      input.el-checkbox__original(type='checkbox', v-model="selected" :value ='m.id')
                 td(style="width:570px")
                   div(style="height:100%; width:100%; overflow: hidden;")
                     div.session-status
-                      span.label(style="border-radius:0px;" :class="statusLabel(m.status)"  data-toggle="tooltip" title="Status") {{m.status}} 
+                      span.label(style="border-radius:0px;" :class="statusLabel(m.status)"  data-toggle="tooltip" title="Status") {{m.status}}
                     div.session-name
                       router-link(:to="'task-instances?session=' + m.id" data-toggle="tooltip" title="Session name") {{m.name}}
                   div.session-detail(style="height:100%; width:100%; overflow: hidden;")
@@ -100,12 +100,12 @@
                       router-link(:to="'task-instances?session=' + m.id" data-toggle="tooltip" title="See tasks") {{m.stats.success+m.stats.done}}/{{m.stats.total}} &ensp;
                     div(v-show="m.stats.error > 0")
                       div.session-detail-label(data-toggle="tooltip" title="Errors")
-                        span.text-danger(style="font-weight:bold;") error: 
+                        span.text-danger(style="font-weight:bold;") error:
                       div.session-stat
                         router-link(:to="'task-instances?session=' + m.id" data-toggle="tooltip" title="See tasks") {{m.stats.error}} &ensp;
                     div(v-show="m.plan !== undefined")
                       div.session-detail-label(data-toggle="tooltip" title="Completed tasks")
-                        span plan: 
+                        span plan:
                       div.session-plan
                         router-link(:to="'plan/' + m.plan.id" data-toggle="tooltip" title="See plan") {{m.plan.name}}
                   td(style="width:200px")
@@ -117,21 +117,26 @@
                       .progress-bar.progress-bar-info(role='progressbar' :style="'width:' + progress(m.stats) +'%;'")
                         | {{progress(m.stats)}}%
       .box-footer.clearfix
-        ul.pagination.pagination-sm.no-margin.pull-right  
+        ul.pagination.pagination-sm.no-margin.pull-right
           uib-pagination(
-            :total-items="total" 
-            v-model="pagination" 
-            :max-size="maxPaginationSize" 
-            class="pagination-sm" 
-            :boundary-links="true" 
+            :total-items="sessions.meta.count"
+            v-model="pagination"
+            :max-size="maxPaginationSize"
+            class="pagination-sm"
+            :boundary-links="true"
             :rotate="false"
-          )  
-  .align-center(v-if="!hasFilter && collection.length===0")
-    div.no-connection(style="width:330px; display: table-cell;vertical-align: middle;text-align: center;")
+            :items-per-page="15"
+            @change="onPage"
+          )
+  .align-center(v-else)
+    div.no-connection(v-if="!loading" style="width:330px; display: table-cell;vertical-align: middle;text-align: center;")
       div(style="width:100%; display: inline-block;")
         i.fa.big-icon.text-gray-harbor.fa-tasks(style="text-align: center;")
       div(style="width:100%; margin-top: 20px;display: inline-block;")
-        span.text-gray-harbor(style="font-size:20px;") You do not have any sessions !  
+        span.text-gray-harbor(style="font-size:20px;") You do not have any sessions !
+    div.no-connection(v-if="loading" style="width:330px; display: table-cell;vertical-align: middle;text-align: center;")
+      pulse-loader(:loading="loading" color="#d2d6de")
+
 </template>
 
 <script>
@@ -140,13 +145,14 @@ import _ from 'lodash'
 import moment from 'moment'
 import {mapGetters, mapActions} from 'vuex'
 import {getLabelByStatus} from '../../util'
+import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
 
 export default {
   data () {
     return {
       title: 'Sessions',
       selected: [],
-      pageSize: 10,
+      pageSize: 15,
       pagination: {currentPage: 1},
       maxPaginationSize: 7,
       filter: {
@@ -163,16 +169,17 @@ export default {
   },
   computed: {
     ...mapGetters('sessions', [
-      'sessions'
+      'sessions',
+      'loading'
     ]),
     ...mapGetters('plans', [
       'plans'
     ]),
     total () {
-      return this.sessions.length
+      return this.sessions.count
     },
     collection () {
-      return this.sessions.all
+      return _.orderBy(this.sessions.all, ['status', 'startDate'], ['asc', 'desc'])
     },
     hasFilter () {
       return !(
@@ -201,11 +208,16 @@ export default {
       const search = this.filter.search
       const plan = this.filter.plan ? this.filter.plan.id : undefined
       const status = this.filter.status
+      const page = this.pagination.currentPage - 1
       this.$store.dispatch('sessions/findAll', {
         status,
         plan,
-        search
+        search,
+        page
       })
+    },
+    onPage () {
+      this.onReload()
     },
     statusLabel (status) {
       return getLabelByStatus(status)
@@ -235,6 +247,9 @@ export default {
       this.filter.clear()
       this.onReload()
     }
+  },
+  components: {
+    'pulse-loader': PulseLoader
   }
 }
 </script>

@@ -1,6 +1,6 @@
 <template lang='pug'>
 .row
-  .col-md-6.col-md-offset-3  
+  .col-md-6.col-md-offset-3
     .box.box-primary
       .box-header.with-border
         h3.box-title {{title}}
@@ -28,14 +28,14 @@
                   select.form-control(v-model='task.connection')
                     option(v-for='m in connections' :value='m.id')  {{m.name}}
                   router-link.btn.btn-default.input-group-addon(to='/connection')
-                    span.fa.text-success.fa-plus    
+                    span.fa.text-success.fa-plus
               .form-group
                 label Plan
                 .input-group
                   select.form-control(v-model='task.plan')
                     option(v-for='m in plans' :value='m.id')  {{m.name}}
                   router-link.btn.btn-default.input-group-addon(to='/plan')
-                    span.fa.text-success.fa-plus    
+                    span.fa.text-success.fa-plus
               .form-group
                 label Retry Count
                 input.form-control(v-model="task.retry" value=0 type='number' required=false, min='0')
@@ -43,11 +43,11 @@
                 label Priority
                 div(style='min-width:400px')
                   vue-slider(
-                    ref='slider' 
-                    v-model='task.priority' 
+                    ref='slider'
+                    v-model='task.priority'
                     :data="priority"
-                    piecewise=true 
-                    tooltip='hover' 
+                    piecewise=true
+                    tooltip='hover'
                     :speed=0.2)
               .form-group
                   label Active
@@ -71,15 +71,15 @@
                     option(v-for='m in technologies' :value='m.id')  {{m.name}}
                 section
                   codemirror(
-                    ref='script' 
-                    v-model='task.script' 
+                    ref='script'
+                    v-model='task.script'
                     :options='editorOptions'
-                  ) 
+                  )
           #task-dependencies.tab-pane(style='margin:10px')
             .form-group
-              v-select(label='name', 
-                :filterable='false', 
-                :options='dependencies.options', 
+              v-select(label='name',
+                :filterable='false',
+                :options='dependencies.options',
                 @search='onSearchDep',
                 @input='onSelectDep')
                 template(slot='no-options')
@@ -95,16 +95,16 @@
               table.table.table-hover
                 tbody
                   tr(v-for="m in task.dependencies")
-                    td 
+                    td
                       router-link(:to="'task-instance/' + m.id" ) {{m.name}}
                     td
                       a.pull-right(href='javascript:void(0);' @click="onRemoveDep(m)")
                         i.fa.fa-times.text-danger.fa-lg.hover-active
           #task-groups.tab-pane(style="margin:10px")
             .form-group
-              v-select(label='name', 
-                :filterable='false', 
-                :options='groups', 
+              v-select(label='name',
+                :filterable='false',
+                :options='groups',
                 @input='onSelectGroup')
                 template(slot='no-options')
                   | type to search tasks..
@@ -127,16 +127,16 @@
                         span.fa.fa-star.text-yellow
                     td(style="width:20px")
                       div(:style="`border-radius:0px;width:14px;height:14px;background-color:${m.color}`")
-                    td 
+                    td
                       router-link(:to="'group/' + m.id" ) {{m.name}}
                     td
                       a.pull-right(href='javascript:void(0);' @click="onRemoveGroup(m)")
-                        i.fa.fa-times.text-danger.fa-lg.hover-active   
+                        i.fa.fa-times.text-danger.fa-lg.hover-active
           #task-owners.tab-pane(style="margin:10px")
             .form-group
-              v-select(label='name', 
-                :filterable='false', 
-                :options='users', 
+              v-select(label='name',
+                :filterable='false',
+                :options='users',
                 @input='onSelectUser')
                 template(slot='no-options')
                   | type to search tasks..
@@ -148,7 +148,7 @@
                   .selected.d-center
                     div(:style="`border-radius:op0px;width:14px;height:14px;background-color:${option.color}`")
                     |         {{ option.name }}
-            
+
             .table-responsive.connection-items
               table.table.table-hover
                 tbody
@@ -158,9 +158,9 @@
                         span.fa.fa-star-o.text-gray
                       a(v-show="task.primaryOwner.id === m.id" href="javascript:void(0);")
                         span.fa.fa-star.text-yellow
-                    td 
+                    td
                       router-link(:to="'user/' + m.id" ) {{m.username}}
-                    td 
+                    td
                       router-link(:to="'user/' + m.id" ) {{m.name}}
                     td
                       a.pull-right(href='javascript:void(0);' @click="onRemoveOwner(m)")
@@ -307,7 +307,7 @@ export default {
     },
     searchDep: _.debounce((loading, search, vm) => {
       axios.get(`api/v1/tasks/search?q=${escape(search)}`).then(response => {
-        vm.dependencies.options = response.data
+        vm.dependencies.options = _.filter(response.data, r => r.id !== vm.task.id)
         loading(false)
       })
     }, 120),

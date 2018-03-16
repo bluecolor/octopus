@@ -6,21 +6,26 @@ import {success as notifySuccess, error as notifyError} from '../../lib/notify'
 const LOAD = 'LOAD'
 const CLEAR = 'CLEAR'
 const REMOVE = 'REMOVE'
+const SET_LOADING = 'SET_LOADING'
 
 const state = {
   all: [],
-  meta: {}
+  meta: {},
+  loading: false
 }
 
 const getters = {
-  sessions: state => state
+  sessions: state => state,
+  loading: state => state.loading
 }
 
 const actions = {
   findAll ({commit}, payload) {
-    commit(CLEAR)
+    commit(SET_LOADING, true)
     api.findAll(payload).then(response => {
       commit(LOAD, response.data)
+    }).finally(() => {
+      commit(SET_LOADING, false)
     })
   },
   remove ({commit}, id) {
@@ -58,6 +63,9 @@ const mutations = {
     if (i !== -1) {
       state.all.splice(i, 1)
     }
+  },
+  [SET_LOADING] (state, b) {
+    this.state.loading = b
   }
 }
 
