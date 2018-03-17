@@ -3,7 +3,7 @@ package io.octopus.query
 import java.util.regex.{Pattern,Matcher}
 import org.springframework.stereotype.Component
 import org.hibernate._
-import org.hibernate.criterion._ 
+import org.hibernate.criterion._
 import javax.persistence.EntityManagerFactory
 import scala.collection.JavaConverters._
 import scala.collection.JavaConversions._
@@ -27,7 +27,7 @@ class TaskQuery extends Query{
 
   @(Autowired @setter)
   private var userService: UserService = _
-  
+
   private val log:Logger  = LoggerFactory.getLogger(MethodHandles.lookup.lookupClass)
 
 
@@ -36,19 +36,19 @@ class TaskQuery extends Query{
     val em = entityManagerFactory.createEntityManager
     val session = em.unwrap(classOf[org.hibernate.Session])
     var p = new io.octopus.model.Page[Task]
-    var (filter,_) = parseSearchPattern(search) 
+    var (filter,_) = parseSearchPattern(search)
     var sort = orderBy(sortBy, order)
     val q = s"""
-      select t 
-      from 
-        task t 
+      select t
+      from
+        task t
         left join fetch t.stats s
         left join fetch t.plan  p
         left join fetch t.primaryOwner o
         left join fetch t.primaryGroup g
-        left join fetch t.bookmarkers  b 
-      where 
-        ${filter} 
+        left join fetch t.bookmarkers  b
+      where
+        ${filter}
       ${sort}
     """
     log.debug(filter)
@@ -57,10 +57,10 @@ class TaskQuery extends Query{
     p.count = query.list.length
     if(page == 0) {
       p.first = true
-      p.totalPages = 
-      if(p.count % pageSize == 0) 
-        p.count / pageSize 
-      else 
+      p.totalPages =
+      if(p.count % pageSize == 0)
+        p.count / pageSize
+      else
         p.count / pageSize +1
     }
     p.page = page
@@ -79,7 +79,7 @@ class TaskQuery extends Query{
       var p = m.group(2)
       var o = m.group(3)
       var v = m.group(4)
-      
+
       log.debug(w,p,o,v);
 
       if(w != null && !w.trim.isEmpty) {
@@ -88,20 +88,20 @@ class TaskQuery extends Query{
       if(p!=null && o!= null && v!= null) {
         p=p.trim;o=o.trim;v=v.trim;
         p.toLowerCase match {
-          case "group" => 
+          case "group" =>
             val parameter = if(o == SearchOperation.EQUAL_ID) "g.id" else "g.name"
             filters += build(parameter, o, v)
-          case "owner" => 
+          case "owner" =>
             val parameter = if(o == SearchOperation.EQUAL_ID) "o.id" else "o.name"
             filters += build(parameter, o, v)
-          case "plan" => 
+          case "plan" =>
             val parameter = if(o == SearchOperation.EQUAL_ID) "p.id" else "p.name"
             filters += build(parameter, o, v)
           case "is" =>
             v.toLowerCase.stripPrefix("[").stripSuffix("]") match {
               case "bookmarked" =>
                 filters += s"b.id = ${userService.findMe.id.toString}"
-              case "active" => 
+              case "active" =>
                 filters += s"t.active = true"
               case "mine" =>
                 filters += s"o.id = ${userService.findMe.id.toString}"

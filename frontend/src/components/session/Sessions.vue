@@ -1,6 +1,6 @@
 <template lang="pug">
 .row
-  .col-md-8.col-md-offset-2(v-if="sessions.all.length > 0")
+  .col-md-8.col-md-offset-2(v-if="sessions.all.length > 0 || hasFilter")
     .box.box-primary(style="border-top=0px")
       .box-header.with-border
         h3.box-title {{title}}
@@ -11,7 +11,7 @@
         .table-controls
           a.btn.btn-default.btn-sm(@click='onReload' type='button', data-toggle="tooltip" title="Reload",)
             i.fa.fa-refresh.text-blue.fa-lg
-          a.btn.btn-default.btn-sm(@click="deleteSession(selected[0])", data-toggle="tooltip" title="Delete", :class="selected.length > 0 ? '':'hidden'")
+          a.btn.btn-default.btn-sm(@click="onRemove", data-toggle="tooltip" title="Delete", :class="selected.length > 0 ? '':'hidden'")
             i.fa.fa-trash-o.text-danger.fa-lg
           .dropdown(style="display:inline;" :class="selected.length > 0 ? '':'hidden'")
             button.btn.btn-default.btn-sm.dropdown-toggle(
@@ -129,7 +129,7 @@
             @change="onPage"
           )
   .align-center(v-else)
-    div.no-connection(v-if="!loading" style="width:330px; display: table-cell;vertical-align: middle;text-align: center;")
+    div.no-connection(v-if="loading === false && sessions.all.length === 0" style="width:330px; display: table-cell;vertical-align: middle;text-align: center;")
       div(style="width:100%; display: inline-block;")
         i.fa.big-icon.text-gray-harbor.fa-tasks(style="text-align: center;")
       div(style="width:100%; margin-top: 20px;display: inline-block;")
@@ -156,6 +156,10 @@ export default {
       pagination: {currentPage: 1},
       maxPaginationSize: 7,
       filter: {
+        sort: {
+          by: 'name',
+          order: 'desc'
+        },
         search: undefined,
         plan: undefined,
         status: undefined,
@@ -190,20 +194,24 @@ export default {
     }
   },
   watch: {
-    selected: function () {
+    selected () {
       if (this.selected.length > 1) {
         this.selected.splice(0, 1)
       }
     },
-    sessions: function () {
+    sessions () {
       this.selected = []
     }
   },
   methods: {
-    ...mapActions('connections', [
-      'remove',
-      'findAll'
+    ...mapActions('sessions', [
+      'remove'
     ]),
+    onRemove () {
+      const id = this.selected[0]
+      if (!id) { return }
+      this.remove(id)
+    },
     onReload () {
       const search = this.filter.search
       const plan = this.filter.plan ? this.filter.plan.id : undefined

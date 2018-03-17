@@ -7,5 +7,8 @@ export default {
   findAll (payload) {
     const u = toUrlString(payload)
     return axios.get(`${API_BASE}/sessions?${u}`)
+  },
+  remove (id) {
+    return axios.delete(`${API_BASE}/sessions/${id}`)
   }
 }

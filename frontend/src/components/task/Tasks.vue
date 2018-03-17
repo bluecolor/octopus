@@ -1,5 +1,5 @@
 <template lang="pug">
-.col-md-8.col-md-offset-2(v-if="tasks.all.length > 0")
+.col-md-8.col-md-offset-2(v-if="tasks.all.length > 0 || hasFilter")
   .box.box-primary(style="border-top=0px")
     .box-header.with-border
       h3.box-title {{title}}
@@ -45,19 +45,19 @@
               span.caret
             ul.dropdown-menu(aria-labelledby='dropdownMenu1')
               li
-                a(href='javascript:void(0);') Name ascending
+                a(@click="onSort('name', 'asc')" href='javascript:void(0);') Name ascending
               li
-                a(href='javascript:void(0);') Name descending
+                a(@click="onSort('name', 'desc')" href='javascript:void(0);') Name descending
               li.divider(role='separator')
               li
-                a(href='javascript:void(0);') Avg. duration ascending
+                a(@click="onSort('avgd', 'asc')" href='javascript:void(0);') Avg. duration ascending
               li
-                a(href='javascript:void(0);') Avg. duration descending
+                a(@click="onSort('avgd', 'desc')" href='javascript:void(0);') Avg. duration descending
               li.divider(role='separator')
               li
-                a(href='javascript:void(0);') Most crashing
+                a(@click="onSort('error', 'desc')" href='javascript:void(0);') Most crashing
               li
-                a(href='javascript:void(0);') Least crashing
+                a(@click="onSort('error', 'asc')" href='javascript:void(0);') Least crashing
         .dropdown.pull-right(style="display:inline;")
             button.btn.btn-default.btn-sm.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
               | {{filter.owner.id===undefined ? 'Owners' : filter.owner.name }}
@@ -161,7 +161,10 @@ export default {
       pagination: {currentPage: 1},
       maxPaginationSize: 7,
       filter: {
-        sort: undefined,
+        sort: {
+          by: 'name',
+          order: 'asc'
+        },
         search: '',
         plan: {},
         group: {},
@@ -203,7 +206,7 @@ export default {
       return this.tasks.all
     },
     hasFilter () {
-      return (this.filter.sort !== undefined ||
+      return (
         this.filter.plan.id !== undefined ||
         this.filter.group.id ||
         this.filter.owner.id ||
@@ -261,7 +264,13 @@ export default {
       q.owner = this.filter.owner ? this.filter.owner.id : undefined
       q.search = _.isEmpty(this.filter.search) ? undefined : this.filter.search
       q.page = this.pagination.currentPage - 1
+      q.sortBy = this.filter.sort.by
+      q.order = this.filter.sort.order
       this.$store.dispatch('tasks/findAll', q)
+    },
+    onSort (by, order) {
+      this.filter.sort = {by, order}
+      this.reload()
     },
     onDelete () {
       const id = this.selected[0]

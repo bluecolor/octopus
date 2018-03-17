@@ -22,7 +22,7 @@ const getters = {
 const actions = {
   findAll ({commit}, payload) {
     commit(SET_LOADING, true)
-    api.findAll(payload).then(response => {
+    return api.findAll(payload).then(response => {
       commit(LOAD, response.data)
     }).finally(() => {
       commit(SET_LOADING, false)

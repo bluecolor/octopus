@@ -54,7 +54,7 @@ class TaskService @Autowired()(val taskRepository: TaskRepository) {
 
   def findAll = taskRepository.findAll
 
-  def findAll(plan: java.lang.Long, search:String, sortBy:String, order:String, page: Int, pageSize: Int) = {    
+  def findAll(plan: java.lang.Long, search:String, sortBy:String, order:String, page: Int, pageSize: Int) = {
     val me = userService.findMe
     val p = taskQuery.findAll(page,pageSize,search,sortBy,order)
     p.content = p.content.map(t=>{
@@ -74,12 +74,12 @@ class TaskService @Autowired()(val taskRepository: TaskRepository) {
     plan: java.lang.Long,
     group: java.lang.Long,
     owner: java.lang.Long,
-    search: String, 
-    sortBy: String, 
-    order: String, 
-    page: Int, 
+    search: String,
+    sortBy: String,
+    order: String,
+    page: Int,
     pageSize: Int
-  ) = {    
+  ) = {
     val me = userService.findMe
     val p = taskQuery.findAll(page,pageSize,search,sortBy,order)
     p.content = p.content.map(t=>{
@@ -96,12 +96,12 @@ class TaskService @Autowired()(val taskRepository: TaskRepository) {
   def findOne(id: Long): Task = taskRepository.findOne(id)
 
   def findByPlan(id: Long) =  taskRepository.findByPlanId(id)
-  
+
   def findByPrimaryGroup(id: Long) = taskRepository.findByPrimaryGroupId(id)
 
   def findByPrimaryOwner(id: Long) = taskRepository.findByPrimaryOwnerId(id)
 
-  def findByIdIn(tasks: java.util.List[java.lang.Long]) = 
+  def findByIdIn(tasks: java.util.List[java.lang.Long]) =
     taskRepository.findByIdIn(tasks)
 
   def findBookmarked = {
@@ -109,9 +109,9 @@ class TaskService @Autowired()(val taskRepository: TaskRepository) {
     .getContext
     .getAuthentication
     .getPrincipal.asInstanceOf[org.springframework.security.core.userdetails.User].getUsername
-    
+
     var user:User = userService.findByUsername(username);
-    
+
     taskRepository.findByBookmarkersContaining(user).asScala.map(t=>{
       t.bookmarked = true
       t
@@ -119,20 +119,20 @@ class TaskService @Autowired()(val taskRepository: TaskRepository) {
   }
 
   def search(q: String) =
-    taskRepository.findByNameContainingIgnoreCase(q) 
+    taskRepository.findByNameContainingIgnoreCase(q)
 
   def myTasks = {
     val username: String = SecurityContextHolder
     .getContext()
     .getAuthentication()
     .getPrincipal().asInstanceOf[org.springframework.security.core.userdetails.User].getUsername()
-    
+
     var user:User = userService.findByUsername(username);
     taskRepository.findByPrimaryOwnerId(user.id)
   }
 
   def hasCycle(tasks: List[Task]) = {
-    var directedGraph: Graph[Long, DefaultEdge] = 
+    var directedGraph: Graph[Long, DefaultEdge] =
       new DefaultDirectedGraph(classOf[DefaultEdge])
 
     def addDependecies(task: Task) {
@@ -147,10 +147,10 @@ class TaskService @Autowired()(val taskRepository: TaskRepository) {
       }
     }
     tasks.foreach(addDependecies(_))
-    
+
     val cycleDetector = new CycleDetector[Long, DefaultEdge](directedGraph)
     cycleDetector.detectCycles
-  } 
+  }
 
   def create(task: Task): Task = {
     taskRepository.save(task)
@@ -178,13 +178,13 @@ class TaskService @Autowired()(val taskRepository: TaskRepository) {
     if(hasCycle(tasks.toList)) {
       throw new RuntimeException("Update creates cycle.")
     }
-    
+
     taskRepository.save(t)
   }
 
   def delete(id: Long): Task = {
     val task = taskRepository.findOne(id)
-    
+
     taskRepository.delete(id)
     task
   }
@@ -194,10 +194,10 @@ class TaskService @Autowired()(val taskRepository: TaskRepository) {
     .getContext()
     .getAuthentication()
     .getPrincipal().asInstanceOf[org.springframework.security.core.userdetails.User].getUsername()
-    
+
     var task = taskRepository.findOne(id)
     var user:User = userService.findByUsername(username);
-    
+
     if(!user.bookmarks.contains(task)){
       user.bookmarks.add(task)
       userService.update(user)
@@ -210,10 +210,10 @@ class TaskService @Autowired()(val taskRepository: TaskRepository) {
     .getContext()
     .getAuthentication()
     .getPrincipal().asInstanceOf[org.springframework.security.core.userdetails.User].getUsername()
-    
+
     var task = taskRepository.findOne(id)
     var user:User = userService.findByUsername(username);
-    
+
     if(user.bookmarks.contains(task)){
       user.bookmarks.remove(task)
       userService.update(user)
@@ -253,7 +253,7 @@ class TaskService @Autowired()(val taskRepository: TaskRepository) {
   def export(ids: java.util.List[java.lang.Long]) = {
     val mapper = new ObjectMapper
     var scheduler = new Scheduler
-    scheduler.tasks = taskRepository.findByIdIn(ids) 
+    scheduler.tasks = taskRepository.findByIdIn(ids)
     mapper.writeValueAsString(scheduler)
   }
 
