@@ -7,6 +7,7 @@ const LOAD = 'LOAD'
 const CLEAR = 'CLEAR'
 const REMOVE = 'REMOVE'
 const SET_LOADING = 'SET_LOADING'
+const UPDATE = 'UPDATE'
 
 const state = {
   all: [],
@@ -40,6 +41,26 @@ const actions = {
         reject(error.response.data.message)
       })
     })
+  },
+  stop ({commit}, id) {
+    return api.stop(id).then(response => {
+      notifySuccess('Session stopped')
+      commit(UPDATE, response.data)
+    },
+    error => {
+      notifyError(`Unable to stop session ${error.response.data.message}`)
+      console.log(error.response.data.message)
+    })
+  },
+  start ({commit}, id) {
+    return api.stop(id).then(response => {
+      notifySuccess('Session will start')
+      commit(UPDATE, response.data)
+    },
+    error => {
+      notifyError(`Unable to start session ${error.response.data.message}`)
+      console.log(error.response.data.message)
+    })
   }
 }
 
@@ -55,7 +76,7 @@ const mutations = {
       totalPages: data.totalPages
     }
   },
-  [CLEAR] (state, records) {
+  [CLEAR] (state) {
     state.all = []
   },
   [REMOVE] (state, id) {
@@ -63,6 +84,14 @@ const mutations = {
     if (i !== -1) {
       state.all.splice(i, 1)
     }
+  },
+  [UPDATE] (state, session) {
+    const id = session.id
+    const i = _.findIndex(state.all, {id})
+    if (i !== -1) {
+      state.all.splice(i, 1)
+    }
+    state.all.push(session)
   },
   [SET_LOADING] (state, b) {
     this.state.loading = b

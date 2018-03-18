@@ -46,16 +46,16 @@ class SessionService @Autowired()(val sessionRepository: SessionRepository) {
 
   @(Autowired @setter)
   private var groupService: GroupService = _
-  
+
   @(Autowired @setter)
   private var planService: PlanService = _
-  
+
   @(Autowired @setter)
   private var parameterService: ParameterService = _
-  
+
   @(Autowired @setter)
   private var sessionQuery: SessionQuery = _
-  
+
 
   private val log:Logger  = LoggerFactory.getLogger(MethodHandles.lookup.lookupClass)
 
@@ -69,26 +69,26 @@ class SessionService @Autowired()(val sessionRepository: SessionRepository) {
     sessions
   }
 
-  def findOne(id: Long): Session = 
+  def findOne(id: Long): Session =
     sessionRepository.findOne(id)
 
-  def findActiveByPlan(planId: Long) = 
+  def findActiveByPlan(planId: Long) =
     sessionRepository.findByStatusNotInAndPlanId(Array(Status.DONE), planId)
-  
-  def findByStatusIn(statuses: Array[String]) = 
+
+  def findByStatusIn(statuses: Array[String]) =
     sessionRepository.findByStatusIn(statuses)
-  
-  def findByStatus(status: String) = 
+
+  def findByStatus(status: String) =
     sessionRepository.findByStatus(status)
 
-  def isActiveSessionOfPlanExist(planId: Long) = 
+  def isActiveSessionOfPlanExist(planId: Long) =
     if (sessionRepository.countByStatusNotInAndPlanId(Array(Status.DONE,Status.SUCCESS), planId) > 0) true else false
 
   def isSessionSuccess(id: Long) = {
     val blockers = Array(Status.ERROR,Status.KILLED,Status.BLOCKED, Status.IDLE, Status.RUNNING)
     taskInstanceService.findBySessionIdAndStatusIn(id,blockers).length == 0
   }
-    
+
   def create(session: Session, options: HashMap[String,String] = null): Session = {
 
     def buildName: String = {
@@ -107,8 +107,8 @@ class SessionService @Autowired()(val sessionRepository: SessionRepository) {
       session.name = options.get("name")
       val d  = options.get("scheduleDate")
       if(d != null && !d.isEmpty){
-        val df = new SimpleDateFormat("yyyy-MM-dd HH:mm") 
-        session.scheduleDate = df.parse(d)  
+        val df = new SimpleDateFormat("yyyy-MM-dd HH:mm")
+        session.scheduleDate = df.parse(d)
       }
     }
 
@@ -129,7 +129,7 @@ class SessionService @Autowired()(val sessionRepository: SessionRepository) {
 
   def createByTask(tasks: java.util.List[Task], options: HashMap[String, String]=null) = {
     var session = create(new Session, options)
-    val instances = taskInstanceService.createByTask(session, tasks)    
+    val instances = taskInstanceService.createByTask(session, tasks)
     session.taskInstances = instances
     session
   }
@@ -137,8 +137,8 @@ class SessionService @Autowired()(val sessionRepository: SessionRepository) {
   def run(tasks: java.util.List[Task]) = {
     var session = createByTask(tasks)
     val supervisor = appInit.system.actorSelection("/user/supervisor")
-    val message = new RunSession(session) 
-    val timeout = new Timeout(Duration.create(4*1000, TimeUnit.MILLISECONDS)) 
+    val message = new RunSession(session)
+    val timeout = new Timeout(Duration.create(4*1000, TimeUnit.MILLISECONDS))
     val future  = Patterns.ask(supervisor, message, timeout)
     session
   }
@@ -146,20 +146,20 @@ class SessionService @Autowired()(val sessionRepository: SessionRepository) {
   private def findPlanSlots(session: Session, running: java.util.List[TaskInstance], maxParallel:Int): Int = {
     val plan = session.plan
     if(plan == null) return maxParallel
-    plan.parallel - running.asScala.filter{ r => 
-      r.session.plan != null && r.session.plan.id == plan.id  
-    }.length    
+    plan.parallel - running.asScala.filter{ r =>
+      r.session.plan != null && r.session.plan.id == plan.id
+    }.length
   }
 
   private def findGroupSlotMap(running: java.util.List[TaskInstance]) = {
     var slots:Map[Long, Int] = Map()
     val groups = groupService.findAll
-    groups.foreach{g => 
+    groups.foreach{g =>
       slots += (g.id -> g.parallel)
     }
     running.foreach{instance =>
       instance.task.groups.foreach{g=>
-        var p: Int = slots.get(g.id).get 
+        var p: Int = slots.get(g.id).get
         slots += ( g.id -> (p-1) )
       }
     }
@@ -171,11 +171,11 @@ class SessionService @Autowired()(val sessionRepository: SessionRepository) {
     val session = findOne(id)
     val running = taskInstanceService.findBySessionAndStatus(id, Status.RUNNING)
     val idle = taskInstanceService.findBySessionAndStatus(id, Status.IDLE)
-    
+
     var runningSlots = running.length
     var groupSlotMap = findGroupSlotMap(running)
-    var planSlots = findPlanSlots(session,running, maxParallel) 
-    
+    var planSlots = findPlanSlots(session,running, maxParallel)
+
     if(maxParallel <= runningSlots || planSlots <= 0){
       log.debug(s"""
         No available slots!
@@ -186,7 +186,7 @@ class SessionService @Autowired()(val sessionRepository: SessionRepository) {
       return null
     }
 
-    def isDependenciesOk(dependencies: List[TaskInstance]) = {      
+    def isDependenciesOk(dependencies: List[TaskInstance]) = {
       val blockers = Array(Status.IDLE,Status.ERROR, Status.BLOCKED,Status.KILLED, Status.RUNNING)
       dependencies == null ||
       dependencies
@@ -202,18 +202,18 @@ class SessionService @Autowired()(val sessionRepository: SessionRepository) {
       }
       true
     }
-    
+
     def hasSlot(instance: TaskInstance):Boolean = {
       val groups = instance.task.groups
       for(g <- groups) {
         val gs = groupSlotMap.get(g.id).get
-        if(gs <= 0) return false 
+        if(gs <= 0) return false
       }
       setSlots(instance)
     }
-    val runnable = idle.filter(i=> isDependenciesOk(taskInstanceService.findDependencies(i)) && hasSlot(i) ).asJava 
-    
-    log.debug(s"Found ${runnable.length} instances")    
+    val runnable = idle.filter(i=> isDependenciesOk(taskInstanceService.findDependencies(i)) && hasSlot(i) ).asJava
+
+    log.debug(s"Found ${runnable.length} instances")
 
     val parameters = parameterService.findAll
 
@@ -246,32 +246,32 @@ class SessionService @Autowired()(val sessionRepository: SessionRepository) {
   def setRunning(id: Long): Session = {
     var session = findOne(id)
     session.status = Status.RUNNING
-    session.startDate = new Date 
+    session.startDate = new Date
     session
-  } 
-  
+  }
+
   def setSuccess(id: Long): Session = {
     var session = findOne(id)
     session.status = Status.SUCCESS
-    session.endDate= new Date 
+    session.endDate= new Date
     sessionRepository.save(session)
   }
 
   def setDone(id: Long): Session = {
     var session = findOne(id)
     session.status = Status.DONE
-    session.endDate= new Date 
+    session.endDate= new Date
     sessionRepository.save(session)
   }
 
 
   def setTaskInstanceSuccess(id: Long) = taskInstanceService.setSuccess(id)
 
-  def setTaskInstanceError(id: Long, error: String) = 
+  def setTaskInstanceError(id: Long, error: String) =
     taskInstanceService.setError(id, error)
 
   def setTaskInstanceRunning(id: Long) = taskInstanceService.setRunning(id)
-  
+
 
   def recover = {
     findByStatus(Status.RUNNING).foreach{s=>
@@ -283,17 +283,20 @@ class SessionService @Autowired()(val sessionRepository: SessionRepository) {
 
   def stop(id: Long) = {
     var session = findOne(id)
+    if(!Array(Status.RUNNING, Status.IDLE).contains(session.status)) {
+      throw new RuntimeException("Session is not running")
+    }
     session.status = Status.STOPPED
-    session.endDate= new Date 
+    session.endDate= new Date
     sessionRepository.save(session)
     val supervisor = appInit.system.actorSelection("/user/supervisor")
     supervisor ! StopSession(id)
-    session 
+    session
   }
 
   def start(id: Long) = {
     var session = findOne(id)
-    if(Array(Status.RUNNING,Status.IDLE).contains(session.status)){
+    if(Array(Status.RUNNING, Status.IDLE).contains(session.status)){
       throw new RuntimeException("Session already running!")
     }
     session.status = Status.IDLE

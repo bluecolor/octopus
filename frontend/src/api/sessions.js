@@ -10,5 +10,11 @@ export default {
   },
   remove (id) {
     return axios.delete(`${API_BASE}/sessions/${id}`)
+  },
+  stop (id) {
+    return axios.put(`${API_BASE}/sessions/${id}/stop`)
+  },
+  start (id) {
+    return axios.put(`${API_BASE}/sessions/${id}/start`)
   }
 }

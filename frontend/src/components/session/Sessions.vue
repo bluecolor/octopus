@@ -25,12 +25,12 @@
               span.caret
             ul.dropdown-menu
               li
-                a(href='javascript:void(0);') Stop
+                a(@click="onStop" href='javascript:void(0);') Stop
               li
-                a(href='javascript:void(0);') Start
+                a(@click="onStop" href='javascript:void(0);') Start
               li.divider(role='separator')
               li
-                a(href='javascript:void(0);') Delete
+                a(@click="onRemove" href='javascript:void(0);') Delete
 
           .dropdown.pull-right(style="display:inline;")
             a.btn.btn-default.btn-sm.dropdown-toggle.text-green(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
@@ -205,12 +205,22 @@ export default {
   },
   methods: {
     ...mapActions('sessions', [
-      'remove'
+      'remove', 'stop', 'start'
     ]),
     onRemove () {
       const id = this.selected[0]
       if (!id) { return }
       this.remove(id)
+    },
+    onStop () {
+      const id = this.selected[0]
+      if (!id) { return }
+      this.stop(id)
+    },
+    onStart () {
+      const id = this.selected[0]
+      if (!id) { return }
+      this.start(id)
     },
     onReload () {
       const search = this.filter.search
