@@ -32,6 +32,9 @@ import io.octopus.query.TaskInstanceQuery
 class TaskInstanceService @Autowired()(val taskInstanceRepository: TaskInstanceRepository) {
 
   @(Autowired @setter)
+  private var sessionService: SessionService = _
+
+  @(Autowired @setter)
   private var slackService: SlackService = _
 
   @(Autowired @setter)
@@ -41,7 +44,7 @@ class TaskInstanceService @Autowired()(val taskInstanceRepository: TaskInstanceR
   private var userService: UserService = _
 
   @(Autowired @setter)
-  private var taskInstanceSearch: TaskInstanceSearch = _ 
+  private var taskInstanceSearch: TaskInstanceSearch = _
 
   @(Autowired @setter)
   private var taskInstanceLogService: TaskInstanceLogService = _
@@ -65,26 +68,26 @@ class TaskInstanceService @Autowired()(val taskInstanceRepository: TaskInstanceR
         instance.dependencies = findDependencies(instance)
         instance
       }
-    })  
+    })
   }
 
-  def findBySessionIdAndStatusIn(sessionId: Long, statuses: Array[String]) = 
+  def findBySessionIdAndStatusIn(sessionId: Long, statuses: Array[String]) =
     taskInstanceRepository.findBySessionIdAndStatusIn(sessionId,statuses)
 
-  def findByStatus(status: String) = 
+  def findByStatus(status: String) =
     taskInstanceRepository.findByStatus(status)
 
-  def findBySessionAndStatus(id: Long, status: String) = 
+  def findBySessionAndStatus(id: Long, status: String) =
     taskInstanceRepository.findBySessionIdAndStatus(id, status)
 
-  def countByStatus(status: String) = 
+  def countByStatus(status: String) =
     taskInstanceRepository.countByStatus(status)
 
   def findOne(id: Long): TaskInstance =
     taskInstanceRepository.findOne(id)
 
   def findBySession(sessionId: Long, group: java.lang.Long, status: String, page: Int, pageSize: Int, search:String,sortBy:String, order:String) = {
-    var instances = taskInstanceQuery.findBySession(sessionId, page, pageSize, search,sortBy, order) 
+    var instances = taskInstanceQuery.findBySession(sessionId, page, pageSize, search,sortBy, order)
     instances.content = instances.content.filter{ instance =>
       (status == null || instance.status == status) &&
       (group == null || instance.task.primaryGroup == null || instance.task.primaryGroup.id == group)
@@ -92,8 +95,8 @@ class TaskInstanceService @Autowired()(val taskInstanceRepository: TaskInstanceR
       instance.dependencies = findDependencies(instance)
       instance
     }
-    instances 
-  } 
+    instances
+  }
 
   def withDependencies(instance: TaskInstance) = {
     instance.dependencies = findDependencies(instance)
@@ -117,7 +120,7 @@ class TaskInstanceService @Autowired()(val taskInstanceRepository: TaskInstanceR
   def createBySessionIdAndPlanId(sessionId: Long, planId: Long) = {
     var instances = taskService.findByPlan(planId).toList.map(task=>{
       var instance = new TaskInstance
-      instance.task = task 
+      instance.task = task
       instance.session = new Session(sessionId)
       instance
     })
@@ -275,15 +278,16 @@ class TaskInstanceService @Autowired()(val taskInstanceRepository: TaskInstanceR
     instance.endDate= null
     instance.status = Status.IDLE
     update(instance)
+    sessionService.start(instance.session.id)
     instance.dependencies = findDependencies(instance)
     instance
   }
-  
+
   def sendTaskInstanceMail(instance: TaskInstance) = {
     appInit.system.actorSelection("/user/mail") ! SendTaskInstanceMail(instance)
     instance
   }
-  
+
   private def logInstance(instance: TaskInstance, message: String = null) = {
     taskInstanceLogService.create(instance, message)
   }
@@ -298,6 +302,6 @@ class TaskInstanceService @Autowired()(val taskInstanceRepository: TaskInstanceR
       i.status = Status.ERROR
       taskInstanceRepository.save(i)
     }
-  }  
+  }
 
 }

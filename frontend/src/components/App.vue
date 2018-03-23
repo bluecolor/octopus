@@ -1,5 +1,6 @@
 <template lang="pug">
   #app(:class="loading ? 'disable-bg':''")
+    modals-container
     spinner-circle.spinner(v-show="loading")
     router-view
 </template>

@@ -1,6 +1,6 @@
 <template lang="pug">
 .row
-  .col-md-6.col-md-offset-3  
+  .col-md-6.col-md-offset-3
     .box.box-primary
       .box-header.with-border
         h3.box-title Session Task
@@ -33,11 +33,11 @@
                 label Priority
                 div(style="min-width:400px")
                   vue-slider(
-                    ref="slider" 
-                    v-model="value" 
+                    ref="slider"
+                    v-model="value"
                     :data=['Low', 'Medium', 'High', 'Top']
-                    piecewise=true 
-                    tooltip="hover" 
+                    piecewise=true
+                    tooltip="hover"
                     :speed=0.2)
               .form-group
                 label Description
@@ -50,8 +50,8 @@
                   option(v-for="m in technologies" :value="m.id")  {{m.name}}
               section
                 codemirror(
-                  ref="script" 
-                  :code="taskInstance.script" 
+                  ref="script"
+                  :code="taskInstance.script"
                   :options="editorOptions")
           #task-instance-dependencies.tab-pane(style="margin:10px")
             .table-responsive.connection-items
@@ -59,22 +59,22 @@
                 tbody
                   tr(v-for="m in taskInstance.dependencies")
                     td(style="width:100px")
-                      span.label(style="border-radius:0px;", :class = 'labelByStatus(m.status)'  data-toggle="tooltip" title="Status") {{m.status}} 
-                    td 
+                      span.label(style="border-radius:0px;", :class = 'labelByStatus(m.status)'  data-toggle="tooltip" title="Status") {{m.status}}
+                    td
                       router-link(:to="'task-instance/' + m.id" ) {{m.name}}
           #task-instance-groups.tab-pane(style="margin:10px")
             .table-responsive.connection-items
               table.table.table-hover
                 tbody
                   tr(v-for="m in taskInstance.task.groups")
-                    td 
-                      router-link(:to="'group/' + m.id" ) {{m.name}}  
+                    td
+                      router-link(:to="'group/' + m.id" ) {{m.name}}
           #task-instance-owners.tab-pane(style="margin:10px")
             .table-responsive.connection-items
               table.table.table-hover
                 tbody
                   tr(v-for="m in taskInstance.task.owners")
-                    td 
+                    td
                       router-link(:to="'user/' + m.id" ) {{m.name}}
           #task-instance-logs.tab-pane(style="margin:10px")
             .table-responsive.connection-items
@@ -82,15 +82,15 @@
                 tbody
                   tr(v-for="m in taskInstance.logs")
                     td(style="width:100px")
-                      span.label(:class="labelByStatus(m.status)"  data-toggle="tooltip" title="Status") {{m.status}} 
+                      span.label(:class="labelByStatus(m.status)"  data-toggle="tooltip" title="Status") {{m.status}}
                     td(style="width:100px") {{toDateString(m.date)}}
                     td(style="width:100px") {{`${(m.log==null?'':m.log).substring(0,30)}...`}}
                     td(style="width:20px")
-                      a.js-more(href='javascript:void(0);' style='margin-right:20px' model-id!='<%- id %>')
+                      a(@click="onOpenLog(m)" href='javascript:void(0);' style='margin-right:20px' model-id!='<%- id %>')
                         i.fa.fa-ellipsis-h.text-green-fade.fa-lg
       .box-footer
         a.btn.btn-danger(@click="onClose") Close
-        a.ladda-button.btn.btn-primary.pull-right.js-save-btn(data-style="expand-left") Save 
+        a.ladda-button.btn.btn-primary.pull-right.js-save-btn(data-style="expand-left") Save
 </template>
 
 <script>
@@ -165,6 +165,16 @@ export default {
     ])
   },
   methods: {
+    onOpenLog (log) {
+      this.$modal.show({
+        template: `
+          <div>
+            <code>{{ log }}</code>
+          </div>
+        `,
+        props: ['log']
+      }, {log: log.log})
+    },
     labelByStatus (s) {
       return getLabelByStatus(s)
     },
@@ -186,7 +196,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .vue-slider-component {
   padding: 2px !important;
 }
@@ -206,6 +216,9 @@ export default {
 .CodeMirror-gutters {
   border-right: 1px solid rgba(255,255,255,.15);
   background-color: #dddddd1c;
+}
+.table-responsive {
+  overflow-x: hidden;
 }
 
 </style>

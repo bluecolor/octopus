@@ -11,6 +11,7 @@ import VeeValidate from 'vee-validate'
 import router from './router'
 import pagination from 'vuejs-uib-pagination'
 import VuejsDialog from 'vuejs-dialog'
+import VModal from 'vue-js-modal'
 
 import 'pnotify/dist/pnotify.css'
 import 'pnotify/dist/pnotify.buttons.css'
@@ -32,6 +33,8 @@ Vue.use(VueRouter)
 Vue.use(VeeValidate)
 Vue.use(pagination)
 Vue.use(VuejsDialog)
+Vue.use(VModal, { dynamic: true })
+
 // Vue.use(ElementUI, {locale})
 Vue.config.productionTip = false
 Vue.config.lang = 'en'
