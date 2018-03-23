@@ -1,6 +1,6 @@
 <template lang="pug">
 .row
-  .col-md-10.col-md-offset-1(v-if="collection.length > 0")
+  .col-md-10.col-md-offset-1(v-if="taskInstances.all.length > 0 || hasFilter")
     .box.box-primary(style="border-top=0px")
       .box-header.with-border
         h3.box-title {{title}}
@@ -11,30 +11,30 @@
         .table-controls
           a.btn.btn-default.btn-sm(@click='reload' type='button', data-toggle="tooltip" title="Reload",)
             i.fa.fa-refresh.text-blue.fa-lg
-          a.btn.btn-default.btn-sm(@click="", data-toggle="tooltip" title="Delete", :class="selected.length > 0 ? '':'hidden'")
+          a.btn.btn-default.btn-sm(@click="onDelete", data-toggle="tooltip" title="Delete", :class="selected.length > 0 ? '':'hidden'")
             i.fa.fa-trash-o.text-danger.fa-lg
           .dropdown(style="display:inline;" :class="selected.length > 0 ? '':'hidden'")
             button.btn.btn-default.btn-sm.dropdown-toggle(
-              type='button', 
-              data-toggle='dropdown', 
-              aria-haspopup='true', 
+              type='button',
+              data-toggle='dropdown',
+              aria-haspopup='true',
               aria-expanded='true'
               style="color:#212121;"
             )
               | More
               span.caret
             ul.dropdown-menu(aria-labelledby='dm1')
-              li  
+              li
                 a(href='javascript:void(0);' @click="onDone") Done
-              li  
+              li
                 a(href='javascript:void(0);' @click="onStop") Stop
-              li  
+              li
                 a(href='javascript:void(0);' @click="onStart") Start
-              li  
+              li
                 a(href='javascript:void(0);' @click="onBlock") Block
               li.divider(role='separator')
               li
-                a(href='javascript:void(0);') Delete
+                a(href='javascript:void(0);' @click="onDelete") Delete
 
           .dropdown.pull-right(style="display:inline;")
             a.btn.btn-default.btn-sm.dropdown-toggle.text-green(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
@@ -81,8 +81,8 @@
               li.footer
                 a(href='javascript:void(0);' @click="onFilterByGroup()") All
           a.btn.btn-default.btn-sm.pull-right(@click="onClearFilter", data-toggle="tooltip" title="Clear filters" :class="hasFilter ? '':'hidden'")
-            i.fa.fa-filter.text-danger.fa-lg 
-            | Clear filters     
+            i.fa.fa-filter.text-danger.fa-lg
+            | Clear filters
         .table-responsive.connection-items
           table.table.table-hover
             tbody
@@ -93,43 +93,43 @@
                       span.el-checkbox__inner
                       input.el-checkbox__original(type='checkbox', v-model="selected" :value ='m.id')
                 td(style="width:100px")
-                  span.label(style="border-radius:0px;", :class = 'labelByStatus(m.status)'  data-toggle="tooltip" title="Status") {{m.status}} 
-                td 
+                  span.label(style="border-radius:0px;", :class = 'labelByStatus(m.status)'  data-toggle="tooltip" title="Status") {{m.status}}
+                td
                   router-link(:to="'task-instance/' + m.id" ) {{m.name}}
-                td 
+                td
                   span.label(
-                    :style="'border-radius:0px; background-color:'+ m.task.primaryGroup.color+';'", 
+                    :style="'border-radius:0px; background-color:'+ m.task.primaryGroup.color+';'",
                     data-toggle="tooltip" title="Group"
                   ) {{m.task.primaryGroup.name}}
-                td 
+                td
                   popper(trigger='click', :options="{placement: 'left'}")
                     .popper(v-show="m.dependencies && m.dependencies.length > 0")
                       div(slot="content")
                         ul.pop-menu
                           li(v-for="d in m.dependencies")
                             router-link(:to="'task-instance/' + d.id") {{d.name}}
-                          
+
                     a.top(href='javascript:void(0)', slot='reference')
                       | {{m.dependencies.length}}
-                td 
+                td
                   span(data-toggle="tooltip" title="Start date") {{dateString(m.startDate)}}
-                td 
+                td
                   span(data-toggle="tooltip" title="End date") {{dateString(m.endDate)}}
                 td(style="width:200px;")
                   .progress.progress-striped(style="margin-bottom:0px;" data-toggle="tooltip" title="Progress")
                     .progress-bar.progress-bar-info(role='progressbar', :style ="'width:'+ progress(m) + '%;'")
-                      |  {{progress(m)}}%                
+                      |  {{progress(m)}}%
 
       .box-footer.clearfix
-        ul.pagination.pagination-sm.no-margin.pull-right  
+        ul.pagination.pagination-sm.no-margin.pull-right
           uib-pagination(
-            :total-items="total" 
-            v-model="pagination" 
-            :max-size="maxPaginationSize" 
-            class="pagination-sm" 
-            :boundary-links="true" 
+            :total-items="total"
+            v-model="pagination"
+            :max-size="maxPaginationSize"
+            class="pagination-sm"
+            :boundary-links="true"
             :rotate="false"
-          )  
+          )
   .align-center(v-else)
     div.no-connection(v-if="!loading" style="width:330px; display: table-cell;vertical-align: middle;text-align: center;")
       div(style="width:100%; display: inline-block;")
@@ -138,7 +138,7 @@
         span.text-gray-harbor(style="font-size:20px;") No task instance for this session!
     div.no-connection(v-if="loading" style="width:330px; display: table-cell;vertical-align: middle;text-align: center;")
       pulse-loader(:loading="loading" color="#d2d6de")
-   
+
 </template>
 
 <script>
@@ -208,7 +208,8 @@ export default {
       'findAll',
       'done',
       'start',
-      'block'
+      'block',
+      'remove'
     ]),
     reload () {
       const session = this.filter.session
@@ -252,6 +253,9 @@ export default {
     },
     onDependenciesClick (e, m) {
       console.log(e)
+    },
+    onDelete () {
+      this.remove(this.selected[0])
     },
     onDone () {
       this.done(this.selected[0])
@@ -301,7 +305,7 @@ export default {
     bottom: 0;
     left: 0;
     right: 0;
-    margin: 50px auto; 
+    margin: 50px auto;
   }
 
   .box {
@@ -314,11 +318,11 @@ export default {
   }
 
   .big-icon {
-    font-size: 132px; 
+    font-size: 132px;
   }
 
   .text-gray-harbor {
-    color: #757D75; 
+    color: #757D75;
   }
 
   .default-text {

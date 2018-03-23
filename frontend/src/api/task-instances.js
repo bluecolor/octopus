@@ -15,5 +15,8 @@ export default {
   },
   block (id) {
     return axios.put(`${API_BASE}/task-instances/block/${id}`)
+  },
+  remove (id) {
+    return axios.delete(`${API_BASE}/task-instances/${id}`)
   }
 }

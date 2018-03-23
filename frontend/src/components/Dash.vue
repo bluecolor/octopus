@@ -12,32 +12,6 @@ div(:class="['wrapper', classes]")
       .navbar-custom-menu
         ul.nav.navbar-nav
           li.navbar-text {{connectionName}}
-          // Messages
-          li.dropdown.messages-menu
-            a.dropdown-toggle(href='javascript:;', data-toggle='dropdown')
-              i.fa.fa-envelope-o
-              span.label.label-success {{  }}
-            ul.dropdown-menu
-              li.header You have {{  }} message(s)
-              li(v-if='true')
-                // inner menu: contains the messages
-                ul.menu
-                  li
-                    // start message
-                    a(href='javascript:;')
-                      // Message title and timestamp
-                      h4
-                        | Support Team
-                        small
-                          i.fa.fa-clock-o
-                          |  5 mins
-                      // The message
-                      p Why not consider this a test message?
-                  // end message
-                // /.menu
-              li.footer(v-if='true')
-                a(href='javascript:;') See All Messages
-          // /.messages-menu
           // Notifications Menu
           li.dropdown.notifications-menu
             a.dropdown-toggle(href='javascript:;', data-toggle='dropdown')
@@ -56,38 +30,27 @@ div(:class="['wrapper', classes]")
                   // end notification
               li.footer(v-if='true')
                 a(href='javascript:;') View all
-          // Tasks Menu
-          li.dropdown.tasks-menu
-            a.dropdown-toggle(href='javascript:;', data-toggle='dropdown')
-              i.fa.fa-flag-o
-              span.label.label-danger {{  }} 
-            ul.dropdown-menu
-              li.header You have {{  }} task(s)
-              li(v-if='true')
-                // Inner menu: contains the tasks
-                ul.menu
-                  li
-                    // Task item
-                    a(href='javascript:;')
-                      // Task title and progress text
-                      h3
-                        | Design some buttons
-                        small.pull-right 20%
-                      // The progress bar
-                      .progress.xs
-                        // Change the css width attribute to simulate progress
-                        .progress-bar.progress-bar-aqua(style='width: 20%', role='progressbar', aria-valuenow='20', aria-valuemin='0', aria-valuemax='100')
-                          span.sr-only 20% Complete
-                  // end task item
-              li.footer(v-if='true')
-                a(href='javascript:;') View all tasks
           // User Account Menu
-          li.dropdown.user.user-menu
+          li.dropdown.user.user-menu.tasks-menu
             a.dropdown-toggle(href='javascript:;', data-toggle='dropdown')
               // The user image in the navbar
-              img.user-image(v-bind:src='demo.avatar', alt='User Image')
+              //- img.user-image(v-bind:src='demo.avatar', alt='User Image')
               // hidden-xs hides the username on small devices so only the image appears.
               span.hidden-xs {{ demo.displayName }}
+            ul.dropdown-menu
+              li(v-if='true')
+                ul.menu
+                  li
+                    router-link(to="/options" href='javascript:;')
+                      i.fa.fa-sliders.text-green
+                      |  Options
+                  li
+                    a(href='javascript:;')
+                      i.fa.fa-key.text-orange
+                      |  Change password
+              li.footer(v-if='true')
+                a(href='javascript:;' @click="logout")
+                  span(style="color:red;") Sign out
   // Left side column. contains the logo and sidebar
   sidebar(:display-name='demo.displayName', :picture-url='demo.avatar')
   // Content Wrapper. Contains page content
@@ -176,6 +139,9 @@ export default {
   methods: {
     changeloading () {
       this.$store.commit('TOGGLE_SEARCHING')
+    },
+    logout () {
+      window.location = '/logout'
     }
   }
 }

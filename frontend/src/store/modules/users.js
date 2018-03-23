@@ -15,7 +15,8 @@ const state = {
 
 const getters = {
   users: state => state.all,
-  me: state => state.me
+  me: state => state.me,
+  options: state => JSON.parse(state.me.options)
 }
 
 // actions
@@ -29,18 +30,29 @@ const actions = {
       notifyError('Unable to load current user')
     })
   },
-  findAll ({ commit }) {
+  findAll ({commit}) {
     api.findAll().then(response => {
       commit(LOAD, response.data)
     })
   },
-  saveUser ({ commit }, payload) {
+  saveUser ({commit}, payload) {
     api.save(payload).then(response => {
       commit(SAVE, response.data)
       notifySuccess('User saved')
     },
     error => {
       notifyError(`Unable to save user. ${error.response.data.message}`)
+    })
+  },
+  saveOptions ({commit}, options) {
+    return api.saveOptions(JSON.stringify(options)).then(response => {
+      notifySuccess('Options saves')
+      commit(SET_ME, response.data)
+      window.history.back()
+    },
+    error => {
+      console.log(error.response.data.message)
+      notifyError('Unable to save options')
     })
   },
   remove ({ commit }, id) {

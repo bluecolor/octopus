@@ -1,4 +1,4 @@
-package io.octopus.controller 
+package io.octopus.controller
 
 import java.util.Optional
 import org.springframework.beans.factory.annotation.Autowired
@@ -20,40 +20,40 @@ class TaskInstanceController @Autowired()(private val taskInstanceService: TaskI
     @RequestParam(value= "session") session: Int,
     @RequestParam(value="group", required=false) group : Optional[java.lang.Long],
     @RequestParam(value="status", required=false) status : Optional[String],
-    @RequestParam(value="page", required=false) page: Optional[Int], 
+    @RequestParam(value="page", required=false) page: Optional[Int],
     @RequestParam(value="pageSize", required=false) pageSize: Optional[Int]
-  ) = 
+  ) =
     taskInstanceService.findBySession(
       session,
       group.orElse(null),
       status.orElse(null),
-      page.orElse(0), 
+      page.orElse(0),
       pageSize.orElse(15),
       search.orElse(""),
-      sortBy.orElse("name"), 
+      sortBy.orElse("name"),
       order.orElse("asc")
     )
-  
+
   @RequestMapping(value = Array("/{id}"), method = Array(RequestMethod.GET))
   def findOne(@PathVariable("id") id: Long) =
     taskInstanceService.findOne(id)
 
   @RequestMapping(value = Array("/status/{status}"), method = Array(RequestMethod.GET))
-  def findByStatus(@PathVariable("status") status: String) = 
+  def findByStatus(@PathVariable("status") status: String) =
     taskInstanceService.findByStatus(status.toUpperCase)
-  
+
   @RequestMapping(value = Array("/{id}"), method = Array(RequestMethod.PUT))
   def update(@PathVariable("id") id: Long, @RequestBody taskInstance: TaskInstance) =
-    taskInstanceService.update(taskInstance) 
+    taskInstanceService.update(taskInstance)
 
   @RequestMapping(value = Array("/block/{id}"), method = Array(RequestMethod.PUT))
-  def block(@PathVariable("id") id: Long) = 
+  def block(@PathVariable("id") id: Long) =
     taskInstanceService.block(id)
 
   @RequestMapping(value = Array("/stop/{id}"), method = Array(RequestMethod.PUT))
   def stop(@PathVariable("id") id: Long) =
     taskInstanceService.stop(id)
-  
+
   @RequestMapping(value = Array("/start/{id}"), method = Array(RequestMethod.PUT))
   def start(@PathVariable("id") id: Long) =
     taskInstanceService.start(id)

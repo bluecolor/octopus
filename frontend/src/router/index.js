@@ -13,6 +13,7 @@ import Groups from '@/components/group/Groups.vue'
 import Group from '@/components/group/Group.vue'
 import Users from '@/components/user/Users.vue'
 import User from '@/components/user/User.vue'
+import Options from '@/components/user/Options.vue'
 import GeneralSettings from '@/components/settings/General.vue'
 import MailSettings from '@/components/settings/Mail.vue'
 import SlackSettings from '@/components/settings/Slack.vue'
@@ -100,6 +101,9 @@ export default new Router({
       path: 'group',
       component: Group,
       name: 'NewGroup'
+    }, {
+      path: 'options',
+      component: Options
     }, {
       path: 'users',
       component: Users,

@@ -6,6 +6,7 @@ import {success as notifySuccess, error as notifyError} from '../../lib/notify'
 const LOAD = 'LOAD'
 const CLEAR = 'CLEAR'
 const UPDATE = 'UPDATE'
+const REMOVE = 'REMOVE'
 
 const state = {
   all: [],
@@ -32,6 +33,15 @@ const actions = {
     },
     error => {
       notifyError(`Failed to update task ${error.response.data.message}`)
+    })
+  },
+  remove ({commit}, id) {
+    api.remove(id).then(response => {
+      commit(REMOVE, response.data)
+      notifySuccess('Deleted task')
+    },
+    error => {
+      notifyError(`Failed to delete task ${error.response.data.message}`)
     })
   },
   start ({commit}, id) {
@@ -76,6 +86,11 @@ const mutations = {
     const i = _.findIndex(state.all, {id})
     state.all.splice(i, 1)
     state.all.push(data)
+  },
+  [REMOVE] (state, data) {
+    const id = data.id
+    const i = _.findIndex(state.all, {id})
+    state.all.splice(i, 1)
   }
 }
 

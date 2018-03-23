@@ -11,6 +11,9 @@ export default {
   save (user) {
     return axios.post(`${API_BASE}/users`, user)
   },
+  saveOptions (options) {
+    return axios.put(`${API_BASE}/users/options`, options)
+  },
   remove (id) {
     return axios.delete(`${API_BASE}/users/${id}`)
   }

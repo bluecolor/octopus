@@ -1,6 +1,6 @@
-package io.octopus.controller 
+package io.octopus.controller
 
-import org.springframework.security.access.annotation.Secured 
+import org.springframework.security.access.annotation.Secured
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation._
@@ -29,12 +29,12 @@ class UserController  @Autowired()(private val userService: UserService) {
   @RequestMapping(method = Array(RequestMethod.POST))
   @Secured(Array("ROLE_MASTER"))
   def create(@Validated @RequestBody user: User) = {
-    var u: User = null 
+    var u: User = null
     try{
       u = userService.create(user)
     }catch{
-      case integrityViolation:DataIntegrityViolationException => 
-        throw new UniqueConstraintViolationException("Username already exists!")  
+      case integrityViolation:DataIntegrityViolationException =>
+        throw new UniqueConstraintViolationException("Username already exists!")
     }
     u
   }
@@ -43,17 +43,17 @@ class UserController  @Autowired()(private val userService: UserService) {
   @Secured(Array("ROLE_MASTER"))
   def update(@PathVariable("id") id: Long, @RequestBody user: User) =
     userService.update(user)
-  
+
 
   @RequestMapping(value = Array("/profile"), method = Array(RequestMethod.PUT))
-  def updateProfile(@RequestBody user: User) = 
+  def updateProfile(@RequestBody user: User) =
     userService.updateProfile(user)
 
 
   @RequestMapping(value = Array("/options"), method = Array(RequestMethod.PUT))
-  def updateOptions(@RequestBody options: String) = 
+  def updateOptions(@RequestBody options: String) =
     userService.updateOptions(options)
- 
+
 
   @RequestMapping(value = Array("/password"), method = Array(RequestMethod.PUT))
   def changePassword(@RequestBody pass: Map[String,String]) =
