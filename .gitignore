@@ -32,3 +32,4 @@ private-docs
 !src/main/resources/templates/**/*.html
 .jekyll-metadata
 .sass-cache
+test

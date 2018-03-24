@@ -15,14 +15,13 @@ trait Query {
   private val log:Logger  = LoggerFactory.getLogger(MethodHandles.lookup.lookupClass)
   protected val searchPattern = "(\\w+\\s+)|(\\s*\\w+\\s*)(:#|:|~|<|>|!:)(\\s*\\w+\\s*|\\[[\\w+[\\s*\\w*]*,??]*\\]\\s*)"
   protected val pattern = Pattern.compile(searchPattern)
-  
+
   protected def parseSearchPattern(str: String):( String, Map[String, AnyRef] )  = {
     val search = if(str == null) "" else str.trim
     if(search.isEmpty) return (" (1=1) ",null)
-    log.debug(search)
     val (f,o) = buildFilter(pattern.matcher(search+" "))
-    if(f.isEmpty) 
-      ("(1=1)", null) 
+    if(f.isEmpty)
+      ("(1=1)", null)
     else
       (f.map(f => s"(${f})").mkString(" and "), o)
   }
@@ -42,8 +41,8 @@ trait Query {
       return s"${parameter} in (${value})"
     }
     if(o == SearchOperation.EQUAL){
-      return s"${parameter.toLowerCase} in (" + 
-        value.split(",").map(vl=> s"'${vl}'").mkString(",") + 
+      return s"${parameter.toLowerCase} in (" +
+        value.split(",").map(vl=> s"'${vl}'").mkString(",") +
       ")"
     }
     else return "1=1"
@@ -62,8 +61,8 @@ trait Query {
       case "avgd" => "s.avgDuration"
       case "error"=> "s.error"
       case _ => "t.name"
-    }  
-    
+    }
+
     s"order by $q $x"
   }
 

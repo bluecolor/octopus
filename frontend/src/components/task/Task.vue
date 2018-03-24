@@ -361,7 +361,7 @@ export default {
       }
     },
     init (id) {
-      let task = _.chain(this.tasks.all).find({id: id}).cloneDeep().value()
+      let task = _.chain(this.tasks.all).find({id}).cloneDeep().value()
       if (task) {
         task.primaryGroup = task.primaryGroup ? task.primaryGroup : undefined
         task.primaryOwner = task.primaryOwner ? task.primaryOwner : undefined

@@ -4,7 +4,7 @@ import java.lang.Integer
 import java.util.regex.{Pattern,Matcher}
 import org.springframework.stereotype.Component
 import org.hibernate.{Session=>HibernateSession,_}
-import org.hibernate.criterion._ 
+import org.hibernate.criterion._
 import javax.persistence.EntityManagerFactory
 import scala.collection.JavaConverters._
 import scala.collection.JavaConversions._
@@ -26,38 +26,44 @@ class SessionQuery extends Query{
 
   private val log:Logger  = LoggerFactory.getLogger(MethodHandles.lookup.lookupClass)
 
-  def findAll(pageNo: Int, pageSize: Int, search:String, sortBy:String = "name" , order:String = "asc") = {
-    
+  def findAll(
+    pageNo: Int, pageSize: Int, search:String,
+    sortBy: String = "name" , order: String = "asc",
+    status: String = "", planId: Long = -1
+  ) = {
+
     val em = entityManagerFactory.createEntityManager
     val session = em.unwrap(classOf[HibernateSession])
     var page = new io.octopus.model.Page[Session]
-    var (filter,vals) = parseSearchPattern(search) 
+    var (filter,vals) = parseSearchPattern(search)
     var sort = orderBy(sortBy, order)
     val q = s"""
-      select s 
-      from 
-        session s 
-        left join fetch s.plan p 
-      where 
-        ${filter} 
+      select s
+      from
+        session s
+        left join fetch s.plan p
+      where
+        ${filter}
+        ${if(status != null && !status.isEmpty) "and s.status = " + status else ""}
+        ${if(planId != -1) "and p.id = " + planId else ""}
       ${sort}
     """
     log.debug(q)
     var query = session.createQuery(q)
-    
+
     if(vals != null){
       vals foreach {
         case (k,v) => query.setParameter(k,v)
       }
     }
-    
-    
+
+
     page.count = query.list.length
     if(pageNo == 0) {
-      page.totalPages = 
-      if(page.count % pageSize == 0) 
-        page.count / pageSize 
-      else 
+      page.totalPages =
+      if(page.count % pageSize == 0)
+        page.count / pageSize
+      else
         page.count / pageSize +1
     }
     page.page = pageNo
@@ -78,7 +84,7 @@ class SessionQuery extends Query{
       case "startdate"=> "s.startDate"
       case "status" => "s.status"
       case _ => "s.scheduleDate"
-    }  
+    }
     s"order by $q $x"
   }
 
@@ -90,15 +96,15 @@ class SessionQuery extends Query{
       var p = m.group(2)
       var o = m.group(3)
       var v = m.group(4)
-      
+
       if(w != null && !w.trim.isEmpty) {
         filters += s"""lower(p.name) like lower('%${w.trim.replace("*", "%")}%')"""
       }
       if(p!=null && o!= null && v!= null) {
         p=p.trim;o=o.trim;v=v.trim;
-        
+
         p.toLowerCase match {
-          case "plan" => 
+          case "plan" =>
             val parameter = if(o == SearchOperation.EQUAL_ID) "p.id" else "p.name"
             filters += build(parameter, o, v)
           case "status"=>

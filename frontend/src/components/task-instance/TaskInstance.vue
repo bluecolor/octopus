@@ -150,7 +150,7 @@ export default {
         highlightSelectionMatches: { showToken: /\w/, annotateScrollbar: true }
       },
       taskInstance: {
-        technology: '',
+        technology: undefined,
         dependencies: [],
         task: {}
       }
@@ -191,7 +191,8 @@ export default {
   },
   mounted () {
     const id = parseInt(this.id)
-    this.taskInstance = _.find(this.taskInstances.all, {id})
+    this.taskInstance = _.chain(this.taskInstances.all).find({id}).cloneDeep().value()
+    this.taskInstance.technology = this.taskInstance.technology ? this.taskInstance.technology.id : undefined
   }
 }
 </script>

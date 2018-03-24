@@ -33,12 +33,12 @@ class SlackService {
   @throws(classOf[InterruptedException])
   def taskInstanceDone(instance: TaskInstance, user: User)= {
     val s = settingService.findSlackSettings
-    def send(options: SlackOptions) = {      
+    def send(options: SlackOptions) = {
       if(options.isActive && options.notifications.notifyTaskDone){
         val payload = Payload.builder()
           .channel(options.channel)
           .username("octopus")
-          .text(s"""  
+          .text(s"""
             :white_check_mark: *${instance.name}* made "done" by ${user.name}. @Session: *${instance.session.name}*
           """)
           .build();
@@ -49,7 +49,7 @@ class SlackService {
     }
 
     s match {
-      case None => 
+      case None =>
       case Some(options) => send(options)
     }
   }
@@ -58,12 +58,12 @@ class SlackService {
   @throws(classOf[InterruptedException])
   def taskInstanceBlocked(instance: TaskInstance, user: User)= {
     val s = settingService.findSlackSettings
-    def send(options: SlackOptions) = {      
+    def send(options: SlackOptions) = {
       if(options.isActive && options.notifications.notifyTaskBlocked){
         val payload = Payload.builder()
           .channel(options.channel)
           .username("octopus")
-          .text(s"""  
+          .text(s"""
             :no_entry_sign: *${instance.name}* blocked by ${user.name}. @Session: *${instance.session.name}*
           """)
           .build();
@@ -74,22 +74,22 @@ class SlackService {
     }
 
     s match {
-      case None => 
+      case None =>
       case Some(options) => send(options)
     }
-  } 
+  }
 
   @Async
   @throws(classOf[InterruptedException])
   def taskInstanceKilled(instance: TaskInstance, user: User) = {
     val s = settingService.findSlackSettings
-    def send(options: SlackOptions) = {      
+    def send(options: SlackOptions) = {
 
       if(options.isActive && options.notifications.notifyTaskKilled){
         val payload = Payload.builder()
           .channel(options.channel)
           .username("octopus")
-          .text(s"""  
+          .text(s"""
             :japanese_ogre: *${instance.name}* killed by ${user.name}. @Session: *${instance.session.name}*
           """)
           .build();
@@ -100,7 +100,7 @@ class SlackService {
     }
 
     s match {
-      case None => 
+      case None =>
       case Some(options) => send(options)
     }
   }
@@ -108,33 +108,33 @@ class SlackService {
   @Async
   @throws(classOf[InterruptedException])
   def taskInstanceError(instance: TaskInstance, error: String) = {
-    
+
     val s = settingService.findSlackSettings
-    def send(options: SlackOptions) = {      
+    def send(options: SlackOptions) = {
 
       if(options.isActive && options.notifications.notifyTaskError){
         val payload = Payload.builder()
           .channel(options.channel)
           .username("octopus")
-          .text(s""":boom: *${instance.name}* crashed. @Session: *${instance.session.name}*  
+          .text(s""":boom: *${instance.name}* crashed. @Session: *${instance.session.name}*
             ```${error}```""")
           .build();
 
         val slack = Slack.getInstance
         val response = slack.send(options.url, payload)
       }
-      
+
     }
 
     s match {
-      case None => 
+      case None =>
       case Some(options) => send(options)
     }
-    
+
   }
 
   def test(options: SlackOptions): Boolean = {
-    
+
       val payload = Payload.builder()
         .channel(options.channel)
         .username("octopus")

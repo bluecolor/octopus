@@ -24,7 +24,7 @@ class SessionController  @Autowired()(private val sessionService: SessionService
     @RequestParam(value="pageSize", required=false) pageSize: Optional[java.lang.Integer]
   ) =
     sessionService.findAll(
-      plan.orElse(null),
+      plan.orElse(-1),
       status.orElse(null),
       search.orElse(""),
       sortBy.orElse("name"),

@@ -61,12 +61,7 @@ class SessionService @Autowired()(val sessionRepository: SessionRepository) {
 
 
   def findAll(planId: java.lang.Long, status: String, search: String, sortBy: String, order : String, pageNo: Int, pageSize: Int) = {
-    var sessions = sessionQuery.findAll(pageNo, pageSize, search, sortBy, order)
-    sessions.content = sessions.content.filter{ session =>
-      (status == null || session.status == status) &&
-      (planId == null || session.plan == null || session.plan.id == planId)
-    }
-    sessions
+    sessionQuery.findAll(pageNo, pageSize, search, sortBy, order, status, planId)
   }
 
   def findOne(id: Long): Session =

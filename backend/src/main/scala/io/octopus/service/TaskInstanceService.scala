@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort.Order
 import org.springframework.data.domain.{Sort, Page,Pageable,PageRequest}
 import org.springframework.core.convert.converter.Converter
 import org.springframework.messaging.simp.SimpMessagingTemplate
+import org.apache.commons.lang3.exception.ExceptionUtils
 
 import io.octopus.search._
 import io.octopus.repository.TaskInstanceRepository
@@ -188,7 +189,12 @@ class TaskInstanceService @Autowired()(val taskInstanceRepository: TaskInstanceR
     logInstance(instance,error)
     sendTaskInstanceMail(instance)
     mt.convertAndSend(s"/topic/${SocketTopic.TASK_INSTANCE_ERROR}", instance);
-    slackService.taskInstanceError(instance, error)
+    try {
+      slackService.taskInstanceError(instance, error)
+    } catch {
+      case e: Exception => log.error(ExceptionUtils.getStackTrace(e))
+    }
+
     instance
   }
 
@@ -218,7 +224,11 @@ class TaskInstanceService @Autowired()(val taskInstanceRepository: TaskInstanceR
     val me = userService.findMe
     val message = s"Issued ${Status.BLOCKED} request by user ${me.name}"
     mt.convertAndSend(s"/topic/${SocketTopic.TASK_INSTANCE_BLOCKED}", (instance,me) );
-    slackService.taskInstanceBlocked(instance,me)
+    try {
+      slackService.taskInstanceBlocked(instance, me)
+    } catch {
+      case e: Exception => log.error(ExceptionUtils.getStackTrace(e))
+    }
     logInstance(instance,message)
     instance.dependencies = findDependencies(instance)
     instance
@@ -240,7 +250,11 @@ class TaskInstanceService @Autowired()(val taskInstanceRepository: TaskInstanceR
     val me = userService.findMe
     val message = s"Issued ${Status.KILLED} request by user ${me.name}"
     mt.convertAndSend(s"/topic/${SocketTopic.TASK_INSTANCE_KILLED}", (instance,me) );
-    slackService.taskInstanceKilled(instance,me)
+    try {
+      slackService.taskInstanceKilled(instance, me)
+    } catch {
+      case e: Exception => log.error(ExceptionUtils.getStackTrace(e))
+    }
     logInstance(instance,message)
     sendTaskInstanceMail(instance)
     instance
@@ -261,7 +275,11 @@ class TaskInstanceService @Autowired()(val taskInstanceRepository: TaskInstanceR
     val me = userService.findMe
     val message = s"Issued ${Status.DONE} request by user ${me.name}"
     mt.convertAndSend(s"/topic/${SocketTopic.TASK_INSTANCE_DONE}", (instance,me) );
-    slackService.taskInstanceDone(instance,me)
+    try {
+      slackService.taskInstanceDone(instance, me)
+    } catch {
+      case e: Exception => log.error(ExceptionUtils.getStackTrace(e))
+    }
     logInstance(instance,message)
     instance.dependencies = findDependencies(instance)
     instance

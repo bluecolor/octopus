@@ -11,7 +11,7 @@ import org.hibernate.annotations.FetchMode
 import javax.validation.constraints.{NotNull}
 import scala.beans.BeanProperty
 
-@JsonIgnoreProperties(ignoreUnknown = true) 
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Entity(name="plan")
 class Plan {
 
@@ -49,10 +49,10 @@ class Plan {
 
   @BeanProperty
   @NotNull(message="error.connection.notNull")
-  @Fetch(value= FetchMode.JOIN)
+  @Fetch(value= FetchMode.SELECT)
   @ManyToOne(optional = false, fetch = FetchType.EAGER)
   var connection: Connection = _
-  
+
   @BeanProperty
   var parallel: Int = _
 
@@ -64,13 +64,13 @@ class Plan {
 
   @BeanProperty
   @Fetch(value= FetchMode.JOIN)
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "plan", cascade=Array(CascadeType.REMOVE))  
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "plan", cascade=Array(CascadeType.REMOVE))
   @JsonIgnore
   var tasks: java.util.Set[Task] = new java.util.HashSet[Task]
 
   @BeanProperty
   @Fetch(value= FetchMode.SELECT)
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "plan", cascade=Array(CascadeType.REMOVE))  
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "plan", cascade=Array(CascadeType.REMOVE))
   @JsonIgnore
   var sessions: java.util.Set[Session] = new java.util.HashSet[Session]
 
