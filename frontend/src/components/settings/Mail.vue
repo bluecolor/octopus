@@ -1,6 +1,6 @@
 <template lang="pug">
 .row
-  .col-md-6.col-md-offset-3  
+  .col-md-6.col-md-offset-3
     .box.box-primary
       .box-header.with-border
         h3.box-title Mail Settings
@@ -9,7 +9,7 @@
           .form-group
             label Mail service active
             fieldset
-              .radio.radio-inline.radio-danger(style="display:inline")
+              .radio.radio-inline.radio-success(style="display:inline")
                 input#radio-service-1(v-model="m.active" name="active" type='radio' value=1)
                 label(for='radio-service-1')
                   | Yes
@@ -31,7 +31,7 @@
             input.form-control(v-model="m.username" placeholder='Username ...')
           .form-group
             label Password
-            input.form-control(v-model="m.password" type='password' placeholder='Password ...')  
+            input.form-control(v-model="m.password" type='password' placeholder='Password ...')
           .form-group
             label Connection security
             fieldset
@@ -49,7 +49,7 @@
                   | None
           .form-group
             label Send from
-            input.form-control(v-model="m.sendFrom" placeholder='sender@yourdomain.com')  
+            input.form-control(v-model="m.sendFrom" placeholder='sender@yourdomain.com')
           .form-group
             label Send task mail to
             fieldset
@@ -64,12 +64,12 @@
               .radio.radio-inline.radio-danger(style="display:inline")
                 input#radio-mail-3(v-model="m.sendTo" type='radio', name='sendTo', value='nobody' checked='1')
                 label(for='radio-mail-3')
-                  | Nobody        
+                  | Nobody
         .box-footer
           a.btn.btn-danger(@click="close") Close
           a.ladda-button.btn.btn-primary.pull-right(@click="onSave" data-style="expand-left") Save
           a.ladda-button.btn.btn-warning.pull-right(style="margin-right:10px;" data-style="expand-left") Test
-          
+
 </template>
 
 <script>

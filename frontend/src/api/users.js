@@ -12,7 +12,12 @@ export default {
     return axios.post(`${API_BASE}/users`, user)
   },
   saveOptions (options) {
-    return axios.put(`${API_BASE}/users/options`, options)
+    let config = {
+      headers: {
+        'Content-Type': 'text/plain'
+      }
+    }
+    return axios.put(`${API_BASE}/users/options`, options, config)
   },
   remove (id) {
     return axios.delete(`${API_BASE}/users/${id}`)

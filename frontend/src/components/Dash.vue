@@ -54,14 +54,14 @@ div(:class="['wrapper', classes]")
   // Left side column. contains the logo and sidebar
   sidebar(:display-name='demo.displayName', :picture-url='demo.avatar')
   // Content Wrapper. Contains page content
-  .content-wrapper(style="clear:both")
+  .content-wrapper(:style="'clear:both;' + !footer ? 'min-height:740px !important;':''")
     //- toast(position='se')
     // Content Header (Page header)
     section.content-header
     router-view
   // /.content-wrapper
   // Main Footer
-  footer.main-footer
+  footer.main-footer(v-show="footer")
     .pull-right.hidden-xs
       b Version:  
       span {{v.major}}.{{v.minor}}.{{v.code}}
@@ -108,6 +108,15 @@ export default {
     ...mapGetters('app', [
       'version'
     ]),
+    ...mapGetters('users', [
+      'options'
+    ]),
+    footer () {
+      if (!_.isEmpty(this.options) && !_.isEmpty(this.options.appearance)) {
+        return this.options.appearance.footer
+      }
+      return true
+    },
     connection () {
       return _.find(this.connections, {id: this.connectionId})
     },

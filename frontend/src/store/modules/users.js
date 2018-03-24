@@ -10,7 +10,9 @@ const SET_ME = 'SET_ME'
 
 const state = {
   all: [],
-  me: undefined
+  me: {
+    options: '{}'
+  }
 }
 
 const getters = {

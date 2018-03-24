@@ -32,7 +32,7 @@
               .checkbox.checkbox-info
                 input#hide-footer(v-model="o.appearance.footer" type='checkbox')
                 label(for='hide-footer')
-                  | Hide footer
+                  | Show footer
 
         .box-footer
           a.btn.btn-danger(@click="close") Close

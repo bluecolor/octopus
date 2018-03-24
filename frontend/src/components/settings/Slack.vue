@@ -1,6 +1,6 @@
 <template lang="pug">
 .row
-  .col-md-6.col-md-offset-3  
+  .col-md-6.col-md-offset-3
     .box.box-primary
       .box-header.with-border
         h3.box-title Slack Settings
@@ -9,7 +9,7 @@
           .form-group
             label Slack service active
             fieldset
-              .radio.radio-inline.radio-danger(style="display:inline")
+              .radio.radio-inline.radio-success(style="display:inline")
                 input#radio-service-1(v-model="s.active" type='radio', name='active' value=1 )
                 label(for='radio-service-1')
                   | Yes
@@ -17,29 +17,29 @@
                 input#radio-service-2(v-model="s.active" type='radio', name='active' value=0)
                 label(for='radio-service-2')
                   | No
-          
+
           .form-group
             label Notifications
             fieldset
               .checkbox.checkbox-info
                 input#task-error(v-model="s.notifications.taskError" type='checkbox', name='taskError')
                 label(for='task-error')
-                  | Enable slack notifications for 
-                  strong task errors 
+                  | Enable slack notifications for
+                  strong task errors
               .checkbox.checkbox-info(style="padding-top:7px;")
                 input#task-killed(v-model="s.notifications.taskKilled" type='checkbox' name='taskKilled')
                 label(for='task-killed')
-                  | Enable slack notifications for 
-                  strong killed tasks 
+                  | Enable slack notifications for
+                  strong killed tasks
               .checkbox.checkbox-info(style="padding-top:7px;")
                 input#task-blocked(v-model="s.notifications.taskBlocked" type='checkbox' name='taskBlocked')
                 label(for='task-blocked')
-                  | Enable slack notifications for 
-                  strong blocked tasks 
+                  | Enable slack notifications for
+                  strong blocked tasks
               .checkbox.checkbox-info(style="padding-top:7px;")
                 input#task-done(v-model="s.notifications.taskDone" type='checkbox' name='taskDone')
                 label(for='task-done')
-                  | Enable slack notifications for 
+                  | Enable slack notifications for
                   strong tasks made done
           .form-group
             label Channel
@@ -50,7 +50,7 @@
         .box-footer
           a.btn.btn-danger(@click="close") Close
           a.ladda-button.btn.btn-primary.pull-right(@click="onSave" data-style="expand-left") Save
-          a.ladda-button.btn.btn-warning.pull-right(data-style="expand-left" style="margin-right:10px;") Test  
+          a.ladda-button.btn.btn-warning.pull-right(data-style="expand-left" style="margin-right:10px;") Test
 </template>
 
 <script>
