@@ -1,6 +1,6 @@
 <template lang="pug">
 .row
-  .col-md-6.col-md-offset-3  
+  .col-md-6.col-md-offset-3
     .box.box-primary
       .box-header.with-border
         h3.box-title {{title}}
@@ -16,24 +16,23 @@
             label Priority
             div(style="min-width:400px")
               vue-slider(
-                ref="slider" 
-                v-model="group.priority" 
+                ref="slider"
+                v-model="group.priority"
                 :data="priority"
-                piecewise=true 
-                tooltip="hover" 
+                piecewise=true
+                tooltip="hover"
                 :speed=0.2)
           .form-group
             label Color
-            .input-group.colorpicker-component
-              input.form-control(v-model="group.color")
-              span.input-group-addon
-                el-color-picker(size='mini' v-model="group.color")
+            swatches(v-model="group.color")
+              input.form-control(slot="trigger" :value="group.color" required=false, readonly)
+
           .form-group
             label Description
             textarea.form-control(name="description" rows="3")
         .box-footer
           a.btn.btn-danger(@click="close") Close
-          a.ladda-button.btn.btn-primary.pull-right(:class="isValid?'':'disabled'" @click="onSave" data-style="expand-left") Save  
+          a.ladda-button.btn.btn-primary.pull-right(:class="isValid?'':'disabled'" @click="onSave" data-style="expand-left") Save
 </template>
 
 <script>
@@ -41,10 +40,12 @@
 import _ from 'lodash'
 import {mapActions, mapGetters} from 'vuex'
 import vueSlider from 'vue-slider-component'
-import {ColorPicker} from 'element-ui'
-import lang from 'element-ui/lib/locale/lang/en'
-import locale from 'element-ui/lib/locale'
-locale.use(lang)
+// import {ColorPicker} from 'element-ui'
+// import lang from 'element-ui/lib/locale/lang/en'
+// import locale from 'element-ui/lib/locale'
+// locale.use(lang)
+import Swatches from 'vue-swatches'
+import 'vue-swatches/dist/vue-swatches.min.css'
 
 export default {
   props: ['id'],
@@ -101,7 +102,7 @@ export default {
   },
   components: {
     vueSlider,
-    'el-color-picker': ColorPicker
+    Swatches
   }
 }
 </script>

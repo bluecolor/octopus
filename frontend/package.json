@@ -49,6 +49,7 @@
     "vue-select": "^2.4.0",
     "vue-slider-component": "^2.4.7",
     "vue-spinner": "^1.0.3",
+    "vue-swatches": "^1.0.1",
     "vue-template-compiler": "^2.5.3",
     "vue-typeahead": "^2.3.2",
     "vuejs-dialog": "^0.4.7",

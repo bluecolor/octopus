@@ -62,7 +62,7 @@
               | {{filter.status ? filter.status : 'Status'}}
               span.caret
             ul.dropdown-menu
-              li(v-for="m in ['RUNNING', 'IDLE', 'ERROR', 'SUCCESS']")
+              li(v-for="m in ['RUNNING', 'IDLE', 'ERROR', 'STOPPED', 'SUCCESS']")
                 a(href='javascript:void(0);' @click="onStatusFilter(m)" ) {{m}}
               li.footer
                 a(href='javascript:void(0);' @click="onStatusFilter") All
