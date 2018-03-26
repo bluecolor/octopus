@@ -46,7 +46,7 @@ class TaskInstance {
   @Fetch(value= FetchMode.JOIN)
   @ManyToOne(optional = false, fetch = FetchType.EAGER)
   var session: Session = _
-  
+
   @BeanProperty
   @Fetch(value= FetchMode.SELECT)
   @ManyToOne(optional = false, fetch = FetchType.LAZY)
@@ -73,7 +73,7 @@ class TaskInstance {
 
   @BeanProperty
   @Fetch(value= FetchMode.JOIN)
-  @OneToMany(fetch = FetchType.EAGER, mappedBy = "taskInstance", cascade=Array(CascadeType.REMOVE))  
+  @OneToMany(fetch = FetchType.EAGER, mappedBy = "taskInstance", cascade=Array(CascadeType.REMOVE))
   var logs: java.util.Set[TaskInstanceLog] = new java.util.HashSet[TaskInstanceLog]
 
 
@@ -94,9 +94,9 @@ class TaskInstance {
 
 
   def getConnection: Connection = {
-    if(task.connection != null) 
+    if(task.connection != null)
       return task.connection
-    if(task.plan!= null && task.plan.connection != null) 
+    if(task.plan!= null && task.plan.connection != null)
       return task.plan.connection
     if(session.plan != null && session.plan.connection != null)
       return session.plan.connection

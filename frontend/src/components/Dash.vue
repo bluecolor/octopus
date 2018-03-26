@@ -45,7 +45,7 @@ div(:class="['wrapper', classes]")
                       i.fa.fa-sliders.text-green
                       |  Options
                   li
-                    a(href='javascript:;')
+                    router-link(to="/change-password" href='javascript:;')
                       i.fa.fa-key.text-orange
                       |  Change password
               li.footer(v-if='true')

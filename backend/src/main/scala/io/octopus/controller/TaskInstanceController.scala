@@ -25,7 +25,7 @@ class TaskInstanceController @Autowired()(private val taskInstanceService: TaskI
   ) =
     taskInstanceService.findBySession(
       session,
-      group.orElse(null),
+      group.orElse(-1),
       status.orElse(null),
       page.orElse(0),
       pageSize.orElse(15),

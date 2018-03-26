@@ -14,6 +14,7 @@ import Group from '@/components/group/Group.vue'
 import Users from '@/components/user/Users.vue'
 import User from '@/components/user/User.vue'
 import Options from '@/components/user/Options.vue'
+import ChangePassword from '@/components/user/ChangePassword.vue'
 import GeneralSettings from '@/components/settings/General.vue'
 import MailSettings from '@/components/settings/Mail.vue'
 import SlackSettings from '@/components/settings/Slack.vue'
@@ -104,6 +105,9 @@ export default new Router({
     }, {
       path: 'options',
       component: Options
+    }, {
+      path: 'change-password',
+      component: ChangePassword
     }, {
       path: 'users',
       component: Users,

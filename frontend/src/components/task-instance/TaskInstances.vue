@@ -68,6 +68,8 @@
               li
                 a(href='javascript:void(0);' @click="onFilterByStatus('ERROR')") ERROR
               li
+                a(href='javascript:void(0);' @click="onFilterByStatus('BLOCKED')") BLOCKED
+              li
                 a(href='javascript:void(0);' @click="onFilterByStatus('SUCCESS')") SUCCESS
               li.footer
                 a(href='javascript:void(0);' @click="onFilterByStatus()") All
@@ -106,8 +108,11 @@
                     .popper(v-show="m.dependencies && m.dependencies.length > 0")
                       div(slot="content")
                         ul.pop-menu
-                          li(v-for="d in m.dependencies")
-                            router-link(:to="'task-instance/' + d.id") {{d.name}}
+                          li(style="display:block;" v-for="d in m.dependencies")
+                            router-link(:to="'task-instance/' + d.id")
+                              span.label(style="border-radius:0px;", :class = 'labelByStatus(d.status)') {{d.status}}
+                              span(style="float:right;")
+                                | {{d.name}}
 
                     a.top(href='javascript:void(0)', slot='reference')
                       | {{m.dependencies.length}}
@@ -189,7 +194,8 @@ export default {
     hasFilter () {
       return (
         !_.isEmpty(this.filter.status) ||
-        !_.isEmpty(this.filter.search)
+        !_.isEmpty(this.filter.search) ||
+        !_.isEmpty(this.filter.group)
       )
     }
   },

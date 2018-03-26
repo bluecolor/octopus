@@ -227,6 +227,7 @@ export default {
       const plan = this.filter.plan ? this.filter.plan.id : undefined
       const status = this.filter.status
       const page = this.pagination.currentPage - 1
+      this.selected = []
       this.$store.dispatch('sessions/findAll', {
         status,
         plan,

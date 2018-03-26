@@ -15,9 +15,9 @@ import scala.beans.BeanProperty
 
 
 case class SessionStats(
-  @BeanProperty total: Int, 
+  @BeanProperty total: Int,
   @BeanProperty success: Int,
-  @BeanProperty done: Int, 
+  @BeanProperty done: Int,
   @BeanProperty error: Int
 )
 
@@ -43,7 +43,7 @@ class Session {
   @Fetch(value= FetchMode.JOIN)
   @ManyToOne(optional = true, fetch = FetchType.EAGER)
   var plan: Plan = _
-  
+
   @BeanProperty
   var parallel: Int = _
 
@@ -52,7 +52,7 @@ class Session {
 
   @BeanProperty
   @Fetch(value= FetchMode.SELECT)
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "session", cascade=Array(CascadeType.REMOVE))  
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "session", cascade=Array(CascadeType.REMOVE))
   @JsonIgnore
   var taskInstances: java.util.List[TaskInstance] = _
 
@@ -71,7 +71,7 @@ class Session {
     if(plan!=null){
       parallel = plan.parallel
       priority = plan.priority
-    } 
+    }
   }
 
   @BeanProperty
@@ -97,7 +97,7 @@ class Session {
       return SessionStats(0,0,0,0)
     }
 
-    val total:Int = taskInstances.size 
+    val total:Int = taskInstances.size
     val success:Int = taskInstances.filter(Array("SUCCESS") contains _.status).size
     val error:Int = taskInstances.filter(Array("ERROR", "KILLED") contains _.status).size
     val done:Int = taskInstances.filter(Array("DONE") contains _.status).size

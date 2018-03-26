@@ -283,10 +283,10 @@ class SessionService @Autowired()(val sessionRepository: SessionRepository) {
     }
     session.status = Status.STOPPED
     session.endDate= new Date
-    sessionRepository.save(session)
+    val s = sessionRepository.save(session)
     val supervisor = appInit.system.actorSelection("/user/supervisor")
     supervisor ! StopSession(id)
-    session
+    s
   }
 
   def start(id: Long) = {
@@ -296,8 +296,8 @@ class SessionService @Autowired()(val sessionRepository: SessionRepository) {
     }
     session.status = Status.IDLE
     session.endDate= null
-    sessionRepository.save(session)
-    session
+    val s = sessionRepository.save(session)
+    s
   }
 
 }

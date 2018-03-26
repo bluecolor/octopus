@@ -44,7 +44,7 @@ class SessionQuery extends Query{
         left join fetch s.plan p
       where
         ${filter}
-        ${if(status != null && !status.isEmpty) "and s.status = " + status else ""}
+        ${if(status != null && !status.isEmpty) "and s.status = '" + status + "'" else ""}
         ${if(planId != -1) "and p.id = " + planId else ""}
       ${sort}
     """
@@ -85,7 +85,7 @@ class SessionQuery extends Query{
       case "status" => "s.status"
       case _ => "s.scheduleDate"
     }
-    s"order by $q $x"
+    s"order by s.status asc, $q $x"
   }
 
   override def buildFilter(m: Matcher) = {
