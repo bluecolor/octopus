@@ -56,8 +56,8 @@ class UserController  @Autowired()(private val userService: UserService) {
 
 
   @RequestMapping(value = Array("/password"), method = Array(RequestMethod.PUT))
-  def changePassword(@RequestBody pass: Map[String,String]) =
-    userService.changePassword(pass.get("currentPassword").get,pass.get("newPassword").get)
+  def changePassword(@RequestParam("o") o: String, @RequestParam("n") n: String) =
+    userService.changePassword(o, n)
 
 
   @RequestMapping(value = Array("/{id}"), method = Array(RequestMethod.DELETE))

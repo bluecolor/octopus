@@ -19,6 +19,9 @@ export default {
     }
     return axios.put(`${API_BASE}/users/options`, options, config)
   },
+  changePassword (o, n) {
+    return axios.put(`${API_BASE}/users/password?o=${o}&n=${n}`)
+  },
   remove (id) {
     return axios.delete(`${API_BASE}/users/${id}`)
   }

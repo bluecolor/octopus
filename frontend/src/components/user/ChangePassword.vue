@@ -17,14 +17,14 @@
             input.form-control(:class="password.newp !== password.renewp ? 'no-match' : ''" v-model="password.renewp" type="password" required=true)
         .box-footer
           a.btn.btn-danger(@click="close") Close
-          a.ladda-button.btn.btn-primary.pull-right(:class="isValid?'':'disabled'" @click="onSave" data-style="expand-left") Save
+          a.btn.btn-primary.pull-right(:class="isValid?'':'disabled'" @click="onSave" data-style="expand-left") Save
 
 </template>
 
 <script>
 
-import _ from 'lodash'
-import {mapActions, mapGetters} from 'vuex'
+// import _ from 'lodash'
+import {mapActions} from 'vuex'
 
 export default {
   name: 'ChangePassword',
@@ -40,31 +40,24 @@ export default {
     }
   },
   methods: {
-    ...mapActions('parameters', [
-      'create',
-      'update',
-      'remove'
+    ...mapActions('users', [
+      'changePassword'
     ]),
     close () {
       window.history.back()
     },
-    init () {
-      if (_.isEmpty(this.id)) {
-        return
-      }
-    },
     onSave () {
+      this.changePassword({o: this.password.currentp, n: this.password.newp})
     }
   },
   computed: {
-    ...mapGetters('parameters', [
-      'parameters'
-    ]),
     isValid () {
-      // return (
-      //   this.parameter.name &&
-      //   this.parameter.value
-      // )
+      return (
+        this.password.currentp &&
+        this.password.newp &&
+        this.password.renewp &&
+        this.password.newp === this.password.renewp
+      )
     }
   },
   mounted () {

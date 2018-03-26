@@ -57,6 +57,16 @@ const actions = {
       notifyError('Unable to save options')
     })
   },
+  changePassword ({commit}, payload) {
+    return api.changePassword(payload.o, payload.n).then(response => {
+      notifySuccess('Password changed')
+      window.history.back()
+    },
+    error => {
+      console.log(error.response.data.message)
+      notifyError('Unable to change password')
+    })
+  },
   remove ({ commit }, id) {
     return new Promise((resolve, reject) => {
       return api.remove(id).then(response => {
