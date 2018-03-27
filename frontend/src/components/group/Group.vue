@@ -124,4 +124,10 @@ export default {
   display: table-cell;
 }
 
+.input-group input {
+  border-top-right-radius: 3px !important;
+  border-bottom-right-radius: 3px !important;
+}
+
+
 </style>

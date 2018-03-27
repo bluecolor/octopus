@@ -42,19 +42,19 @@
               span.caret
             ul.dropdown-menu(aria-labelledby='dropdownMenu1')
               li
-                a(href='javascript:void(0);') Status ascending
+                a(@click="onSort('status', 'asc')" href='javascript:;') Status ascending
               li
-                a(href='javascript:void(0);') Status descending
+                a(@click="onSort('status', 'desc')" href='javascript:;') Status descending
               li.divider(role='separator')
               li
-                a(href='javascript:void(0);') Name ascending
+                a(@click="onSort('name', 'asc')" href='javascript:;') Name ascending
               li
-                a(href='javascript:void(0);') Name descending
+                a(@click="onSort('name', 'desc')" href='javascript:;') Name descending
               li.divider(role='separator')
               li
-                a(href='javascript:void(0);') Duration ascending
+                a(@click="onSort('duration', 'asc')" href='javascript:;') Duration ascending
               li
-                a(href='javascript:void(0);') Duration descending
+                a(@click="onSort('duration', 'desc')" href='javascript:;') Duration descending
 
           .dropdown.pull-right(style="display:inline;")
             a.btn.btn-default.btn-sm.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
@@ -169,6 +169,10 @@ export default {
         search: undefined,
         status: undefined,
         group: undefined,
+        sort: {
+          by: undefined,
+          order: undefined
+        },
         clear () {
           this.status = undefined
           this.search = undefined
@@ -217,14 +221,22 @@ export default {
       'block',
       'remove'
     ]),
+    onSort (by, order) {
+      this.filter.sort = {by, order}
+      this.reload()
+    },
     reload () {
       const session = this.filter.session
       const status = this.filter.status
       const group = this.filter.group ? this.filter.group.id : undefined
+      const sortBy = this.filter.sort.by
+      const order = this.filter.sort.order
       this.$store.dispatch('taskInstances/findAll', {
         session,
         status,
-        group
+        group,
+        sortBy,
+        order
       })
     },
     pageChange (p) {
