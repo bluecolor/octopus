@@ -24,8 +24,10 @@
                 :speed=0.2)
           .form-group
             label Color
-            swatches(v-model="group.color")
-              input.form-control(slot="trigger" :value="group.color" required=false, readonly)
+            div.input-group(style="width:100%")
+              span.input-group-addon.color(:style="'width:10%;background:'+group.color+';border-color:'+group.color")
+              swatches(row-length="8" v-model="group.color")
+                input.form__input__element.form-control(slot="trigger" v-model="group.color"  required=false readonly)
 
           .form-group
             label Description
@@ -107,14 +109,19 @@ export default {
 }
 </script>
 
-<style lang="css" scoped>
+<style scoped>
 
 .input-group-addon{
   padding: 0;
+  border-radius: 0px !important;
 }
 
 .input-group-addon {
   line-height: 1.28;
+}
+
+.input-group .color{
+  display: table-cell;
 }
 
 </style>
