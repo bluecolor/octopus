@@ -25,12 +25,12 @@
               span.caret
             ul.dropdown-menu
               li
-                a(@click="onStop" href='javascript:void(0);') Stop
+                a(@click="onStop" href='javascript:;') Stop
               li
-                a(@click="onStop" href='javascript:void(0);') Start
+                a(@click="onStop" href='javascript:;') Start
               li.divider(role='separator')
               li
-                a(@click="onRemove" href='javascript:void(0);') Delete
+                a(@click="onRemove" href='javascript:;') Delete
 
           .dropdown.pull-right(style="display:inline;")
             a.btn.btn-default.btn-sm.dropdown-toggle.text-green(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
@@ -38,24 +38,24 @@
               span.caret
             ul.dropdown-menu(aria-labelledby='dropdownMenu1')
               li
-                a(href='javascript:void(0);') Status ascending
+                a(@click="onSort('status', 'asc')" href='javascript:;') Status ascending
               li
-                a(href='javascript:void(0);') Status descending
+                a(@click="onSort('status', 'desc')" href='javascript:;') Status descending
               li.divider(role='separator')
               li
-                a(href='javascript:void(0);') Name ascending
+                a(@click="onSort('name', 'asc')" href='javascript:;') Name ascending
               li
-                a(href='javascript:void(0);') Name descending
+                a(@click="onSort('name', 'desc')" href='javascript:;') Name descending
               li.divider(role='separator')
               li
-                a(href='javascript:void(0);') Schedule date ascending
+                a(@click="onSort('scheduleDate', 'asc')" href='javascript:;') Schedule date ascending
               li
-                a(href='javascript:void(0);') Schedule date descending
+                a(@click="onSort('scheduleDate', 'desc')" href='javascript:;') Schedule date descending
               li.divider(role='separator')
               li
-                a(href='javascript:void(0);') Start date ascending
+                a(@click="onSort('startDate', 'asc')" href='javascript:;') Start date ascending
               li
-                a(href='javascript:void(0);') Start date descending
+                a(@click="onSort('startDate', 'desc')" href='javascript:;') Start date descending
 
           .dropdown.pull-right(style="display:inline;")
             a.btn.btn-default.btn-sm.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
@@ -63,18 +63,18 @@
               span.caret
             ul.dropdown-menu
               li(v-for="m in ['RUNNING', 'IDLE', 'ERROR', 'STOPPED', 'SUCCESS']")
-                a(href='javascript:void(0);' @click="onStatusFilter(m)" ) {{m}}
+                a(href='javascript:;' @click="onStatusFilter(m)" ) {{m}}
               li.footer
-                a(href='javascript:void(0);' @click="onStatusFilter") All
+                a(href='javascript:;' @click="onStatusFilter") All
           .dropdown.pull-right(style="display:inline;")
             a.btn.btn-default.btn-sm.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
               | {{filter.plan ? filter.plan.name : 'Plan'}}
               span.caret
             ul.dropdown-menu
               li(v-for="m in plans")
-                a(href='javascript:void(0);' @click="onPlanFilter(m)") {{m.name}}
+                a(href='javascript:;' @click="onPlanFilter(m)") {{m.name}}
               li.footer
-                a(href='javascript:void(0);' @click="onPlanFilter") All
+                a(href='javascript:;' @click="onPlanFilter") All
           a.btn.btn-default.btn-sm.pull-right(@click="onClearFilter", data-toggle="tooltip" title="Clear filters" :class="hasFilter ? '':'hidden'")
             i.fa.fa-filter.text-danger.fa-lg
             | Clear filters
@@ -207,6 +207,10 @@ export default {
     ...mapActions('sessions', [
       'remove', 'stop', 'start'
     ]),
+    onSort (by, order) {
+      this.filter.sort = {by, order}
+      this.onReload()
+    },
     onRemove () {
       const id = this.selected[0]
       if (!id) { return }
@@ -227,12 +231,16 @@ export default {
       const plan = this.filter.plan ? this.filter.plan.id : undefined
       const status = this.filter.status
       const page = this.pagination.currentPage - 1
+      const sortBy = this.filter.sort.by
+      const order = this.filter.sort.order
       this.selected = []
       this.$store.dispatch('sessions/findAll', {
         status,
         plan,
         search,
-        page
+        page,
+        sortBy,
+        order
       })
     },
     onPage () {

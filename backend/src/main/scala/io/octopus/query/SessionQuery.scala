@@ -85,7 +85,7 @@ class SessionQuery extends Query{
       case "status" => "s.status"
       case _ => "s.scheduleDate"
     }
-    s"order by s.status asc, $q $x"
+    s"order by $q $x"
   }
 
   override def buildFilter(m: Matcher) = {

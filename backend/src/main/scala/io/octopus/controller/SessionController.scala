@@ -27,7 +27,7 @@ class SessionController  @Autowired()(private val sessionService: SessionService
       plan.orElse(-1),
       status.orElse(null),
       search.orElse(""),
-      sortBy.orElse("name"),
+      sortBy.orElse("status"),
       order.orElse("asc"),
       page.orElse(0),
       pageSize.orElse(15))
