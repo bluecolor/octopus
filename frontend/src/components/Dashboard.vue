@@ -6,35 +6,36 @@
           span.info-box-icon.bg-aqua
             i.ion.ion-ios-pulse-strong
           .info-box-content
-            span.info-box-text Running Steps
-            span.info-box-number 16
+            span.info-box-text Running Tasks
+            span.info-box-number {{taskInstanceStats.running.length}}
       .col-md-3.col-sm-6.col-xs-12
         .info-box
           span.info-box-icon.bg-red
             i.ion.ion-alert
           .info-box-content
             span.info-box-text Errors
-            span.info-box-number 4
+            span.info-box-number {{taskInstanceStats.error.length}}
       .clearfix.visible-sm-block
       .col-md-3.col-sm-6.col-xs-12
         .info-box
           span.info-box-icon.bg-green
-            i.ion.ion-checkmark
+            i.fa.fa-tasks
           .info-box-content
-            span.info-box-text Success
-            span.info-box-number 760
+            span.info-box-text Active Sessions
+            span.info-box-number {{activeSessions}}
       .col-md-3.col-sm-6.col-xs-12
         .info-box
           span.info-box-icon.bg-yellow
-            i.ion.ion-alert-circled
+            i.fa.fa-calendar-check-o
           .info-box-content
-            span.info-box-text Warning
-            span.info-box-number 21
+            span.info-box-text Plans
+            span.info-box-number {{plans.length}}
 
 </template>
 
 <script>
-// import Chart from 'chart.js'
+import {mapGetters} from 'vuex'
+// import _ from 'lodash'
 
 export default {
   data () {
@@ -49,14 +50,17 @@ export default {
     }
   },
   computed: {
-    coPilotNumbers () {
-      return this.generateRandomNumbers(12, 1000000, 10000)
-    },
-    personalNumbers () {
-      return this.generateRandomNumbers(12, 1000000, 10000)
-    },
-    isMobile () {
-      return (window.innerWidth <= 800 && window.innerHeight <= 600)
+    ...mapGetters('taskInstances', {
+      'taskInstanceStats': 'stats'
+    }),
+    ...mapGetters('sessions', {
+      'sessionStats': 'stats'
+    }),
+    ...mapGetters('plans', [
+      'plans'
+    ]),
+    activeSessions () {
+      return this.sessionStats.error.length + this.sessionStats.running.length
     }
   },
   mounted () {

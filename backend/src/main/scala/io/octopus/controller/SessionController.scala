@@ -13,6 +13,9 @@ import io.octopus.service.SessionService
 @RequestMapping(Array("/api/v1/sessions"))
 class SessionController  @Autowired()(private val sessionService: SessionService) {
 
+  @RequestMapping(value = Array("/status"), method = Array(RequestMethod.POST))
+  def findByStatusIn(@RequestBody s: Array[String]) = sessionService.findByStatusIn(s)
+
   @RequestMapping(method = Array(RequestMethod.GET) )
   def findAll(
     @RequestParam(value="search",required=false) search: Optional[String],

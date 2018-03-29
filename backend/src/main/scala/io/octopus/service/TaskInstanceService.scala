@@ -61,6 +61,8 @@ class TaskInstanceService @Autowired()(val taskInstanceRepository: TaskInstanceR
 
   private val log:Logger  = LoggerFactory.getLogger(MethodHandles.lookup.lookupClass)
 
+  def findByStatusIn(s: Array[String]) = taskInstanceRepository.findByStatusIn(s)
+
   def findAll(page: Int, pageSize: Int) = {
     val pageable = new PageRequest(page, pageSize)
     var instances= taskInstanceRepository.findAll(pageable)

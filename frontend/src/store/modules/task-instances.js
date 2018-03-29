@@ -7,19 +7,34 @@ const LOAD = 'LOAD'
 const CLEAR = 'CLEAR'
 const UPDATE = 'UPDATE'
 const REMOVE = 'REMOVE'
+const SET_STATS = 'SET_STATS'
 
 const state = {
   all: [],
   meta: {},
-  loading: false
+  loading: false,
+  stats: {
+    error: [],
+    running: []
+  }
 }
 
 const getters = {
   taskInstances: state => state,
-  loading: state => state.loading
+  loading: state => state.loading,
+  stats: state => state.stats
 }
 
 const actions = {
+  findByStatus ({commit}, payload) {
+    api.findByStatus(payload).then(response => {
+      commit(SET_STATS, response.data)
+    },
+    error => {
+      console.log(error.response.data.message)
+      notifyError(`Unable to find stats ${error.response.data.message}`)
+    })
+  },
   findAll ({commit}, payload) {
     commit(CLEAR)
     api.findAll(payload).then(response => {
@@ -91,6 +106,11 @@ const mutations = {
     const id = data.id
     const i = _.findIndex(state.all, {id})
     state.all.splice(i, 1)
+  },
+  [SET_STATS] (state, instances) {
+    let running = _.filter(instances, i => i.status === 'RUNNING')
+    let error = _.filter(instances, i => i.status === 'ERROR')
+    state.stats = {running, error}
   }
 }
 

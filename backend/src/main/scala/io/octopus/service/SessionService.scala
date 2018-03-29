@@ -59,6 +59,7 @@ class SessionService @Autowired()(val sessionRepository: SessionRepository) {
 
   private val log:Logger  = LoggerFactory.getLogger(MethodHandles.lookup.lookupClass)
 
+  def findByStatusIn(s: Array[String]) = sessionRepository.findByStatusIn(s)
 
   def findAll(planId: java.lang.Long, status: String, search: String, sortBy: String, order : String, pageNo: Int, pageSize: Int) = {
     sessionQuery.findAll(pageNo, pageSize, search, sortBy, order, status, planId)
@@ -69,9 +70,6 @@ class SessionService @Autowired()(val sessionRepository: SessionRepository) {
 
   def findActiveByPlan(planId: Long) =
     sessionRepository.findByStatusNotInAndPlanId(Array(Status.DONE), planId)
-
-  def findByStatusIn(statuses: Array[String]) =
-    sessionRepository.findByStatusIn(statuses)
 
   def findByStatus(status: String) =
     sessionRepository.findByStatus(status)

@@ -3,6 +3,8 @@
 
 export default {
   init () {
+    this.dispatch('sessions/findByStatus', ['ERROR', 'RUNNING'])
+    this.dispatch('taskInstances/findByStatus', ['ERROR', 'RUNNING'])
     this.dispatch('connections/findAll')
     this.dispatch('sessions/findAll')
     this.dispatch('technology/findAll')

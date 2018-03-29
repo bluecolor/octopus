@@ -4,6 +4,9 @@ import { toUrlString } from '../util'
 
 export default {
 
+  findByStatus (payload) {
+    return axios.post(`${API_BASE}/sessions/status`, payload)
+  },
   findAll (payload) {
     const u = toUrlString(payload)
     return axios.get(`${API_BASE}/sessions?${u}`)

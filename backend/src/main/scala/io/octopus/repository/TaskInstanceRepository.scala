@@ -10,6 +10,7 @@ import io.octopus.model.Task
 
 @Repository
 trait TaskInstanceRepository extends JpaRepository[TaskInstance, java.lang.Long] with JpaSpecificationExecutor[TaskInstance] {
+  def findByStatusIn(s: Array[String]): java.util.List[TaskInstance]
   def findByIdIn(tasks:java.util.List[java.lang.Long]): java.util.List[TaskInstance]
   def findBySessionId(id: Long, pageable: Pageable): Page[TaskInstance] 
   def findBySessionIdAndStatus(id: Long, status: String): java.util.List[TaskInstance] 

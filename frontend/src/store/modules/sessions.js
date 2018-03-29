@@ -8,19 +8,34 @@ const CLEAR = 'CLEAR'
 const REMOVE = 'REMOVE'
 const SET_LOADING = 'SET_LOADING'
 const UPDATE = 'UPDATE'
+const SET_STATS = 'SET_STATS'
 
 const state = {
   all: [],
   meta: {},
-  loading: false
+  loading: false,
+  stats: {
+    running: [],
+    error: []
+  }
 }
 
 const getters = {
   sessions: state => state,
-  loading: state => state.loading
+  loading: state => state.loading,
+  stats: state => state.stats
 }
 
 const actions = {
+  findByStatus ({commit}, payload) {
+    return api.findByStatus(payload).then(response => {
+      commit(SET_STATS, response.data)
+    },
+    error => {
+      notifyError(`Unable find sessions by status! ${error.response.data.message}`)
+      console.log(error.response.data.message)
+    })
+  },
   findAll ({commit}, payload) {
     commit(SET_LOADING, true)
     return api.findAll(payload).then(response => {
@@ -95,6 +110,11 @@ const mutations = {
   },
   [SET_LOADING] (state, b) {
     this.state.loading = b
+  },
+  [SET_STATS] (state, sessions) {
+    let running = _.filter(sessions, s => s.status === 'RUNNING')
+    let error = _.filter(sessions, s => s.status === 'ERROR')
+    state.stats = {running, error}
   }
 }
 

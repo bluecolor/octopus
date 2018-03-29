@@ -12,6 +12,9 @@ import io.octopus.service.TaskInstanceService
 @RequestMapping(Array("/api/v1/task-instances"))
 class TaskInstanceController @Autowired()(private val taskInstanceService: TaskInstanceService) {
 
+  @RequestMapping(value = Array("/status"), method = Array(RequestMethod.POST))
+  def findByStatusIn(@RequestBody s: Array[String]) = taskInstanceService.findByStatusIn(s)
+
   @RequestMapping(method = Array(RequestMethod.GET))
   def findAll(
     @RequestParam(value="search",required=false) search: Optional[String],
