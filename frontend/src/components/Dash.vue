@@ -18,15 +18,15 @@ div(:class="['wrapper', classes]")
               i.fa.fa-bell-o
               span.label.label-warning {{ }}
             ul.dropdown-menu
-              li.header You have {{ }} notification(s)
+              li.header You have {{notifications.length}} notification(s)
               li(v-if='true')
                 // Inner Menu: contains the notifications
                 ul.menu
-                  li
+                  li(v-for="n in notifications")
                     // start notification
                     a(href='javascript:;')
-                      i.fa.fa-users.text-aqua
-                      |  5 new members joined today
+                      i.fa.fa-cog.text-danger
+                      |  {{n.name}}
                   // end notification
               li.footer(v-if='true')
                 a(href='javascript:;') View all
@@ -36,7 +36,7 @@ div(:class="['wrapper', classes]")
               // The user image in the navbar
               //- img.user-image(v-bind:src='demo.avatar', alt='User Image')
               // hidden-xs hides the username on small devices so only the image appears.
-              span.hidden-xs {{ demo.displayName }}
+              span.hidden-xs {{ me.name }}
             ul.dropdown-menu
               li(v-if='true')
                 ul.menu
@@ -52,7 +52,7 @@ div(:class="['wrapper', classes]")
                 a(href='javascript:;' @click="logout")
                   span(style="color:red;") Sign out
   // Left side column. contains the logo and sidebar
-  sidebar(:display-name='demo.displayName', :picture-url='demo.avatar')
+  sidebar(display-name='', picture-url='')
   // Content Wrapper. Contains page content
   .content-wrapper(:style="'clear:both;' + !footer ? 'min-height:740px !important;':''")
     //- toast(position='se')
@@ -80,7 +80,6 @@ div(:class="['wrapper', classes]")
 <script>
 
 import _ from 'lodash'
-import faker from 'faker'
 import { mapGetters } from 'vuex'
 import config from '../config'
 import Sidebar from './Sidebar'
@@ -109,7 +108,11 @@ export default {
       'version'
     ]),
     ...mapGetters('users', [
-      'options'
+      'options',
+      'me'
+    ]),
+    ...mapGetters('taskInstances', [
+      'stats'
     ]),
     footer () {
       if (!_.isEmpty(this.options) && !_.isEmpty(this.options.appearance)) {
@@ -125,14 +128,6 @@ export default {
         return this.connection.name
       }
     },
-    demo () {
-      return {
-        displayName: faker.name.findName(),
-        avatar: faker.image.avatar(),
-        email: faker.internet.email(),
-        randomCard: faker.helpers.createCard()
-      }
-    },
     v () {
       let version = {}
       if (this.version.major) {
@@ -143,6 +138,9 @@ export default {
         }
       }
       return version
+    },
+    notifications () {
+      return _.take(this.stats.error, 5)
     }
   },
   methods: {
