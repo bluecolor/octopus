@@ -42,6 +42,9 @@
               span.caret
             ul.dropdown-menu(aria-labelledby='dropdownMenu1')
               li
+                a(@click="onSort('startDate', 'desc')" href='javascript:;') Start date descending
+              li.divider(role='separator')
+              li
                 a(@click="onSort('status', 'asc')" href='javascript:;') Status ascending
               li
                 a(@click="onSort('status', 'desc')" href='javascript:;') Status descending

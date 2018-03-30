@@ -23,6 +23,7 @@ import Parameter from '@/components/parameter/Parameter.vue'
 import Tasks from '@/components/task/Tasks.vue'
 import Task from '@/components/task/Task.vue'
 import Upload from '@/components/upload/Upload.vue'
+import Reports from '@/components/reports/Reports.vue'
 
 Vue.use(Router)
 
@@ -165,6 +166,9 @@ export default new Router({
       props: true,
       component: Task,
       name: 'CloneTask'
+    }, {
+      path: 'reports',
+      component: Reports
     }]
   }]
 })

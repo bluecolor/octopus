@@ -24,22 +24,22 @@
               .checkbox.checkbox-info
                 input#task-error(v-model="s.notifications.taskError" type='checkbox', name='taskError')
                 label(for='task-error')
-                  | Enable slack notifications for
+                  | Enable slack notifications for &nbsp;
                   strong task errors
               .checkbox.checkbox-info(style="padding-top:7px;")
                 input#task-killed(v-model="s.notifications.taskKilled" type='checkbox' name='taskKilled')
                 label(for='task-killed')
-                  | Enable slack notifications for
+                  | Enable slack notifications for &nbsp;
                   strong killed tasks
               .checkbox.checkbox-info(style="padding-top:7px;")
                 input#task-blocked(v-model="s.notifications.taskBlocked" type='checkbox' name='taskBlocked')
                 label(for='task-blocked')
-                  | Enable slack notifications for
+                  | Enable slack notifications for &nbsp;
                   strong blocked tasks
               .checkbox.checkbox-info(style="padding-top:7px;")
                 input#task-done(v-model="s.notifications.taskDone" type='checkbox' name='taskDone')
                 label(for='task-done')
-                  | Enable slack notifications for
+                  | Enable slack notifications for &nbsp;
                   strong tasks made done
           .form-group
             label Channel

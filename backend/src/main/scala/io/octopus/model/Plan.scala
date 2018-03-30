@@ -77,7 +77,7 @@ class Plan {
   @JsonProperty("stats")
   @JsonSerialize
   @BeanProperty
-  def stats:PlanStats = {
+  def stats: PlanStats = {
     val s = sessions.filter(_.status == Status.SUCCESS)
     val taskCount = tasks.size
     val groupCount= tasks.map(_.groups).flatten.toList.distinct.length
@@ -87,7 +87,7 @@ class Plan {
     val maxDuration = s.map(_.duration).max
     val minDuration = s.map(_.duration).filter(_!=0).min
 
-    PlanStats(taskCount,groupCount, avgDuration, maxDuration, minDuration)
+    PlanStats(taskCount, groupCount, avgDuration, maxDuration, minDuration)
   }
 
 
