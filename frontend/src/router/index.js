@@ -24,6 +24,7 @@ import Tasks from '@/components/task/Tasks.vue'
 import Task from '@/components/task/Task.vue'
 import Upload from '@/components/upload/Upload.vue'
 import Reports from '@/components/reports/Reports.vue'
+import Notifications from '@/components/Notifications.vue'
 
 Vue.use(Router)
 
@@ -37,6 +38,9 @@ export default new Router({
       component: Dashboard,
       name: 'Dashboard',
       meta: {description: 'Overview of environment'}
+    }, {
+      path: 'notifications',
+      component: Notifications
     }, {
       path: 'connection/:id',
       props: true,

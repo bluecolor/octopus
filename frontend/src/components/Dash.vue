@@ -26,10 +26,10 @@ div(:class="['wrapper', classes]")
                     // start notification
                     a(href='javascript:;')
                       i.fa.fa-cog.text-danger
-                      |  {{n.name}}
+                      |  {{n.name}} crashed
                   // end notification
               li.footer(v-if='true')
-                a(href='javascript:;') View all
+                router-link(to='notifications') View all
           // User Account Menu
           li.dropdown.user.user-menu.tasks-menu
             a.dropdown-toggle(href='javascript:;', data-toggle='dropdown')
