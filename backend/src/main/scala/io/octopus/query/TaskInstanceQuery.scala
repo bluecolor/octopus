@@ -33,7 +33,7 @@ class TaskInstanceQuery extends Query {
   private val log:Logger  = LoggerFactory.getLogger(MethodHandles.lookup.lookupClass)
 
   def findBySession(
-    id: Long, page: Int, pageSize: Int, search: String, sortBy: String, order: String, status: String, groupId: Long
+    id: Long, page: Int, pageSize: Int, bookmark: Boolean, search: String, sortBy: String, order: String, status: String, groupId: Long
   ) = {
     val em = entityManagerFactory.createEntityManager
     val session = em.unwrap(classOf[org.hibernate.Session])
@@ -55,11 +55,17 @@ class TaskInstanceQuery extends Query {
         ${filter}
         ${if(status != null && !status.isEmpty) "and instance.status = '" + status + "'" else ""}
         ${if(groupId != -1) "and primaryGroup.id = " + groupId else ""}
+        ${if(bookmark) "and :me member of task.bookmarkers" else ""}
       ${sort}
     """
-    var query = session.createQuery(q)
-    p.count = query.list.length
     log.debug(q)
+    var query = {
+      if(bookmark)
+        session.createQuery(q).setParameter("me", userService.findMe)
+      else
+        session.createQuery(q)
+    }
+    p.count = query.list.length
     if(page == 0) {
       p.totalPages =
         if(p.count % pageSize == 0)

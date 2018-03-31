@@ -91,9 +91,9 @@ class TaskInstanceService @Autowired()(val taskInstanceRepository: TaskInstanceR
 
   def findBySession(
     sessionId: Long, group: java.lang.Long, status: String, page: Int,
-    pageSize: Int, search: String, sortBy: String, order: String
+    pageSize: Int, bookmark: Boolean, search: String, sortBy: String, order: String
   ) = {
-    var instances = taskInstanceQuery.findBySession(sessionId, page, pageSize, search,sortBy, order, status, group)
+    var instances = taskInstanceQuery.findBySession(sessionId, page, pageSize, bookmark, search,sortBy, order, status, group)
     instances.content = instances.content.map{ instance =>
       instance.dependencies = findDependencies(instance)
       instance

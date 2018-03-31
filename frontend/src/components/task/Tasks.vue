@@ -85,6 +85,8 @@
                 a(href='javascript:void(0);' @click="onPlanSelect(m)") {{m.name}}
               li.footer(v-if='plans.length > 0')
                 a(href='javascript:void(0);' @click="onPlanSelect()") All
+        a.btn.btn-default.btn-sm.pull-right(data-toggle="tooltip" title="Bookmarked",)
+          i.fa.text-yellow.fa-lg(@click="onBookmarkFilter" :class="filter.bookmarked ? 'fa-bookmark': 'fa-bookmark-o'")
         a.btn.btn-default.btn-sm.pull-right(@click="onClearFilter", data-toggle="tooltip" title="Clear filters" :class="hasFilter ? '':'hidden'")
           i.fa.fa-filter.text-danger.fa-lg
           | Clear filters
@@ -166,6 +168,7 @@ export default {
           order: 'asc'
         },
         search: '',
+        bookmarked: false,
         plan: {},
         group: {},
         owner: {},
@@ -210,6 +213,7 @@ export default {
         this.filter.plan.id !== undefined ||
         this.filter.group.id ||
         this.filter.owner.id ||
+        this.filter.bookmark ||
         !_.isEmpty(this.filter.search))
     },
     debounce () { return _.debounce(this.reload, 1000) }
@@ -266,7 +270,12 @@ export default {
       q.page = this.pagination.currentPage - 1
       q.sortBy = this.filter.sort.by
       q.order = this.filter.sort.order
+      q.bookmark = this.filter.bookmark
       this.$store.dispatch('tasks/findAll', q)
+    },
+    onBookmarkFilter () {
+      this.filter.bookmarked = !this.filter.bookmarked
+      this.reload()
     },
     onSort (by, order) {
       this.filter.sort = {by, order}

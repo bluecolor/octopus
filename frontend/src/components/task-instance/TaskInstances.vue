@@ -85,6 +85,8 @@
                 a(href='javascript:void(0);' @click="onFilterByGroup(m)") {{m.name}}
               li.footer
                 a(href='javascript:void(0);' @click="onFilterByGroup()") All
+          a.btn.btn-default.btn-sm.pull-right(data-toggle="tooltip" title="Bookmarked",)
+            i.fa.text-yellow.fa-lg(@click="onBookmarkFilter" :class="filter.bookmarked ? 'fa-bookmark': 'fa-bookmark-o'")
           a.btn.btn-default.btn-sm.pull-right(@click="onClearFilter", data-toggle="tooltip" title="Clear filters" :class="hasFilter ? '':'hidden'")
             i.fa.fa-filter.text-danger.fa-lg
             | Clear filters
@@ -172,6 +174,7 @@ export default {
         search: undefined,
         status: undefined,
         group: undefined,
+        bookmarked: false,
         sort: {
           by: undefined,
           order: undefined
@@ -180,6 +183,7 @@ export default {
           this.status = undefined
           this.search = undefined
           this.group = undefined
+          this.bookmarked = false
         }
       }
     }
@@ -202,7 +206,8 @@ export default {
       return (
         !_.isEmpty(this.filter.status) ||
         !_.isEmpty(this.filter.search) ||
-        !_.isEmpty(this.filter.group)
+        !_.isEmpty(this.filter.group) ||
+        this.filter.bookmarked
       )
     }
   },
@@ -234,13 +239,19 @@ export default {
       const group = this.filter.group ? this.filter.group.id : undefined
       const sortBy = this.filter.sort.by
       const order = this.filter.sort.order
+      const bookmark = this.filter.bookmarked
       this.$store.dispatch('taskInstances/findAll', {
         session,
         status,
         group,
+        bookmark,
         sortBy,
         order
       })
+    },
+    onBookmarkFilter () {
+      this.filter.bookmarked = !this.filter.bookmarked
+      this.reload()
     },
     pageChange (p) {
       this.currentPage = p

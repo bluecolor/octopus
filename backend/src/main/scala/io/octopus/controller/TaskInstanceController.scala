@@ -23,6 +23,7 @@ class TaskInstanceController @Autowired()(private val taskInstanceService: TaskI
     @RequestParam(value= "session") session: Int,
     @RequestParam(value="group", required=false) group : Optional[java.lang.Long],
     @RequestParam(value="status", required=false) status : Optional[String],
+    @RequestParam(value="bookmark", required=false) bookmark : Optional[String],
     @RequestParam(value="page", required=false) page: Optional[Int],
     @RequestParam(value="pageSize", required=false) pageSize: Optional[Int]
   ) =
@@ -32,6 +33,7 @@ class TaskInstanceController @Autowired()(private val taskInstanceService: TaskI
       status.orElse(null),
       page.orElse(0),
       pageSize.orElse(15),
+      bookmark.orElse("false") == "true",
       search.orElse(""),
       sortBy.orElse("name"),
       order.orElse("asc")
