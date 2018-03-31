@@ -2,14 +2,17 @@ package io.octopus.model
 
 import java.util.Date
 import javax.persistence._
-import org.hibernate.validator.constraints._ 
+import org.hibernate.validator.constraints._
 import org.hibernate.annotations.Fetch
 import org.hibernate.annotations.FetchMode
 import javax.validation.constraints.{NotNull}
 import scala.beans.BeanProperty
 import com.fasterxml.jackson.annotation._
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
 import Role._
+
+case class UserStats(taskCount: Int)
 
 @Entity(name="users")
 class User {
@@ -59,9 +62,9 @@ class User {
   @BeanProperty
   @Fetch(value= FetchMode.JOIN)
   @ManyToMany(fetch = FetchType.LAZY)
-  @JoinTable(name = "task_user", 
+  @JoinTable(name = "task_user",
     joinColumns = Array(new JoinColumn(name = "user_id", nullable = false, updatable = false)),
-    inverseJoinColumns = Array(new JoinColumn(name = "task_id",nullable = false, updatable = false)) 
+    inverseJoinColumns = Array(new JoinColumn(name = "task_id",nullable = false, updatable = false))
   )
   @JsonIgnore
   var tasks: java.util.List[Task] = _
@@ -69,9 +72,9 @@ class User {
   @BeanProperty
   @Fetch(value= FetchMode.JOIN)
   @ManyToMany(fetch = FetchType.LAZY)
-  @JoinTable(name = "task_bookmark", 
+  @JoinTable(name = "task_bookmark",
     joinColumns = Array(new JoinColumn(name = "user_id", nullable = false, updatable = false)),
-    inverseJoinColumns = Array(new JoinColumn(name = "task_id",nullable = false, updatable = false)) 
+    inverseJoinColumns = Array(new JoinColumn(name = "task_id",nullable = false, updatable = false))
   )
   @JsonIgnore
   var bookmarks: java.util.List[Task] = _
@@ -83,5 +86,11 @@ class User {
   @PrePersist @PreUpdate private def prepare = {
     username = if (username == null)  null else username.toLowerCase
     email = if (email == null)  null else email.toLowerCase
+  }
+
+  @JsonProperty("stats")
+  @JsonSerialize
+  def stats: UserStats = {
+    UserStats(tasks.size)
   }
 }

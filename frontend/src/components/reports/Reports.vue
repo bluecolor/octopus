@@ -29,18 +29,18 @@ export default {
     close () {
       window.history.back()
     },
-    donut () {
-    },
-    initPlanTasksPie () {
-      let data = _.cloneDeep(this.plans)
+    donut (elId, payload) {
+      let data = payload.data
+      let nameAttr = payload.name
+      let valueAttr = payload.value
+
       let width = 260
       let height = 260
       let thickness = 40
       let radius = Math.min(width, height) / 2
       let color = d3.scaleOrdinal(d3.schemeCategory10)
 
-      // console.log(data)
-      var svg = d3.select('#plan-tasks-pie')
+      var svg = d3.select(`#${elId}`)
         .append('svg')
         .attr('class', 'pie')
         .attr('width', width)
@@ -53,7 +53,7 @@ export default {
         .innerRadius(radius - thickness)
         .outerRadius(radius)
 
-      let pie = d3.pie().value(d => d.stats.taskCount).sort(null)
+      let pie = d3.pie().value(d => d.stats[valueAttr]).sort(null)
 
       g.selectAll('path')
         .data(pie(data))
@@ -67,13 +67,13 @@ export default {
             .attr('class', 'text-group')
           g.append('text')
             .attr('class', 'name-text')
-            .text(`${d.data.name}`)
+            .text(`${d.data[nameAttr]}`)
             .attr('text-anchor', 'middle')
             .attr('dy', '-1.2em')
 
           g.append('text')
             .attr('class', 'value-text')
-            .text(`${d.data.stats.taskCount}`)
+            .text(`${d.data.stats[valueAttr]}`)
             .attr('text-anchor', 'middle')
             .attr('dy', '.6em')
         })
@@ -102,15 +102,31 @@ export default {
         .attr('text-anchor', 'middle')
         .attr('dy', '.35em')
         .text('')
+    },
+    initPlanTasksPie () {
+      let data = _.cloneDeep(this.plans)
+      let name = 'name'
+      let value = 'taskCount'
+      this.donut('plan-tasks-pie', {name, data, value})
+    },
+    initUserTasksPie () {
+      let data = _.cloneDeep(this.users)
+      let name = 'name'
+      let value = 'taskCount'
+      this.donut('user-tasks-pie', {name, data, value})
     }
   },
   computed: {
     ...mapGetters('plans', [
       'plans'
+    ]),
+    ...mapGetters('users', [
+      'users'
     ])
   },
   mounted () {
     this.initPlanTasksPie()
+    this.initUserTasksPie()
   }
 }
 </script>
