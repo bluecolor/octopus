@@ -54,26 +54,21 @@ class TaskService @Autowired()(val taskRepository: TaskRepository) {
 
   def findAll = taskRepository.findAll
 
-  def findAll(plan: java.lang.Long, search:String, sortBy:String, order:String, page: Int, pageSize: Int) = {
+  def findAll(plan: java.lang.Long, bookmark: Boolean, search: String, sortBy: String, order: String, page: Int, pageSize: Int) = {
     val me = userService.findMe
-    val p = taskQuery.findAll(page,pageSize,search,sortBy,order)
+    val p = taskQuery.findAll(page, pageSize, bookmark, plan, -1, -1, search, sortBy, order)
     p.content = p.content.map(t=>{
       t.bookmarked = t.bookmarkers.map(_.id).contains(me.id)
       t
-    }).filter{t =>
-      if ( plan == null || (plan != null && t.plan != null && t.plan.id == plan) ) {
-        true
-      } else {
-        false
-      }
-    }
+    })
     p
   }
 
   def findAll(
-    plan: java.lang.Long,
-    group: java.lang.Long,
-    owner: java.lang.Long,
+    plan: java.lang.Long  = -1,
+    group: java.lang.Long = -1,
+    owner: java.lang.Long = -1,
+    bookmark: Boolean,
     search: String,
     sortBy: String,
     order: String,
@@ -81,15 +76,11 @@ class TaskService @Autowired()(val taskRepository: TaskRepository) {
     pageSize: Int
   ) = {
     val me = userService.findMe
-    val p = taskQuery.findAll(page,pageSize,search,sortBy,order)
+    val p = taskQuery.findAll(page,pageSize, bookmark, plan, group, owner, search, sortBy, order)
     p.content = p.content.map(t=>{
       t.bookmarked = t.bookmarkers.map(_.id).contains(me.id)
       t
-    }).filter{t =>
-      ( plan == null || (plan != null && t.plan != null && t.plan.id == plan) ) &&
-      ( group == null || (group != null && t.primaryGroup != null && t.primaryGroup.id == group) ) &&
-      ( owner == null || (owner != null && t.primaryOwner != null && t.primaryOwner.id == owner) )
-    }
+    })
     p
   }
 

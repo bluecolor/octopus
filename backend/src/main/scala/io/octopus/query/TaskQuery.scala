@@ -31,8 +31,10 @@ class TaskQuery extends Query{
   private val log:Logger  = LoggerFactory.getLogger(MethodHandles.lookup.lookupClass)
 
 
-  def findAll(page: Int, pageSize: Int, search:String, sortBy:String, order:String) = {
-
+  def findAll(
+    page: Int, pageSize: Int, bookmark: Boolean, planId: Long, groupId: Long ,
+    ownerId: Long, search: String, sortBy:String, order:String
+  ) = {
     val em = entityManagerFactory.createEntityManager
     val session = em.unwrap(classOf[org.hibernate.Session])
     var p = new io.octopus.model.Page[Task]
@@ -49,11 +51,19 @@ class TaskQuery extends Query{
         left join fetch t.bookmarkers  b
       where
         ${filter}
+        ${if(ownerId!= -1) "and o.id = " + ownerId else ""}
+        ${if(groupId!= -1) "and g.id = " + groupId else ""}
+        ${if(planId != null && planId != -1) "and p.id = " + planId else ""}
+        ${if(bookmark) "and :me member of t.bookmarkers" else ""}
       ${sort}
     """
-    log.debug(filter)
     log.debug(q)
-    var query = session.createQuery(q)
+    var query = {
+      if(bookmark)
+        session.createQuery(q).setParameter("me", userService.findMe)
+      else
+        session.createQuery(q)
+    }
     p.count = query.list.length
     if(page == 0) {
       p.first = true

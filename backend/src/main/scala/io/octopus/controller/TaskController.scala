@@ -18,9 +18,10 @@ class TaskController  @Autowired()(private val taskService: TaskService) {
 
   @RequestMapping(method = Array(RequestMethod.GET) )
   def findAll(
-    @RequestParam(value="plan",required=false) plan: java.lang.Long,
-    @RequestParam(value="group",required=false) group: java.lang.Long,
-    @RequestParam(value="owner",required=false) owner: java.lang.Long,
+    @RequestParam(value="plan",required=false) plan: Optional[Long],
+    @RequestParam(value="group",required=false) group: Optional[Long],
+    @RequestParam(value="owner",required=false) owner: Optional[Long],
+    @RequestParam(value="bookmark", required=false) bookmark : Optional[String],
     @RequestParam(value="search",required=false) search: Optional[String],
     @RequestParam(value="sortBy",required=false) sortBy: Optional[String],
     @RequestParam(value="order", required=false) order : Optional[String],
@@ -28,9 +29,10 @@ class TaskController  @Autowired()(private val taskService: TaskService) {
     @RequestParam("pageSize") pageSize: Optional[java.lang.Integer]
   ) =
     taskService.findAll(
-      plan,
-      group,
-      owner,
+      plan.orElse(-1),
+      group.orElse(-1),
+      owner.orElse(-1),
+      bookmark.orElse("false") == "true",
       search.orElse(""),
       sortBy.orElse("name"),
       order.orElse("asc"),
