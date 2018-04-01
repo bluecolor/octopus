@@ -1,3 +1,0 @@
-
-<label><%- label %></label>
-<select class="form-control js-combo" style="border-radius:3px 0px 0px 3px; width:100%;" name="<%=name%>"></select><% if(button) {%><span class="input-group-btn js-clear-btn js-combo-b1 <%= button.clear ? '': 'hidden'  %>" style="vertical-align:bottom;"><a class="btn btn-default combo-action" type="button" tabindex="-1" href="javascript:void(0)"><span class="fa fa-eraser text-danger" aria-hidden="true">   </span></a></span><span class="input-group-btn js-combo-b2" style="vertical-align:bottom;"><a class="btn btn-default" type="button" tabindex="-1" href="<%= button.ref %>"><span class="fa text-success <%= button.cls ? button.cls : 'fa-plus' %>" aria-hidden="true">   </span></a></span><%}%>

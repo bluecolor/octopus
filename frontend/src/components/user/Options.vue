@@ -26,13 +26,13 @@
                 input#sound-off(:disabled="o.notifications.enabled==0" v-model="o.notifications.sound" type='checkbox')
                 label(for='sound-off')
                   | Turn off sound
-          .form-group
-            label Appearance
-            fieldset
-              .checkbox.checkbox-info
-                input#hide-footer(v-model="o.appearance.footer" type='checkbox')
-                label(for='hide-footer')
-                  | Show footer
+          //- .form-group
+          //-   label Appearance
+          //-   fieldset
+          //-     .checkbox.checkbox-info
+          //-       input#hide-footer(v-model="o.appearance.footer" type='checkbox')
+          //-       label(for='hide-footer')
+          //-         | Show footer
 
         .box-footer
           a.btn.btn-danger(@click="close") Close
