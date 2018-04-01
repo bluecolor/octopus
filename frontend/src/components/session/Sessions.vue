@@ -201,6 +201,9 @@ export default {
     },
     sessions () {
       this.selected = []
+    },
+    'filter.search' (v) {
+      _.throttle(this.onReload, 200)()
     }
   },
   methods: {

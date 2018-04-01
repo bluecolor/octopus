@@ -228,7 +228,7 @@ export default {
       this.selected = []
     },
     'filter.search': function (v) {
-      this.debounce()
+      _.throttle(this.reload, 1000)()
     }
   },
   methods: {

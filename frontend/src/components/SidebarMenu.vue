@@ -54,15 +54,15 @@ ul.sidebar-menu
       i.fa.fa-bar-chart
       span Reports
   li
-    a(href="", onclick="window.location='https://github.com/bluecolor/octopus'", target="_blank")
+    a(href="", onclick="window.location='https://bluecolor.github.io/octopus'", target="_blank")
       i.fa.fa-lg.fa-github
       span Project Home
     ul.treeview-menu
-      li 
+      li
         a.js-nav-users(href='https://github.com/bluecolor/octopus/wiki', target="_blank")
           i.fa.fa-book
           span Documentation
-      li 
+      li
         a.js-nav-users(href='https://github.com/bluecolor/octopus/issues', target="_blank")
           i.fa.fa-bug
           span Report an Issue
