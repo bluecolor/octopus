@@ -1,9 +1,8 @@
 {
-  "name": "copilot",
-  "version": "0.5.0",
-  "description": "A fully responsive admin template based on AdminLTE with vue.js integration",
-  "author": "Gil Ferreira <gfgilly@gmail.com>",
-  "repository": "https://github.com/misterGF/CoPilot",
+  "name": "octopus",
+  "description": "Open source task scheduler with dependency management https://bluecolor.github.io/octopus",
+  "author": "blue <info@bluecolor.io>",
+  "repository": "https://github.com/bluecolor/octopus",
   "license": "MIT",
   "scripts": {
     "dev": "node build/dev-server.js",
