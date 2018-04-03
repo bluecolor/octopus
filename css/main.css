@@ -1925,6 +1925,11 @@ h2 p {
   color: #6c7680 !important;
 }
 
+.navigationSlider .slidingNav ul li a:focus,
+.navigationSlider .slidingNav ul li a:hover,
+.navigationSlider .slidingNav ul li.siteNavItemActive a,
+.navigationSlider .slidingNav ul li.siteNavGroupActive a,
+.siteNavGroupActive siteNavItemActive ul li a,
 .navigationSlider .slidingNav ul li a:hover,
 .navigationSlider .slidingNav ul li:hover{
   background: unset !important;
