@@ -49,3 +49,4 @@ npm run dev
 
 
 ### Documentation
+You can find more info [here](https://bluecolor.github.io/octopus/)

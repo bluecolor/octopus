@@ -270,7 +270,7 @@ export default {
       q.page = this.pagination.currentPage - 1
       q.sortBy = this.filter.sort.by
       q.order = this.filter.sort.order
-      q.bookmark = this.filter.bookmark
+      q.bookmark = this.filter.bookmarked
       this.$store.dispatch('tasks/findAll', q)
     },
     onBookmarkFilter () {
