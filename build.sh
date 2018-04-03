@@ -44,7 +44,7 @@ npm run build
 echo "Copying frontend files"
 cd $SOURCE_HOME
 rm -f $OCTOPUS_HOME/src/main/resources/static/index.html
-cp -R $SOURCE_HOME/frontend/dist/*.* $OCTOPUS_HOME/src/main/resources/static
+cp -R $SOURCE_HOME/frontend/dist/* $OCTOPUS_HOME/src/main/resources/static/
 
 cd $OCTOPUS_HOME
 rm -fr $OCTOPUS_HOME/build/libs/*.*
