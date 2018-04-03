@@ -38,7 +38,7 @@ if (versionPropsFile.canRead()) {
 
     _patch = versionProps['PATCH'].toInteger() + 1
     _major = versionProps['MAJOR'].toInteger()
-    _minor = versionProps['MINOR'].toInteger() 
+    _minor = versionProps['MINOR'].toInteger()
     _versionCode= versionProps['VERSION_CODE'].toInteger()+1
     if(_patch==99)
     {
@@ -64,7 +64,8 @@ def _versionName = "${_major}.${_versionCode}.${_minor}.${_patch}"
 
 jar {
 	baseName = 'octopus'
-	version = "${_versionName}"
+  version = null
+	// version = "${_versionName}"
 }
 
 sourceCompatibility = 1.8
@@ -91,7 +92,7 @@ dependencies {
 
   // compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
 
-	compile "org.springframework.boot:spring-boot-devtools"	
+	compile "org.springframework.boot:spring-boot-devtools"
 
   compile group: 'com.hierynomus', name: 'sshj', version: '0.21.1'
 
@@ -104,7 +105,7 @@ dependencies {
 
 
   compile group: 'org.hsqldb', name: 'hsqldb', version: '2.4.0'
-	
+
   // built in drivers
   compile group: 'org.postgresql', name: 'postgresql', version: '42.0.0'
 
@@ -127,10 +128,10 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web')
   testCompile('org.springframework.boot:spring-boot-starter-test')
   compile("org.webjars:webjars-locator")
-  
+
   compile("org.webjars:sockjs-client:1.0.2")
   compile("org.webjars:stomp-websocket:2.3.3")
-    
+
   compile group: 'org.springframework', name: 'spring-context-support', version: '4.3.8.RELEASE'
 
 

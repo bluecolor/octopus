@@ -1,31 +1,13 @@
 # Octopus - Open Source Task Scheduler
 
-### Clone
-```
-git clone https://github.com/bluecolor/octopus
-```
 
 
-### Configuration
-- configure `octopus.shell` using the `application.properties.template` file in `backend` directory
-  - rename the `application.properties.template` file to `application.properties` and enter the 
-  repository connection parameters and octopus shell initiation parameters.
 
-### Backend
-```
-  cd octopus/backend
-  gradle bootrun
-```
-
-
-### Frontend
-```
-cd octopus/frontend
-npm run dev
-```
-
-
-### Usage
+### Getting started with minimal configuration
+- Download the latest release from [here](https://github.com/bluecolor/octopus/releases/download/0.12/octopus-0.12.883.tar.gz)
+- un-compress the archive file
+- `cd octopus`
+- `./octopus.sh`
 - create system user from the `octopus shell`:
   ```
     ssh user@localhost -p 2000
@@ -39,5 +21,31 @@ npm run dev
   ```
   http://localhost:9090
   ```
+
+
+
+### Configuration
+- You can change the repository to use a different `db` by changing the parameters in `application.properties`
+- Configure `octopus.shell` using the `application.properties`
+
+
+### Developers
+- Build backend by;
+```
+  cd octopus/backend
+  gradle bootrun
+```
+- Start a dev server for frontend with;
+```
+cd octopus/frontend
+npm run dev
+```
+
+### Building
+- `git clone https://github.com/bluecolor/octopus`
+- `cd` into cloned repo folder
+- run `./build.sh'
+- check out the `dist` folder
+
 
 ### Documentation

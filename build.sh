@@ -1,4 +1,4 @@
- #!/bin/bash
+ #!/bin/bash -x
 
 SOURCE_HOME=$(pwd)
 DIST_DIR=$SOURCE_HOME/dist
@@ -55,4 +55,13 @@ gradle build
 rm -f $OCTOPUS_HOME/build/libs/*.original
 cp $SOURCE_HOME/backend/version.properties $OCTOPUS_HOME/build/libs/version.properties
 
+touch $OCTOPUS_HOME/build/libs/octopus.sh
+chmod +x $OCTOPUS_HOME/build/libs/octopus.sh
+
+echo "java -jar octopus.jar -cp \"lib/*.jar\"" > $OCTOPUS_HOME/build/libs/octopus.sh
+mkdir $OCTOPUS_HOME/build/libs/lib
+
+cd $OCTOPUS_HOME/build
+mv libs octopus
+tar -czf $DIST_DIR/octopus-$version.tar.gz octopus
 rm -fr $TMP_DIR

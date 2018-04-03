@@ -53,7 +53,7 @@ class TaskQuery extends Query{
         ${filter}
         ${if(ownerId!= -1) "and o.id = " + ownerId else ""}
         ${if(groupId!= -1) "and g.id = " + groupId else ""}
-        ${if(planId != null && planId != -1) "and p.id = " + planId else ""}
+        ${if(planId != -1) "and p.id = " + planId else ""}
         ${if(bookmark) "and :me member of t.bookmarkers" else ""}
       ${sort}
     """
