@@ -39,6 +39,7 @@ cp -R backend $OCTOPUS_HOME
 
 echo "Building frontend"
 cd $SOURCE_HOME/frontend
+npm install
 npm run build
 
 echo "Copying frontend files"
