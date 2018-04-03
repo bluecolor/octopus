@@ -23,10 +23,16 @@
   ```
 
 
-
 ### Configuration
 - You can change the repository to use a different `db` by changing the parameters in `application.properties`
 - Configure `octopus.shell` using the `application.properties`
+
+
+### Building
+- `git clone https://github.com/bluecolor/octopus`
+- `cd` into cloned repo folder
+- run `./build.sh'
+- check out the `dist` folder
 
 
 ### Developers
@@ -40,12 +46,6 @@
 cd octopus/frontend
 npm run dev
 ```
-
-### Building
-- `git clone https://github.com/bluecolor/octopus`
-- `cd` into cloned repo folder
-- run `./build.sh'
-- check out the `dist` folder
 
 
 ### Documentation
