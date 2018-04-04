@@ -90,7 +90,8 @@ class User {
 
   @JsonProperty("stats")
   @JsonSerialize
+  @Transient
   def stats: UserStats = {
-    UserStats(tasks.size)
+    UserStats(if(tasks == null) 0 else tasks.size)
   }
 }
