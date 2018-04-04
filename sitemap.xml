@@ -11,4 +11,6 @@
 <url> <loc>https://bluecolor.github.io/octopus/docs/doc1.html</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://bluecolor.github.io/octopus/docs/doc1.html" /> </url>
 <url> <loc>https://bluecolor.github.io/octopus/docs/doc2.html</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://bluecolor.github.io/octopus/docs/doc2.html" /> </url>
 <url> <loc>https://bluecolor.github.io/octopus/docs/doc3.html</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://bluecolor.github.io/octopus/docs/doc3.html" /> </url>
+<url> <loc>https://bluecolor.github.io/octopus/docs/doc4.html</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://bluecolor.github.io/octopus/docs/doc4.html" /> </url>
+<url> <loc>https://bluecolor.github.io/octopus/docs/doc5.html</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://bluecolor.github.io/octopus/docs/doc5.html" /> </url>
 </urlset>
