@@ -1,4 +1,4 @@
-<html lang="en"><head><meta charset="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Configuration · Octopus</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta property="og:title" content="Configuration · Octopus"/><meta property="og:type" content="website"/><meta property="og:url" content="https://bluecolor.github.io/octopus/octopus/index.html"/><meta property="og:description" content="This tutorial is about configuration options in octopus. The default options are enough"/><link rel="shortcut icon" href="/octopus/img/octopus.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><link rel="stylesheet" href="/octopus/css/main.css"/></head><body class="sideNavVisible doc"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/octopus/"><img class="logo" src="/octopus/img/octopus.svg"/><h2 class="headerTitle">Octopus</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/octopus/docs/doc1.html" target="_self">Docs</a></li><li class=""><a href="/octopus/docs/doc4.html" target="_self">Rest API</a></li><li class=""><a href="/octopus/en/help.html" target="_self">Help</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><i></i></div><h2><i>›</i><span>Configuration</span></h2></div><div class="navGroups"><div class="navGroup navGroupActive"><h3>Octopus</h3><ul><li class="navListItem"><a class="navItem" href="/octopus/docs/doc1.html">Getting Started</a></li></ul></div><div class="navGroup navGroupActive"><h3>Configuration</h3><ul><li class="navListItem navListItemActive"><a class="navItem navItemActive" href="/octopus/docs/doc2.html">Repository</a></li></ul></div></div></section></div><script>
+<html lang="en"><head><meta charset="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Configuration · Octopus</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta property="og:title" content="Configuration · Octopus"/><meta property="og:type" content="website"/><meta property="og:url" content="https://bluecolor.github.io/octopus/octopus/index.html"/><meta property="og:description" content="This tutorial is about configuration options in octopus. The default options are enough"/><link rel="shortcut icon" href="/octopus/img/octopus.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><link rel="stylesheet" href="/octopus/css/main.css"/></head><body class="sideNavVisible doc"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/octopus/"><img class="logo" src="/octopus/img/octopus.svg"/><h2 class="headerTitle">Octopus</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/octopus/docs/doc1.html" target="_self">Docs</a></li><li class="siteNavGroupActive"><a href="/octopus/docs/doc1.html" target="_self">Rest API</a></li><li class=""><a href="/octopus/en/help.html" target="_self">Help</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><i></i></div><h2><i>›</i><span>Configuration</span></h2></div><div class="navGroups"><div class="navGroup navGroupActive"><h3>Octopus</h3><ul><li class="navListItem"><a class="navItem" href="/octopus/docs/doc1.html">Getting Started</a></li></ul></div><div class="navGroup navGroupActive"><h3>Configuration</h3><ul><li class="navListItem navListItemActive"><a class="navItem navItemActive" href="/octopus/docs/doc2.html">Repository</a></li><li class="navListItem"><a class="navItem" href="/octopus/docs/doc3.html">Octopus Shell</a></li></ul></div></div></section></div><script>
           var toggler = document.getElementById('navToggler');
           var nav = document.getElementById('docsNav');
           toggler.onclick = function() {
@@ -46,9 +46,95 @@ when you start octopus you can see <code>db</code> folder is automatically creat
 <ul>
 <li>Edit the <code>octopus.datasource.url</code> property in <code>application.properties</code> file.
 example;
-<code>octopus.datasource.url = jdbc:postgresql://host:port/database</code></li>
+<pre><code class="hljs">octopus<span class="hljs-selector-class">.datasource</span><span class="hljs-selector-class">.url</span> = jdbc:postgresql:<span class="hljs-comment">//host:port/database</span>
+</code></pre></li>
 <li>Set <code>octopus.jpa.properties.hibernate.dialect</code> property to the related dialect;
-for example the dialect for postgreSQL is <code>org.hibernate.dialect.PostgreSQLDialect</code></li>
+for example the dialect for <a href="https://www.postgresql.org/">PostgreSQL</a> is <code>org.hibernate.dialect.PostgreSQLDialect</code>
+you can find the dialect list for various databases below.
+example;
+<pre><code class="hljs">  octopus<span class="hljs-selector-class">.jpa</span><span class="hljs-selector-class">.properties</span><span class="hljs-selector-class">.hibernate</span><span class="hljs-selector-class">.dialect</span> = org<span class="hljs-selector-class">.hibernate</span><span class="hljs-selector-class">.dialect</span><span class="hljs-selector-class">.H2Dialect</span>
+</code></pre></li>
+<li>Change username and password parameters for new connection;
+example;
+<pre><code class="hljs">  octopus<span class="hljs-selector-class">.datasource</span><span class="hljs-selector-class">.username</span> = my_username
+  octopus<span class="hljs-selector-class">.datasource</span><span class="hljs-selector-class">.password</span> = my_password
+</code></pre></li>
+<li>Restart the application</li>
 </ul>
-<p><code>octopus.jpa.properties.hibernate.dialect = org.hibernate.dialect.H2Dialect</code></p>
-</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="doc1.html">← Getting Started</a></div></div></div></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/octopus/" class="nav-home"><img src="/octopus/img/octopus.svg" alt="Octopus" width="66" height="58"/></a><div><h5>Docs</h5><a href="/octopus/docs/en/doc1.html">Getting Started (or other categories)</a><a href="/octopus/docs/en/doc2.html">Guides (or other categories)</a><a href="/octopus/docs/en/doc3.html">API Reference (or other categories)</a></div><div><h5>Community</h5><a href="/octopus/en/users.html">User Showcase</a><a href="http://stackoverflow.com/questions/tagged/" target="_blank">Stack Overflow</a><a href="https://discord.gg/ABTbxrS">Project Chat</a></div><div><h5>More</h5><a href="https://github.com/bluecolor/octopus">GitHub</a><a class="github-button" href="https://github.com/bluecolor/octopus" data-icon="octicon-star" data-count-href="https://github.com/bluecolor/octopus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><a href="https://bluecolor.github.io/" target="_blank" class="fbOpenSource"><img src="/octopus/img/oss_logo.svg" alt="Blue Open Source" width="170" height="45"/></a><section class="copyright">Copyright © 2018 blue.</section></footer></div></body></html>
+<p>That is it, now your repository resides in the new db you provided.</p>
+<h3><a class="anchor" aria-hidden="true" id="hibernate-dialects"></a><a href="#hibernate-dialects" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Hibernate dialects</h3>
+<ul>
+<li>H2
+<pre><code class="hljs">org<span class="hljs-selector-class">.hibernate</span><span class="hljs-selector-class">.dialect</span><span class="hljs-selector-class">.H2Dialect</span>
+</code></pre></li>
+<li>PostgreSQL
+<pre><code class="hljs">org<span class="hljs-selector-class">.hibernate</span><span class="hljs-selector-class">.dialect</span><span class="hljs-selector-class">.PostgreSQLDialect</span>
+</code></pre></li>
+<li>MySQL
+<pre><code class="hljs">org<span class="hljs-selector-class">.hibernate</span><span class="hljs-selector-class">.dialect</span><span class="hljs-selector-class">.MySQLDialect</span>
+</code></pre></li>
+<li>MySQL with InnoDB
+<pre><code class="hljs">org<span class="hljs-selector-class">.hibernate</span><span class="hljs-selector-class">.dialect</span><span class="hljs-selector-class">.MySQLInnoDBDialect</span>
+</code></pre></li>
+<li>MySQL with MyISAM
+<pre><code class="hljs">org<span class="hljs-selector-class">.hibernate</span><span class="hljs-selector-class">.dialect</span><span class="hljs-selector-class">.MySQLMyISAMDialect</span>
+</code></pre></li>
+<li>DB2
+<pre><code class="hljs">org<span class="hljs-selector-class">.hibernate</span><span class="hljs-selector-class">.dialect</span><span class="hljs-selector-class">.DB2Dialect</span>
+</code></pre></li>
+<li>DB2 AS/400
+<pre><code class="hljs">org<span class="hljs-selector-class">.hibernate</span><span class="hljs-selector-class">.dialect</span><span class="hljs-selector-class">.DB2400Dialect</span>
+</code></pre></li>
+<li>DB2 OS390
+<pre><code class="hljs">org<span class="hljs-selector-class">.hibernate</span><span class="hljs-selector-class">.dialect</span><span class="hljs-selector-class">.DB2390Dialect</span>
+</code></pre></li>
+<li>Microsoft SQL Server
+<pre><code class="hljs">org<span class="hljs-selector-class">.hibernate</span><span class="hljs-selector-class">.dialect</span><span class="hljs-selector-class">.SQLServerDialect</span>
+</code></pre></li>
+<li>Sybase
+<pre><code class="hljs">org<span class="hljs-selector-class">.hibernate</span><span class="hljs-selector-class">.dialect</span><span class="hljs-selector-class">.SybaseDialect</span>
+</code></pre></li>
+<li>Sybase Anywhere
+<pre><code class="hljs">org<span class="hljs-selector-class">.hibernate</span><span class="hljs-selector-class">.dialect</span><span class="hljs-selector-class">.SybaseAnywhereDialect</span>
+</code></pre></li>
+<li>Progress
+<pre><code class="hljs">org<span class="hljs-selector-class">.hibernate</span><span class="hljs-selector-class">.dialect</span><span class="hljs-selector-class">.ProgressDialect</span>
+</code></pre></li>
+<li>SAP DB
+<pre><code class="hljs">org<span class="hljs-selector-class">.hibernate</span><span class="hljs-selector-class">.dialect</span><span class="hljs-selector-class">.SAPDBDialect</span>
+</code></pre></li>
+<li>Informix
+<pre><code class="hljs">org<span class="hljs-selector-class">.hibernate</span><span class="hljs-selector-class">.dialect</span><span class="hljs-selector-class">.InformixDialect</span>
+</code></pre></li>
+<li>HypersonicSQL
+<pre><code class="hljs">org<span class="hljs-selector-class">.hibernate</span><span class="hljs-selector-class">.dialect</span><span class="hljs-selector-class">.HSQLDialect</span>
+</code></pre></li>
+<li>Ingres
+<pre><code class="hljs">org<span class="hljs-selector-class">.hibernate</span><span class="hljs-selector-class">.dialect</span><span class="hljs-selector-class">.IngresDialect</span>
+</code></pre></li>
+<li>Mckoi SQL
+<pre><code class="hljs">org<span class="hljs-selector-class">.hibernate</span><span class="hljs-selector-class">.dialect</span><span class="hljs-selector-class">.MckoiDialect</span>
+</code></pre></li>
+<li>Interbase
+<pre><code class="hljs">org<span class="hljs-selector-class">.hibernate</span><span class="hljs-selector-class">.dialect</span><span class="hljs-selector-class">.InterbaseDialect</span>
+</code></pre></li>
+<li>Pointbase
+<pre><code class="hljs">org<span class="hljs-selector-class">.hibernate</span><span class="hljs-selector-class">.dialect</span><span class="hljs-selector-class">.PointbaseDialect</span>
+</code></pre></li>
+<li>FrontBase
+<pre><code class="hljs">org<span class="hljs-selector-class">.hibernate</span><span class="hljs-selector-class">.dialect</span><span class="hljs-selector-class">.FrontbaseDialect</span>
+</code></pre></li>
+<li>Firebird
+<pre><code class="hljs">org<span class="hljs-selector-class">.hibernate</span><span class="hljs-selector-class">.dialect</span><span class="hljs-selector-class">.FirebirdDialect</span>
+</code></pre></li>
+<li>Oracle (any version)
+<pre><code class="hljs">org<span class="hljs-selector-class">.hibernate</span><span class="hljs-selector-class">.dialect</span><span class="hljs-selector-class">.OracleDialect</span>
+</code></pre></li>
+<li>Oracle9i
+<pre><code class="hljs">org<span class="hljs-selector-class">.hibernate</span><span class="hljs-selector-class">.dialect</span><span class="hljs-selector-class">.Oracle9iDialect</span>
+</code></pre></li>
+<li>Oracle10g
+<pre><code class="hljs">org<span class="hljs-selector-class">.hibernate</span><span class="hljs-selector-class">.dialect</span><span class="hljs-selector-class">.Oracle10gDialect</span>
+</code></pre></li>
+</ul>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="doc1.html">← Getting Started</a><a class="docs-next button" href="doc3.html">Octopus Shell →</a></div></div></div></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/octopus/" class="nav-home"><img src="/octopus/img/octopus.svg" alt="Octopus" width="66" height="58"/></a><div><h5>Docs</h5><a href="/octopus/docs/en/doc1.html">Getting Started (or other categories)</a><a href="/octopus/docs/en/doc2.html">Guides (or other categories)</a><a href="/octopus/docs/en/doc3.html">API Reference (or other categories)</a></div><div><h5>Community</h5><a href="/octopus/en/users.html">User Showcase</a><a href="http://stackoverflow.com/questions/tagged/" target="_blank">Stack Overflow</a><a href="https://discord.gg/ABTbxrS">Project Chat</a></div><div><h5>More</h5><a href="https://github.com/bluecolor/octopus">GitHub</a><a class="github-button" href="https://github.com/bluecolor/octopus" data-icon="octicon-star" data-count-href="https://github.com/bluecolor/octopus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><a href="https://bluecolor.github.io/" target="_blank" class="fbOpenSource"><img src="/octopus/img/oss_logo.svg" alt="Blue Open Source" width="170" height="45"/></a><section class="copyright">Copyright © 2018 blue.</section></footer></div></body></html>
