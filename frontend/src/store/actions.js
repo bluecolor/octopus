@@ -16,8 +16,8 @@ export default {
     this.dispatch('app/findVersion')
     this.dispatch('settings/findAll')
 
-    // setInterval(() => {
-    //   this.dispatch('sessions/findAll')
-    // }, 20 * 1000)
+    setInterval(() => {
+      this.dispatch('users/pollMe')
+    }, 10 * 1000)
   }
 }

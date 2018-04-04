@@ -23,6 +23,14 @@ const getters = {
 
 // actions
 const actions = {
+  pollMe ({commit}) {
+    return api.findMe().then(response => {
+    },
+    error => {
+      console.log(error)
+      window.location = '/logout'
+    })
+  },
   findMe ({commit}) {
     return api.findMe().then(response => {
       commit(SET_ME, response.data)
