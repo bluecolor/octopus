@@ -117,6 +117,7 @@
                       | {{m.dependencies.length}}
                 td
                   span.label(
+                    v-show="m.primaryGroup"
                     :style="'border-radius:0px; background-color:'+ m.primaryGroup.color+';'",
                     data-toggle="tooltip" title="Group"
                   ) {{m.primaryGroup.name}}

@@ -34,3 +34,4 @@ private-docs
 .sass-cache
 test
 admin-lte
+dist/octopus/**
