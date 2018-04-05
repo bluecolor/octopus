@@ -4,7 +4,7 @@
 
 
 ### Getting started with minimal configuration
-- Download the latest release from [here](https://github.com/bluecolor/octopus/releases/download/0.12/octopus-0.12.883.tar.gz)
+- Download the latest release from [here](https://github.com/bluecolor/octopus/releases)
 - un-compress the archive file
 - `cd octopus`
 - `./octopus.sh`

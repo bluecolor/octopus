@@ -14,14 +14,14 @@ import io.octopus.model.Role
 import io.octopus.service.UserService
 
 /*
-  usage: Su [-u | --username] [-p | --password] [-n | --name] [-e | --email] [-m | --mode] [-h | --help]
+  usage: su [-u | --username] [-p | --password] [-n | --name] [-e | --email] [-m | --mode] [-h | --help]
    [-u | --username] username
    [-p | --password] password
    [-n | --name]     name
    [-e | --email]    email
    [-m | --mode]     mode c(create) u(update) d(delete)
    [-h | --help]     this help
-  
+
   examples:
 
   CREATE:
@@ -41,22 +41,22 @@ class Su {
     @Usage("password") @Option(names=["p","password"]) String password,
     @Usage("name")  @Option(names=["n","name"])  String name,
     @Usage("email") @Option(names=["e","email"]) String email,
-    @Usage("mode c(create) u(update) d(delete)") @Option(names=["m","mode"])  String mode 
+    @Usage("mode c(create) u(update) d(delete)") @Option(names=["m","mode"])  String mode
   ) {
-    
+
     BeanFactory beanFactory = (BeanFactory) context.getAttributes().get("spring.beanfactory")
     userService = beanFactory.getBean(UserService.class)
     User user = null
 
     switch(mode.toLowerCase()) {
-      case ["c","create"]: 
-        user = create(username, password, name, email); 
+      case ["c","create"]:
+        user = create(username, password, name, email);
         break;
       case ["u","update"]:
-        user = update(username, password, name, email); 
+        user = update(username, password, name, email);
         break;
       case ["d","delete"]:
-        user = delete(username); 
+        user = delete(username);
         break;
     }
 
@@ -68,17 +68,17 @@ class Su {
     return "Exit!"
   }
 
-  
+
   private def create(String username, String password, String name, String email) {
     User user = userService.findSystemUser()
 
     if(user != null){
-      out.println("""Error: 
-        Only one system user is allowed. 
-        There is already a system user with username ${user.username} 
+      out.println("""Error:
+        Only one system user is allowed.
+        There is already a system user with username ${user.username}
       """, red)
       return null
-    } 
+    }
     user = userService.findByUsername(username)
     if(user != null){
       out.println("Error: User ${username} already exists!", red)
@@ -100,7 +100,7 @@ class Su {
   }
 
   private def update(String username, String password, String name, String email) {
-    
+
     User user = userService.findByUsername(username)
 
     if(user != null && !user.system){
@@ -125,7 +125,7 @@ class Su {
 
   private def delete(String username) {
     User user = userService.findByUsername(username)
-    
+
     if(user != null && !user.system){
       out.println("Error: User ${username} is not a system user!", red)
       return null
@@ -134,7 +134,7 @@ class Su {
       out.println("Error: User ${username} does not exist!", red)
       return null
     }
-    
+
     return userService.deleteSystemUser(user.id)
   }
 
