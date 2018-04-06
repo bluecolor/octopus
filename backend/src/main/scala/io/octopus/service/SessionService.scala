@@ -290,12 +290,13 @@ class SessionService @Autowired()(val sessionRepository: SessionRepository) {
   def start(id: Long) = {
     var session = findOne(id)
     if(Array(Status.RUNNING, Status.IDLE).contains(session.status)){
-      throw new RuntimeException("Session already running!")
+      session
+    } else {
+      session.status = Status.IDLE
+      session.endDate= null
+      val s = sessionRepository.save(session)
+      s
     }
-    session.status = Status.IDLE
-    session.endDate= null
-    val s = sessionRepository.save(session)
-    s
   }
 
 }
