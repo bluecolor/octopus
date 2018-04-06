@@ -47,12 +47,11 @@ cd $SOURCE_HOME
 rm -f $OCTOPUS_HOME/src/main/resources/static/index.html
 cp -R $SOURCE_HOME/frontend/dist/* $OCTOPUS_HOME/src/main/resources/static/
 
+echo "Building ..."
 cd $OCTOPUS_HOME
 rm -fr $OCTOPUS_HOME/build/libs/*.*
-cp application.properties.template $OCTOPUS_HOME/build/libs/application.properties
-
-echo "Building ..."
 gradle build
+cp application.properties.template $OCTOPUS_HOME/build/libs/application.properties
 rm -f $OCTOPUS_HOME/build/libs/*.original
 cp $SOURCE_HOME/backend/version.properties $OCTOPUS_HOME/build/libs/version.properties
 
