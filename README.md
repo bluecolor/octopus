@@ -36,7 +36,7 @@
 
 
 ### Developers
-- Build backend by;
+- Run backend by;
 ```
   cd octopus/backend
   gradle bootrun

@@ -20,6 +20,11 @@ class Task{
     this.id = id
   }
 
+  def this(id: Int) {
+    this()
+    this.id = id
+  }
+
   @BeanProperty
   @Id
   @GeneratedValue
@@ -44,9 +49,9 @@ class Task{
   @BeanProperty
   @Fetch(value= FetchMode.JOIN)
   @ManyToMany(fetch = FetchType.EAGER)
-  @JoinTable(name = "task_group", 
+  @JoinTable(name = "task_group",
     joinColumns = Array(new JoinColumn(name = "task_id", nullable = false, updatable = false)),
-    inverseJoinColumns = Array(new JoinColumn(name = "group_id",nullable = false, updatable = false)) 
+    inverseJoinColumns = Array(new JoinColumn(name = "group_id",nullable = false, updatable = false))
   )
   var groups: java.util.Set[Group] = _
 
@@ -65,7 +70,7 @@ class Task{
   @Fetch(value= FetchMode.JOIN)
   @ManyToOne(fetch = FetchType.EAGER)
   var primaryGroup: Group = _
-  
+
   @BeanProperty
   @Fetch(value= FetchMode.JOIN)
   @ManyToOne(optional=false, fetch = FetchType.EAGER)
@@ -89,9 +94,9 @@ class Task{
   @BeanProperty
   @Fetch(value= FetchMode.JOIN)
   @ManyToMany(fetch = FetchType.LAZY)
-  @JoinTable(name = "task_user", 
+  @JoinTable(name = "task_user",
     joinColumns = Array(new JoinColumn(name = "task_id", nullable = false, updatable = false)),
-    inverseJoinColumns = Array(new JoinColumn(name = "user_id",nullable = false, updatable = false)) 
+    inverseJoinColumns = Array(new JoinColumn(name = "user_id",nullable = false, updatable = false))
   )
   var owners: java.util.Set[User] = _
 
@@ -103,9 +108,9 @@ class Task{
   @BeanProperty
   @Fetch(value= FetchMode.JOIN)
   @ManyToMany(fetch = FetchType.LAZY)
-  @JoinTable(name = "task_bookmark", 
+  @JoinTable(name = "task_bookmark",
     joinColumns = Array(new JoinColumn(name = "task_id", nullable = false, updatable = false)),
-    inverseJoinColumns = Array(new JoinColumn(name = "user_id",nullable = false, updatable = false)) 
+    inverseJoinColumns = Array(new JoinColumn(name = "user_id",nullable = false, updatable = false))
   )
   @JsonIgnore
   var bookmarkers: java.util.Set[User] = _
@@ -116,7 +121,7 @@ class Task{
 
   @BeanProperty
   @Fetch(value= FetchMode.SELECT)
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "task", cascade=Array(CascadeType.REMOVE))  
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "task", cascade=Array(CascadeType.REMOVE))
   @JsonIgnore
   var instances: java.util.Set[TaskInstance] = _
 
