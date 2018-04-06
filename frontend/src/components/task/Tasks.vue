@@ -117,10 +117,9 @@
                       | {{m.dependencies.length}}
                 td
                   span.label(
-                    v-show="m.primaryGroup"
-                    :style="'border-radius:0px; background-color:'+ m.primaryGroup.color+';'",
+                    :style="'border-radius:0px; background-color:'+ (m.primaryGroup ? m.primaryGroup.color: '') +';'",
                     data-toggle="tooltip" title="Group"
-                  ) {{m.primaryGroup.name}}
+                  ) {{m.primaryGroup ? m.primaryGroup.name : ''}}
                 td
                   router-link(v-show="m.plan" :to="'plan/' + m.plan.id" data-toggle="tooltip" title="Plan") {{m.plan.name}}
 
