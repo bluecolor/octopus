@@ -18,6 +18,11 @@ class Connection {
     this.id = id
   }
 
+  def this(id: Int) {
+    this()
+    this.id = id
+  }
+
   @Id
   @GeneratedValue
   @BeanProperty
@@ -27,7 +32,7 @@ class Connection {
   @NotNull
   @Column(unique = true)
   var name: String = _
-  
+
   @BeanProperty
   @NotNull
   @Type(`type`="yes_no")
@@ -51,7 +56,7 @@ class Connection {
 
   @BeanProperty
   var password: String = _
-  
+
   @BeanProperty
   var status: Int = _
 
