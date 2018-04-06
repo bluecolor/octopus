@@ -105,9 +105,9 @@
                   router-link(:to="'task-instance/' + m.id" ) {{m.name}}
                 td
                   span.label(
-                    :style="'border-radius:0px; background-color:'+ m.task.primaryGroup.color+';'",
+                    :style="'border-radius:0px; background-color:'+ (m.task.primaryGroup ? m.task.primaryGroup.color : '')+';'",
                     data-toggle="tooltip" title="Group"
-                  ) {{m.task.primaryGroup.name}}
+                  ) {{m.task.primaryGroup ? m.task.primaryGroup.name : ''}}
                 td
                   popper(trigger='click', :options="{placement: 'left'}")
                     .popper(v-show="m.dependencies && m.dependencies.length > 0")
