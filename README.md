@@ -44,6 +44,7 @@
 - Start a dev server for frontend with;
 ```
 cd octopus/frontend
+npm install
 npm run dev
 ```
 
