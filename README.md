@@ -31,7 +31,7 @@
 ### Building
 - `git clone https://github.com/bluecolor/octopus`
 - `cd` into cloned repo folder
-- run `./build.sh'
+- run `./build.sh`
 - check out the `dist` folder
 
 
