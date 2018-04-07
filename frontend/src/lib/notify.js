@@ -33,7 +33,7 @@ const denoError = (message, sound) => {
     window.focus()
     this.hide()
   })
-  const audio = new Audio('static/sound/error.mp3')
+  const audio = new Audio('/sound/error.mp3')
   audio.play()
 }
 
