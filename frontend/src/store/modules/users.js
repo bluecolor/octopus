@@ -1,12 +1,15 @@
 
 import api from '../../api/users'
 import _ from 'lodash'
-import {success as notifySuccess, error as notifyError} from '../../lib/notify'
+import SockJS from 'sockjs-client'
+import Stomp from '@stomp/stompjs'
+import {success as notifySuccess, error as notifyError, denoError} from '../../lib/notify'
 
 const LOAD = 'LOAD'
 const SAVE = 'SAVE'
 const REMOVE = 'REMOVE'
 const SET_ME = 'SET_ME'
+const NOTIFY_TASK_ERR = 'NOTIFY_TASK_ERR'
 
 const state = {
   all: [],
@@ -23,6 +26,17 @@ const getters = {
 
 // actions
 const actions = {
+  listen ({commit}) {
+    const socket = new SockJS('/socket')
+    const stomp = Stomp.over(socket)
+    stomp.connect({}, f => {
+      stomp.subscribe(`/topic/task-instance-error`, d => {
+        commit(NOTIFY_TASK_ERR, d)
+      })
+    }, e => {
+      console.log(e)
+    })
+  },
   pollMe ({commit}) {
     return api.findMe().then(response => {
     },
@@ -109,6 +123,13 @@ const mutations = {
   [REMOVE] (state, id) {
     const i = _.findIndex(state.all, r => r.id === id)
     state.all.splice(i, 1)
+  },
+  [NOTIFY_TASK_ERR] (state, d) {
+    const options = JSON.parse(state.me.options)
+    if (options && options.notifications && options.notifications.enabled === 1) {
+      const instance = JSON.parse(d.body)
+      denoError(`${instance.name} crashed`)
+    }
   }
 }
 

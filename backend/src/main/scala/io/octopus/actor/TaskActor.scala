@@ -32,8 +32,8 @@ object TaskActor {
     instance.getConnection.connectionType match  {
       case ConnectionType.JDBC => Props(new JdbcActor(instance))
       case ConnectionType.SSH  => Props(new SshActor(instance))
-      case ConnectionType.LOCAL=> Props(new LocalActor(instance)) 
-    } 
+      case ConnectionType.LOCAL=> Props(new LocalActor(instance))
+    }
   }
 }
 
@@ -55,9 +55,8 @@ abstract class TaskActor(private var instance:TaskInstance) extends Actor {
     case StopTask  => stop
   }
 
-  def tick= { 
-    if(result.isDone)
-      null//terminate
+  def tick= {
+    if(result.isDone) null//terminate
   }
 
   def terminate = {
@@ -67,7 +66,7 @@ abstract class TaskActor(private var instance:TaskInstance) extends Actor {
   protected def stop
 
   def run = {
-    instance.retry += 1 
+    instance.retry += 1
     context.parent ! StartedTask(instance.id)
     result = asyncExec
   }
@@ -75,17 +74,14 @@ abstract class TaskActor(private var instance:TaskInstance) extends Actor {
   def onError(error: String) = {
     log.error(s"TaskInstance(${instance.id}) failed")
     log.error(error)
-    
+
     if(instance.retry < instance.task.retry)
       self ! StartTask
     else
       context.parent ! TaskError(instance, error)
   }
 
-  def onSuccess = {
-    context.parent ! TaskSuccess(instance)    
-  } 
-
+  def onSuccess = context.parent ! TaskSuccess(instance)
 
   def onDone = {
   }
@@ -95,8 +91,8 @@ abstract class TaskActor(private var instance:TaskInstance) extends Actor {
   protected def asyncExec:Future[TaskInstance]
 
   protected def hearthBeat = {
-    val cancellable = 
-      context.system.scheduler.schedule(0 milliseconds, 2000 milliseconds,self,Tick)      
+    val cancellable =
+      context.system.scheduler.schedule(0 milliseconds, 2000 milliseconds,self,Tick)
   }
 
 }

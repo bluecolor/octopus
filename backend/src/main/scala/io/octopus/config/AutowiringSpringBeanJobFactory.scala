@@ -17,8 +17,7 @@ class AutowiringSpringBeanJobFactory extends SpringBeanJobFactory with Applicati
     beanFactory = context.getAutowireCapableBeanFactory
   }
 
-  protected override def createJobInstance(
-    bundle: TriggerFiredBundle): AnyRef = {
+  protected override def createJobInstance(bundle: TriggerFiredBundle): AnyRef = {
     val job: AnyRef = super.createJobInstance(bundle)
     beanFactory.autowireBean(job)
     job

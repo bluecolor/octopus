@@ -20,7 +20,7 @@ const error = (message) => {
   })
 }
 
-const denoError = (message) => {
+const denoError = (message, sound) => {
   const deno = new PNotify({
     title: '',
     text: message,
@@ -33,6 +33,8 @@ const denoError = (message) => {
     window.focus()
     this.hide()
   })
+  const audio = new Audio('static/sound/error.mp3')
+  audio.play()
 }
 
 const denoSuccess = (message) => {

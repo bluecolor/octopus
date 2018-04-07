@@ -41,10 +41,10 @@ import io.octopus.model.Plan
 @Component(value="quartz")
 @Scope("prototype")
 class QuartzActor extends Actor {
-  
+
   @Autowired
-  private var schedulerFactory: SchedulerFactoryBean = _  
-  
+  private var schedulerFactory: SchedulerFactoryBean = _
+
   private var scheduler: Scheduler = _
 
   @(Autowired @setter)
@@ -64,7 +64,7 @@ class QuartzActor extends Actor {
     case SchedulePlan(plan:Plan) => schedulePlan(plan)
     case UpdatePlanTrigger(plan:Plan) => updatePlanTrigger(plan)
     case RemovePlanTrigger(plan:Plan) => removePlanTrigger(plan)
-    case InvalidCronExpression(exp:String) => context.parent ! InvalidCronExpression(exp) 
+    case InvalidCronExpression(exp:String) => context.parent ! InvalidCronExpression(exp)
   }
 
   private def removePlanTrigger(plan: Plan) = {
@@ -75,7 +75,7 @@ class QuartzActor extends Actor {
 
   private def updatePlanTrigger(plan: Plan) = {
     log.debug(s"Re-Scheduling plan ${plan.name}")
-    
+
     val key = TriggerKey.triggerKey(s"plan.${plan.id}", "plan")
     var trigger = scheduler.getTrigger(key).asInstanceOf[CronTriggerImpl]
     if(trigger != null){
@@ -89,7 +89,7 @@ class QuartzActor extends Actor {
 
   private def startScheduler = {
     schedulePlans
-  } 
+  }
 
   private def schedulePlan(planId: Int): Unit = {
     schedulePlan(planService.findOne(planId))
@@ -102,23 +102,24 @@ class QuartzActor extends Actor {
     if(!CronExpression.isValidExpression(plan.schedule)){
       sender ! InvalidCronExpression(plan.schedule)
     }
-    
-    val cron = CronScheduleBuilder.cronSchedule(plan.schedule) 
-    val trigger = 
+
+    val cron = CronScheduleBuilder.cronSchedule(plan.schedule)
+    val trigger =
       TriggerBuilder.newTrigger()
       .withIdentity(s"plan.${plan.id}", "plan")
       .withSchedule(cron)
-      .build();  
-    val job = 
+      .build();
+    val job =
       JobBuilder.newJob(classOf[SessionMaker])
-      .withIdentity(s"plan.${plan.id}", "plan")
-      .build()  
+        .withIdentity(s"plan.${plan.id}", "plan")
+        .build()
     var data : JobDataMap = job.getJobDataMap
     data.put("PLAN_ID", plan.id)
 
     scheduler.scheduleJob(job, trigger)
-    if(!silent)
+    if(!silent) {
       sender ! ScheduledPlan(plan)
+    }
   }
 
 
@@ -129,6 +130,6 @@ class QuartzActor extends Actor {
   }
 
 
-  
+
 
 }

@@ -41,15 +41,14 @@ class MailActor extends Actor {
     case _ => println("Opps ?")
   }
 
-  def sendTaskInstanceMail(instance: TaskInstance) = {
+  def sendTaskInstanceMail(instance: TaskInstance) =
     mailService.sendTaskInstanceMail(instance)
-  }
 
-  def sendUserPasswordMail(user: User, password: String) = 
+  def sendUserPasswordMail(user: User, password: String) =
     mailService.sendUserPasswordMail(user, password)
 
-  def sendNewPasswordMail(user: User, password: String) = 
+  def sendNewPasswordMail(user: User, password: String) =
     mailService.sendNewPasswordMail(user, password)
-  
+
 
 }

@@ -8,7 +8,6 @@ import org.springframework.web.socket.config.annotation._
 @EnableWebSocketMessageBroker
 class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
 
-  
   override def configureMessageBroker(config: MessageBrokerRegistry)= {
     config.enableSimpleBroker("/topic")
     config.setApplicationDestinationPrefixes("/application")

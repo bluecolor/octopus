@@ -16,6 +16,9 @@ export default {
     this.dispatch('app/findVersion')
     this.dispatch('settings/findAll')
 
+    setTimeout(() => {
+      this.dispatch('users/listen')
+    }, 5000)
     setInterval(() => {
       this.dispatch('users/pollMe')
     }, 10 * 1000)
