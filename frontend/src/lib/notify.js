@@ -26,7 +26,7 @@ const denoError = (message, sound) => {
     text: message,
     desktop: {
       desktop: true,
-      icon: 'http://localhost:8080/static/img/bell_red.png'
+      icon: '/img/bell_red.png'
     }
   })
   deno.get().click(e => {
@@ -43,7 +43,7 @@ const denoSuccess = (message) => {
     text: message,
     desktop: {
       desktop: true,
-      icon: 'http://localhost:8080/static/img/ok_green.png'
+      icon: '/img/ok_green.png'
     }
   })
   deno.get().click(e => {
