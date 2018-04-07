@@ -9,7 +9,7 @@ import scala.beans.BeanProperty
 
 object Technology {
   val Database = "Database"
-  val ShellScript = "Shell Script" 
+  val ShellScript = "Shell Script"
 }
 
 @JsonIgnoreProperties(ignoreUnknown=true)
@@ -17,6 +17,11 @@ object Technology {
 class Technology {
 
   def this(id: Long) {
+    this()
+    this.id = id
+  }
+
+  def this(id: Int) {
     this()
     this.id = id
   }
