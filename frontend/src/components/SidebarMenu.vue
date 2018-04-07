@@ -59,7 +59,7 @@ ul.sidebar-menu
       span Project Home
     ul.treeview-menu
       li
-        a.js-nav-users(href='https://github.com/bluecolor/octopus/wiki', target="_blank")
+        a.js-nav-users(href='https://bluecolor.github.io/octopus/docs/doc1.html', target="_blank")
           i.fa.fa-book
           span Documentation
       li
