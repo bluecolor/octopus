@@ -18,27 +18,17 @@ class TaskController  @Autowired()(private val taskService: TaskService) {
 
   @RequestMapping(method = Array(RequestMethod.GET) )
   def findAll(
-    @RequestParam(value="plan",required=false) plan: Optional[Long],
-    @RequestParam(value="group",required=false) group: Optional[Long],
-    @RequestParam(value="owner",required=false) owner: Optional[Long],
-    @RequestParam(value="bookmark", required=false) bookmark : Optional[String],
-    @RequestParam(value="search",required=false) search: Optional[String],
-    @RequestParam(value="sortBy",required=false) sortBy: Optional[String],
-    @RequestParam(value="order", required=false) order : Optional[String],
-    @RequestParam("page") page: Optional[java.lang.Integer],
-    @RequestParam("pageSize") pageSize: Optional[java.lang.Integer]
+    @RequestParam(value="plan",required=false, defaultValue="-1") plan: Long,
+    @RequestParam(value="group",required=false, defaultValue="-1") group: Long,
+    @RequestParam(value="owner",required=false, defaultValue="-1") owner: Long,
+    @RequestParam(value="bookmark", required=false, defaultValue="false") bookmark : String,
+    @RequestParam(value="search",required=false, defaultValue="") search: String,
+    @RequestParam(value="sortBy",required=false, defaultValue="name") sortBy: String,
+    @RequestParam(value="order", required=false, defaultValue="asc") order : String,
+    @RequestParam(value="page", defaultValue="0") page: java.lang.Integer,
+    @RequestParam(value="pageSize", defaultValue="15") pageSize: java.lang.Integer
   ) =
-    taskService.findAll(
-      plan.orElse(-1),
-      group.orElse(-1),
-      owner.orElse(-1),
-      bookmark.orElse("false") == "true",
-      search.orElse(""),
-      sortBy.orElse("name"),
-      order.orElse("asc"),
-      page.orElse(0),
-      pageSize.orElse(15)
-    )
+    taskService.findAll(plan, group, owner, bookmark == "true", search, sortBy, order, page, pageSize)
 
   @RequestMapping(value = Array("/plan/{id}"), method = Array(RequestMethod.GET))
   def findByPlan(@PathVariable("id") id: Long) = taskService.findByPlan(id)
