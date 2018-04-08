@@ -10,10 +10,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import org.hibernate.annotations.{GenericGenerator,Formula}
 import org.hibernate.annotations.{Parameter => HibernateParameter}
 import javax.validation.constraints.{NotNull}
-
-
 import scala.beans.BeanProperty
-
 
 @Entity(name="task_stats")
 class TaskStats {
@@ -48,10 +45,10 @@ class TaskStats {
 
   @BeanProperty
   var duration: Long = 0
-  
+
   @BeanProperty
   var minDuration: Long = 0
-  
+
   @BeanProperty
   var maxDuration: Long = 0
 

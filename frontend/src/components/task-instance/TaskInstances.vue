@@ -139,6 +139,8 @@
             class="pagination-sm"
             :boundary-links="true"
             :rotate="false"
+            :items-per-page="itemsPerPage"
+            @change="onPage"
           )
   .align-center(v-else)
     div.no-connection(v-if="!loading" style="width:330px; display: table-cell;vertical-align: middle;text-align: center;")
@@ -199,6 +201,9 @@ export default {
     total () {
       return this.taskInstances.all.length
     },
+    itemsPerPage () {
+      return this.taskInstances.meta.pageSize
+    },
     collection () {
       return this.taskInstances.all
     },
@@ -233,6 +238,9 @@ export default {
       this.filter.sort = {by, order}
       this.reload()
     },
+    onPage () {
+      this.reload()
+    },
     reload () {
       const session = this.filter.session
       const status = this.filter.status
@@ -240,8 +248,10 @@ export default {
       const sortBy = this.filter.sort.by
       const order = this.filter.sort.order
       const bookmark = this.filter.bookmarked
+      const page = this.pagination.currentPage - 1
       this.$store.dispatch('taskInstances/findAll', {
         session,
+        page,
         status,
         group,
         bookmark,

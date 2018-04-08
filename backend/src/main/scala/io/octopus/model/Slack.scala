@@ -30,13 +30,13 @@ class Slack {
 
   @BeanProperty
   var notifications: Notifications = _
-  
+
   @BeanProperty
   var channel: String = _
-  
+
   @BeanProperty
   var url: String = _
 
-   def isActive = active == 1
+  def isActive = active == 1
 
 }
