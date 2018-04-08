@@ -28,6 +28,16 @@ const actions = {
       commit(LOAD, response.data)
     })
   },
+  findOne ({commit}, payload) {
+    return new Promise((resolve, reject) => {
+      return api.findOne(payload).then(response => {
+        resolve(response.data)
+      },
+      error => {
+        reject(error.response.data.message)
+      })
+    })
+  },
   bookmark ({commit}, id) {
     api.bookmark(id).then(response => {
       commit(BOOKMARK, response.data.id)

@@ -7,6 +7,9 @@ export default {
     const u = toUrlString(payload)
     return axios.get(`${API_BASE}/tasks?${u}`)
   },
+  findOne (id) {
+    return axios.get(`${API_BASE}/tasks/${id}`)
+  },
   bookmark (id) {
     return axios.put(`${API_BASE}/tasks/bookmark/${id}`)
   },

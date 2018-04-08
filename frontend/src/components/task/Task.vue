@@ -337,6 +337,8 @@ export default {
       this.task.groups.splice(i, 1)
       if (group.id === this.task.primaryGroup && this.task.groups.length > 0) {
         this.task.primaryGroup = this.task.groups[0]
+      } else if (_.isEmpty(this.task.groups)) {
+        this.task.primaryGroup = null
       }
     },
     onRemoveOwner (owner) {
