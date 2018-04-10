@@ -32,7 +32,6 @@ class Supervisor extends Actor {
   private var sessionActor: ActorRef = _
   private var quartzActor:  ActorRef = _
   private var mailActor:  ActorRef = _
-   
 
   override def preStart: Unit = {
     statsActor  = context.system.actorOf(springExtension.props("stats"),"stats")
@@ -60,14 +59,14 @@ class Supervisor extends Actor {
 
   def tick = {
     log.info("Received Tick")
-    sessionActor ! CheckNewSessions   
+    sessionActor ! CheckNewSessions
   }
 
 
   def hearthBeat = {
     log.info("Start hearth beat")
-    val cancellable = 
-      context.system.scheduler.schedule(0 milliseconds, 15000 milliseconds,self,Tick)      
+    val cancellable =
+      context.system.scheduler.schedule(0 milliseconds, 15000 milliseconds,self,Tick)
   }
 
 }

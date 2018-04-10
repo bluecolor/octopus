@@ -19,6 +19,7 @@
     "axios": "^0.15.3",
     "babel-polyfill": "^6.26.0",
     "babel-runtime": "^5.8.0",
+    "billboard.js": "^1.4.0",
     "chart.js": "2.3.0",
     "d3": "^4.13.0",
     "datatables.net": "^1.10.11",

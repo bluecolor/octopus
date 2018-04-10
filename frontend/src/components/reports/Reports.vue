@@ -16,8 +16,10 @@
 <script>
 
 import _ from 'lodash'
-import * as d3 from 'd3'
 import {mapGetters} from 'vuex'
+import {bb} from 'billboard.js'
+
+import 'billboard.js/dist/billboard.min.css'
 
 export default {
   name: 'Reports',
@@ -29,91 +31,31 @@ export default {
     close () {
       window.history.back()
     },
-    donut (elId, payload) {
-      let data = payload.data
-      let nameAttr = payload.name
-      let valueAttr = payload.value
-
-      let width = 260
-      let height = 260
-      let thickness = 40
-      let radius = Math.min(width, height) / 2
-      let color = d3.scaleOrdinal(d3.schemeCategory10)
-
-      var svg = d3.select(`#${elId}`)
-        .append('svg')
-        .attr('class', 'pie')
-        .attr('width', width)
-        .attr('height', height)
-
-      let g = svg.append('g')
-        .attr('transform', `translate( ${width / 2}, ${height / 2})`)
-
-      let arc = d3.arc()
-        .innerRadius(radius - thickness)
-        .outerRadius(radius)
-
-      let pie = d3.pie().value(d => d.stats[valueAttr]).sort(null)
-
-      g.selectAll('path')
-        .data(pie(data))
-        .enter()
-        .append('g')
-        .on('mouseover', function (d) {
-          let g = d3.select(this)
-            .style('cursor', 'pointer')
-            .style('fill', 'black')
-            .append('g')
-            .attr('class', 'text-group')
-          g.append('text')
-            .attr('class', 'name-text')
-            .text(`${d.data[nameAttr]}`)
-            .attr('text-anchor', 'middle')
-            .attr('dy', '-1.2em')
-
-          g.append('text')
-            .attr('class', 'value-text')
-            .text(`${d.data.stats[valueAttr]}`)
-            .attr('text-anchor', 'middle')
-            .attr('dy', '.6em')
-        })
-        .on('mouseout', function (d) {
-          d3.select(this)
-            .style('cursor', 'none')
-            .style('fill', color(this._current))
-            .select('.text-group').remove()
-        })
-        .append('path')
-        .attr('d', arc)
-        .attr('fill', (d, i) => color(i))
-        .on('mouseover', function (d) {
-          d3.select(this)
-            .style('cursor', 'pointer')
-            .style('fill', 'black')
-        })
-        .on('mouseout', function (d) {
-          d3.select(this)
-            .style('cursor', 'none')
-            .style('fill', color(this._current))
-        })
-        .each(function (d, i) { this._current = i })
-
-      g.append('text')
-        .attr('text-anchor', 'middle')
-        .attr('dy', '.35em')
-        .text('')
+    drawPlanTasks () {
+      let columns = _.map(this.plans, p => [p.name, p.stats.taskCount])
+      bb.generate({
+        data: {
+          columns: columns,
+          type: 'donut'
+        },
+        donut: {
+          title: 'Task count'
+        },
+        bindto: '#plan-tasks-pie'
+      })
     },
-    initPlanTasksPie () {
-      let data = _.cloneDeep(this.plans)
-      let name = 'name'
-      let value = 'taskCount'
-      this.donut('plan-tasks-pie', {name, data, value})
-    },
-    initUserTasksPie () {
-      let data = _.cloneDeep(this.users)
-      let name = 'name'
-      let value = 'taskCount'
-      this.donut('user-tasks-pie', {name, data, value})
+    drawUserTasks () {
+      let columns = _.map(this.users, p => [p.name, p.stats.taskCount])
+      bb.generate({
+        data: {
+          columns: columns,
+          type: 'donut'
+        },
+        donut: {
+          title: 'User Task Count'
+        },
+        bindto: '#user-tasks-pie'
+      })
     }
   },
   computed: {
@@ -125,8 +67,8 @@ export default {
     ])
   },
   mounted () {
-    this.initPlanTasksPie()
-    this.initUserTasksPie()
+    this.drawPlanTasks()
+    this.drawUserTasks()
   }
 }
 </script>
