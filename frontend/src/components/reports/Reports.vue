@@ -36,10 +36,16 @@ export default {
       bb.generate({
         data: {
           columns: columns,
-          type: 'donut'
+          type: 'donut',
+          onover: function (d, i) {
+            document.querySelector('#plan-tasks-pie .bb-chart-arcs-title').innerHTML = d.value
+          },
+          onout: function (d, i) {
+            document.querySelector('#plan-tasks-pie .bb-chart-arcs-title').innerHTML = 'Plan Task Count'
+          }
         },
         donut: {
-          title: 'Task count'
+          title: 'Plan Task Count'
         },
         bindto: '#plan-tasks-pie'
       })
@@ -49,7 +55,13 @@ export default {
       bb.generate({
         data: {
           columns: columns,
-          type: 'donut'
+          type: 'donut',
+          onover: function (d, i) {
+            document.querySelector('#user-tasks-pie .bb-chart-arcs-title').innerHTML = d.value
+          },
+          onout: function (d, i) {
+            document.querySelector('#user-tasks-pie .bb-chart-arcs-title').innerHTML = 'User Task Count'
+          }
         },
         donut: {
           title: 'User Task Count'
@@ -91,4 +103,9 @@ export default {
 .pie .value-text{
   font-size: 3em;
 }
+
+.bb-chart-arcs-title {
+  font-weight: 900 !important;
+}
+
 </style>
