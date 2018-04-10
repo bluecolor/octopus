@@ -24,6 +24,7 @@ import Tasks from '@/components/task/Tasks.vue'
 import Task from '@/components/task/Task.vue'
 import Upload from '@/components/upload/Upload.vue'
 import Reports from '@/components/reports/Reports.vue'
+import DependencyGraph from '@/components/reports/DependencyGraph.vue'
 import Notifications from '@/components/Notifications.vue'
 
 Vue.use(Router)
@@ -173,6 +174,10 @@ export default new Router({
     }, {
       path: 'reports',
       component: Reports
+    }, {
+      path: 'reports/task-dep/:id',
+      props: true,
+      component: DependencyGraph
     }]
   }]
 })

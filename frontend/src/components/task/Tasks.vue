@@ -29,7 +29,7 @@
                 li
                   router-link(:to="'/task/'+selected[0]+'?clone=true'") Clone
                 li
-                  a(href='javascript:void(0);') Dependencies
+                  router-link(:to="'/reports/task-dep/'+selected[0]") Dependencies
                 li
                   a(href='javascript:void(0);') Export
                 li.divider(role='separator')
