@@ -33,6 +33,7 @@ export default {
     },
     drawPlanTasks () {
       let columns = _.map(this.plans, p => [p.name, p.stats.taskCount])
+      let taskCount = this.taskCount
       bb.generate({
         data: {
           columns: columns,
@@ -41,17 +42,18 @@ export default {
             document.querySelector('#plan-tasks-pie .bb-chart-arcs-title').innerHTML = d.value
           },
           onout: function (d, i) {
-            document.querySelector('#plan-tasks-pie .bb-chart-arcs-title').innerHTML = 'Plan Task Count'
+            document.querySelector('#plan-tasks-pie .bb-chart-arcs-title').innerHTML = `Plan Task Count\n ${taskCount}`
           }
         },
         donut: {
-          title: 'Plan Task Count'
+          title: `Plan Task Count\n${taskCount}`
         },
         bindto: '#plan-tasks-pie'
       })
     },
     drawUserTasks () {
       let columns = _.map(this.users, p => [p.name, p.stats.taskCount])
+      let taskCount = this.taskCount
       bb.generate({
         data: {
           columns: columns,
@@ -60,11 +62,11 @@ export default {
             document.querySelector('#user-tasks-pie .bb-chart-arcs-title').innerHTML = d.value
           },
           onout: function (d, i) {
-            document.querySelector('#user-tasks-pie .bb-chart-arcs-title').innerHTML = 'User Task Count'
+            document.querySelector('#user-tasks-pie .bb-chart-arcs-title').innerHTML = `User Task Count\n ${taskCount}`
           }
         },
         donut: {
-          title: 'User Task Count'
+          title: `User Task Count\n${taskCount}`
         },
         bindto: '#user-tasks-pie'
       })
@@ -76,7 +78,10 @@ export default {
     ]),
     ...mapGetters('users', [
       'users'
-    ])
+    ]),
+    taskCount () {
+      return _.reduce(this.plans, (s, p) => { s += p.stats.taskCount; return s }, 0)
+    }
   },
   mounted () {
     this.drawPlanTasks()
