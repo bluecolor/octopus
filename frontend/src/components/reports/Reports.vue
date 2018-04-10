@@ -42,7 +42,10 @@ export default {
             document.querySelector('#plan-tasks-pie .bb-chart-arcs-title').innerHTML = d.value
           },
           onout: function (d, i) {
-            document.querySelector('#plan-tasks-pie .bb-chart-arcs-title').innerHTML = `Plan Task Count\n ${taskCount}`
+            document.querySelector('#plan-tasks-pie .bb-chart-arcs-title').innerHTML = (
+              `<tspan>Plan Task Count</tspan>
+               <tspan x="0" dy="15">${taskCount}</tspan>`
+            )
           }
         },
         donut: {
@@ -62,7 +65,10 @@ export default {
             document.querySelector('#user-tasks-pie .bb-chart-arcs-title').innerHTML = d.value
           },
           onout: function (d, i) {
-            document.querySelector('#user-tasks-pie .bb-chart-arcs-title').innerHTML = `User Task Count\n ${taskCount}`
+            document.querySelector('#user-tasks-pie .bb-chart-arcs-title').innerHTML = (
+              `<tspan>User Task Count</tspan>
+               <tspan x="0" dy="15"">${taskCount}</tspan>`
+            )
           }
         },
         donut: {
