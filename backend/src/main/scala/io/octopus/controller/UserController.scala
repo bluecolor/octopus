@@ -15,6 +15,9 @@ import io.octopus.exception.UniqueConstraintViolationException
 @RequestMapping(Array("/api/v1/users"))
 class UserController  @Autowired()(private val userService: UserService) {
 
+
+psakur
+
   @RequestMapping(method = Array(RequestMethod.GET) )
   def findAll = userService.findAll
 

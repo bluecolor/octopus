@@ -3,7 +3,7 @@ package io.octopus.service
 import java.util.Optional
 import org.springframework.data.domain.Sort.Direction
 import org.springframework.data.domain.Sort.Order
-import org.springframework.data.domain.{Sort, Page,Pageable,PageRequest}
+import org.springframework.data.domain.{Sort, Page,Pageable, PageRequest}
 import org.springframework.beans.factory.annotation.Autowired
 import scala.annotation.meta.setter
 import org.springframework.stereotype.Service
@@ -101,7 +101,7 @@ class TaskService @Autowired()(val taskRepository: TaskRepository) {
     .getAuthentication
     .getPrincipal.asInstanceOf[org.springframework.security.core.userdetails.User].getUsername
 
-    var user:User = userService.findByUsername(username);
+    var user:User = userService.findByUsername(username)
 
     taskRepository.findByBookmarkersContaining(user).asScala.map(t=>{
       t.bookmarked = true

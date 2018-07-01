@@ -182,8 +182,7 @@ class SessionService @Autowired()(val sessionRepository: SessionRepository) {
     def isDependenciesOk(dependencies: List[TaskInstance]) = {
       val blockers = Array(Status.IDLE,Status.ERROR, Status.BLOCKED,Status.KILLED, Status.RUNNING)
       dependencies == null ||
-      dependencies
-      .filter(d => blockers contains d.status).isEmpty
+      dependencies.filter(d => blockers contains d.status).isEmpty
     }
 
     def setSlots(instance: TaskInstance) = {
@@ -210,15 +209,15 @@ class SessionService @Autowired()(val sessionRepository: SessionRepository) {
 
     val parameters = parameterService.findAll
 
-    def replaceParams(instance:TaskInstance) = {
-      parameters.foreach{p=>
+    def replaceParams(instance: TaskInstance) = {
+      parameters.foreach{p =>
         if(instance.script.toLowerCase contains s".{${p.value.toLowerCase}}"){
           instance.script = instance.script.replaceAll("\\.\\{.*?\\}", p.value)
         }
       }
       instance
     }
-    runnable.map(replaceParams(_))
+    runnable.map(replaceParams)
   }
 
   def update(session: Session): Session = {

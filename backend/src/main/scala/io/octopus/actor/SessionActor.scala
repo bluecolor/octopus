@@ -36,7 +36,7 @@ class SessionActor extends Actor {
   private var sessionService: SessionService = _
 
   private var sessions: Map[Long,Session] = Map()
-  private var taskActors: Map[Long,ActorRef] = Map()  
+  private var taskActors: Map[Long,ActorRef] = Map()
 
   private val log:Logger  = LoggerFactory.getLogger(MethodHandles.lookup.lookupClass)
 
@@ -52,9 +52,9 @@ class SessionActor extends Actor {
     case Tick => tick
     case SessionAlreadyRunning(session:Session) => log.debug(s"Received SessionAlreadyRunning(${session.id})")
     case CheckNewSessions => checkNewSessions
-    case CheckSession(id: Long) => checkSession(id) 
+    case CheckSession(id: Long) => checkSession(id)
     case IsSessionDone(id: Long) => isSessionDone(id)
-    case IsSessionSuccess(id: Long) => isSessionSuccess(id) 
+    case IsSessionSuccess(id: Long) => isSessionSuccess(id)
     case RunTasks(sessionId: Long) => runTasks(sessionId)
     case RunSession(session: Session) => runSession(session)
     case StopSession(id: Long, status: String) => stopSession(id,status)
@@ -70,13 +70,13 @@ class SessionActor extends Actor {
 
   def stopTask(id: Long) = {
     taskActors get id match {
-      case Some(actor) => 
+      case Some(actor) =>
         actor.forward(StopTask(id))
       case _ =>
-    }  
+    }
   }
 
-  def setTaskRunning(id: Long) = 
+  def setTaskRunning(id: Long) =
     sessionService.setTaskInstanceRunning(id)
 
   def taskInstanceSuccess(instance: TaskInstance) = {
@@ -98,7 +98,7 @@ class SessionActor extends Actor {
     sessionService.findByStatusIn(statuses).foreach(self ! RunSession(_))
   }
 
-  def isSessionSuccess(id: Long): Boolean = 
+  def isSessionSuccess(id: Long): Boolean =
     sessionService.isSessionSuccess(id)
 
   def sessionSuccess(id: Long) = {
@@ -107,7 +107,7 @@ class SessionActor extends Actor {
     sessions -= id
   }
 
-  def isSessionDone(sessionId: Long): Boolean = 
+  def isSessionDone(sessionId: Long): Boolean =
     sessionService.findOne(sessionId).status == Status.DONE
 
   def sessionDone(id: Long) = {
@@ -137,7 +137,7 @@ class SessionActor extends Actor {
 
   def runTasks(sessionId: Long) = {
     log.debug(s"Run tasks of session(${sessionId})")
-    val runnableTasks = sessionService.findRunnable(sessionId)  
+    val runnableTasks = sessionService.findRunnable(sessionId)
     runnableTasks.foreach{ instance =>
       if(!taskActors.contains(instance.id)){
         val actor = context.actorOf(TaskActor.props(instance), name=s"taskinstance.${instance.id}")
@@ -149,13 +149,13 @@ class SessionActor extends Actor {
 
   def runSessions = {
     sessions.keys.foreach{ k=>
-      self ! ( 
-        if(isSessionSuccess(k)) 
-          SessionSuccess(k) 
+      self ! (
+        if(isSessionSuccess(k))
+          SessionSuccess(k)
         else if(isSessionDone(k))
           SessionDone(k)
-        else 
-          RunTasks(k) 
+        else
+          RunTasks(k)
       )
     }
   }
@@ -171,13 +171,13 @@ class SessionActor extends Actor {
 
   def tick = {
     runSessions
-    checkRunningSessions   
+    checkRunningSessions
   }
 
   private def hearthBeat = {
     log.info("Start hearth beat")
-    val cancellable = 
-      context.system.scheduler.schedule(0 milliseconds, 15000 milliseconds,self,Tick)      
+    val cancellable =
+      context.system.scheduler.schedule(0 milliseconds, 15000 milliseconds,self,Tick)
   }
 
   private def recover = {

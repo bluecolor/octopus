@@ -44,7 +44,7 @@ Vue.config.lang = 'en'
 new Vue({
   el: '#root',
   router,
-  store: store,
+  store,
   created () {
     this.$store.dispatch('init')
   },

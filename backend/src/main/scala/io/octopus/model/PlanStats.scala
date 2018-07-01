@@ -1,5 +1,6 @@
 package io.octopus.model
 
+
 import scala.beans.BeanProperty
 
 
